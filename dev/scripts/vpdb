@@ -1,0 +1,28 @@
+#!/bin/bash          
+if [ "$1" == "" ]; then
+	echo "No table or instruction given!"
+	exit 0
+fi
+
+suser=tpull
+spass=mntZCKZ6ZvPD3Zye 
+if [ "$1" == "-tables" ]; then
+	mysql -u $suser -p$spass -e "SHOW TABLES IN kura;"
+elif [ "$1" == "-struct" ]; then
+
+	if [ "$2" == "" ]; then
+		echo "No table given!"
+		exit 0
+	fi
+
+	mysql -u $suser -p$spass -e "DESCRIBE kura.$2;";
+	echo "Structure of kura.$2"
+else
+	if [ "$2" == "" ]; then
+		mysql -u $suser -p$spass -e "SELECT * FROM kura.$1;"
+		echo "Kura.$1" 
+	else
+		mysql -u $suser -p$spass -e "SELECT * FROM kura.$1 WHERE $2='$3'"
+		echo "Kura.$1:$2=$3"
+	fi
+fi

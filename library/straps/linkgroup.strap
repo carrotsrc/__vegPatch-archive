@@ -1,0 +1,10 @@
+<table name="kura_linkgroup">
+	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<field name="inst" type="int(11)" extra="NOT NULL" />
+	<field name="item" type="int(11)" extra="NOT NULL" />
+	<field name="setting" type="tinyint(1)" extra="NOT NULL" />
+	<field name="value" type="varchar(64)" extra="NOT NULL" />
+	<field name="link" type="varchar(64)" extra="NOT NULL" />
+
+	<primary name="id" />
+</table>

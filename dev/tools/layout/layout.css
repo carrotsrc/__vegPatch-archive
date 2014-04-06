@@ -1,0 +1,127 @@
+body {
+	font-family: sans-serif;
+	padding: 0px;
+	margin: 0px;
+	background-image: url('ticks.png');
+}
+#header {
+	color: #659A00;
+	background-color:#C7F66F; 
+	border-bottom: 2px solid #B3DD63;
+	width: 100%;
+	margin-bottom: 50px;
+	overflow: auto;
+	font-size: small;
+}
+
+#vp-title {
+	float: left;
+	font-weight: bold;
+	margin: 3px;
+}
+
+#vp-version {
+	float: right;
+	margin: 3px;
+}
+
+#kr-layout-column {
+	width: 70%;
+	margin-left: 15%;
+	background: white;
+	overflow: auto;
+	height: auto !important;
+	border-radius: 15px;
+	min-height: 500px;
+	border: 1px solid grey;
+	float: left;
+}
+
+#kr-layout {
+	margin: 10px;
+	padding: 10px;
+}
+#link-bar {
+	margin-left:15%;
+	margin-bottom: -1;
+	padding-left: 20px;
+	color: grey;
+}
+
+#link-bar a {
+	color: #659A00;
+//	font-size: large;
+	text-decoration: none;
+}
+
+.tools {
+	float: left;
+	overflow: auto;
+	margin-right: 20px;
+	width: 200px;
+}
+
+input {
+	margin-top: 7px;
+}
+
+select {
+	margin-top: 7px;
+}
+
+textarea {
+	margin-top: 7px;
+}
+
+.float-r {
+	float: right;
+}
+.float-l {
+	float: left;
+}
+.splash {
+	color: #659A00;
+	background-color:#C7F66F; 
+	border: 3px solid #B5F63E;
+	border: 3px solid #B3DD63;
+	border-radius: 5px;
+	padding: 10px;
+	float: left;
+	margin-left: 15px;
+	margin-bottom: 10px;
+	width: 150px;
+}
+
+.panel {
+	color: grey;
+	background-color: #FDF8F8;
+	border: 3px solid #D8D8D8;
+	border-radius: 5px;
+
+	padding: 10px;
+	float: left;
+	background-image: url('dl-grey.png');
+	background-repeat: repeat-x;
+}
+.form-text {
+	border-radius: 2px;
+	border: 2px solid #D8D8D8;
+	color: grey;
+	padding: 3px;
+	background-color: white;
+}
+
+.form-select {
+	padding: 0px;
+	padding-left: 3px;
+}
+
+.form-button {
+	color: grey;
+	border-bottom: 0px solid #808080;
+	border-right: 0px solid #808080;
+	background-color: #FDF8F8;
+	border: 1px solid #D8D8D8;
+	border-radius: 3px;
+}
+

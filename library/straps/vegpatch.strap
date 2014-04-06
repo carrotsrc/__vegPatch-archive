@@ -1,0 +1,159 @@
+<!--
+	Strap: Vegpatch
+	Type: Critical
+	Version: 0.1.2
+	Author: carrotsrc.org / cfg
+
+	This will strap in everything that will be used
+	by the basic functionality of a vegpatch system
+	This includes the channels required to get a page
+	out of the system
+-->
+
+<obj name="modreg" space="vpatch">
+	<module type="plugin" name="getloc" rout="ridp" out="getloc"/>
+</obj>
+<resource type="Instance" ref="1" label="syspg_getloc" out="ridc" />
+<relationship parent="{ridp}" child="{ridc}" />
+
+<obj name="modreg" space="vpatch">
+	<module type="plugin" name="fltanch" rout="ridp" out="fltanch"/>
+</obj>
+<resource type="Instance" ref="1" label="syspg_fltanch" out="ridc" />
+<relationship parent="{ridp}" child="{ridc}" />
+
+<obj name="modreg" space="vpatch">
+	<module type="plugin" name="userchk" rout="ridp" out="userchk" />
+</obj>
+<resource type="Instance" ref="1" label="syspg_userchk" out="ridc" />
+<relationship parent="{ridp}" child="{ridc}" />
+
+<obj name="channel" space="vpatch">
+	<channel name="_on_request">
+		<plugin id="{getloc}" ref="1" />
+		<plugin id="{fltanch}" ref="1" />
+		<plugin id="{userchk}" ref="1" />
+	</channel>
+</obj>
+
+<var name="getloc" value="null" />
+<var name="fltanch" value="null" />
+<var name="userchk" value="null" />
+
+<obj name="modreg" space="vpatch">
+	<module type="plugin" name="arearesolver" rout="ridp" out="arearesolver"/>
+</obj>
+<resource type="Instance" ref="1" label="syspg_arearesolver" out="ridc" />
+<relationship parent="{ridp}" child="{ridc}" />
+
+<obj name="channel" space="vpatch">
+	<channel name="_on_area_access">
+		<plugin id="{arearesolver}" ref="1" />
+	</channel>
+</obj>
+
+<var name="arearesolver" value="null" />
+
+<obj name="modreg" space="vpatch">
+	<module type="plugin" name="edanchor" rout="ridp" out="edanchor"/>
+</obj>
+<resource type="Instance" ref="1" label="syspg_edanchor" out="ridc" />
+<relationship parent="{ridp}" child="{ridc}" />
+
+<obj name="modreg" space="vpatch">
+	<module type="plugin" name="layoutloader" rout="ridp" out="layoutloader"/>
+</obj>
+<resource type="Instance" ref="1" label="syspg_layoutloader" out="ridc" />
+<relationship parent="{ridp}" child="{ridc}" />
+
+<obj name="modreg" space="vpatch">
+	<module type="plugin" name="sessioncmpt" rout="ridp" out="sessioncmpt"/>
+</obj>
+<resource type="Instance" ref="1" label="syspg_sessioncmpt" out="ridc" />
+<relationship parent="{ridp}" child="{ridc}" />
+
+<obj name="modreg" space="vpatch">
+	<module type="plugin" name="acachemk" rout="ridp" out="acachemk"/>
+</obj>
+<resource type="Instance" ref="1" label="syspg_acachemk" out="ridc" />
+<relationship parent="{ridp}" child="{ridc}" />
+
+<obj name="modreg" space="vpatch">
+	<module type="plugin" name="localrq" rout="ridp" out="localrq"/>
+</obj>
+<resource type="Instance" ref="1" label="syspg_localrq" out="ridc" />
+<relationship parent="{ridp}" child="{ridc}" />
+
+<obj name="modreg" space="vpatch">
+	<module type="plugin" name="pagegen" rout="ridp" out="pagegen"/>
+</obj>
+<resource type="Instance" ref="1" label="syspg_pagegen" out="ridc" />
+<relationship parent="{ridp}" child="{ridc}" />
+
+<obj name="channel" space="vpatch">
+	<channel name="_on_page_request">
+		<plugin id="{edanchor}" ref="1" />
+		<plugin id="{layoutloader}" ref="1" />
+		<plugin id="{sessioncmpt}" ref="1" />
+		<plugin id="{acachemk}" ref="1" />
+		<plugin id="{localrq}" ref="1" />
+		<plugin id="{pagegen}" ref="1" />
+	</channel>
+</obj>
+
+<var name="edanchor" value="null" />
+<var name="layoutloader" value="null" />
+<var name="sessioncmpt" value="null" />
+<var name="acachemk" value="null" />
+<var name="localrq" value="null" />
+<var name="pagegen" value="null" />
+
+<obj name="modreg" space="vpatch">
+	<module type="plugin" name="cmptint" rout="ridp" out="cmptint" />
+</obj>
+<resource type="Instance" ref="1" label="syspg_cmptint" out="ridc" />
+<relationship parent="{ridp}" child="{ridc}" />
+
+<obj name="modreg" space="vpatch">
+	<module type="plugin" name="copld" rout="ridp" out="copld"/>
+</obj>
+<resource type="Instance" ref="1" label="syspg_copld" out="ridc" />
+<relationship parent="{ridp}" child="{ridc}" />
+
+<obj name="channel" space="vpatch">
+	<channel name="_on_interface_request">
+		<plugin id="{cmptint}" ref="1" />
+		<plugin id="{copld}" ref="1" />
+	</channel>
+</obj>
+
+<var name="cmptint" value="null" />
+<var name="copld" value="null" />
+
+<obj name="modreg" space="vpatch">
+	<module type="plugin" name="acacheld" rout="ridp" out="acacheld"/>
+</obj>
+<resource type="Instance" ref="1" label="syspg_acacheld" out="ridc" />
+<relationship parent="{ridp}" child="{ridc}" />
+
+<obj name="channel" space="vpatch">
+	<channel name="_on_asset_request">
+		<plugin id="{acacheld}" ref="1" />
+	</channel>
+</obj>
+<var name="acacheld" value="null" />
+
+<!-- Root configuration is set here -->
+
+<obj name="db" space="vpatch">
+	<insert table="rootconfig">
+		<col name="title" value="VegPatch" />
+		<col name="assetrequest" value="system/req/assetport.php" />
+		<col name="ajaxrequest" value="system/req/ajaxport.php" />
+		<col name="submitrequest" value="system/req/submit.php" />
+		<col name="boilerplate" value="kit" />
+		<col name="libshare" value="share" />
+		<col name="globalasset" value="share/kglob" />
+		<col name="assetgrouping" value="0" />
+	</insert>
+</obj>

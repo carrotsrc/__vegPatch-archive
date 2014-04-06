@@ -1,0 +1,29 @@
+Kura 0.1/Vegpatch 0.2
+==============
+Version: 	0.2/vegptach
+Author: 	Carrotsrc, cfg
+Date: 		28/09/2013
+Updated:	17/02/2013
+
+VegPatch 0.2 Changelog
+======================
+
+- QParse and QPart are being used for processing resource queries and converting to SQL.
+- Removed use of '^' character in RQL. Explicit relationship is now required.
+- Fixed RQs that used ^. Now have explicit relationship
+- RQSQL, RQStat, RQuery, ResRel are deprecated.
+- Added error logs to plugins.
+- Channel devtool now reflects changes in db table structure
+- Resource bases are now handled by a separate table - resbase - instead of an enum list in rescast
+- Plugins have access to widget configuration values
+- Components are now in their own space
+- Added generic DB strap obj
+	- implemented INSERT
+- Added widgetcfg strap obj
+- Added wireframecfg strap obj
+- Added areacfg strap obj
+- A bunch of filename standardising
+- Added init strap files for common component setups
+- Components can now draw on widget configs for extra configurations
+- Resource Bin has been updated to be dynamic in the browser
+- Panels that handle resources browser side can now use ResourceBin javascript interface

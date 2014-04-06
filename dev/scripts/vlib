@@ -1,0 +1,29 @@
+#!/bin/bash
+PPATH="/home/charlie/development/web/kit4/library/lib/$2"
+
+if [ "$1" == "" ]; then
+	echo "No name given"
+	echo "klib [LIB-NAME] [SPACE]
+	exit 0
+fi
+
+if [ "$2" == "" ]; then
+	echo "No space given"
+	echo "klib [LIB-NAME] [SPACE]
+	exit 0
+fi
+
+if [ ! -d "$PPATH" ]; then
+	mkdir $PPATH
+	echo "Created new space $PPATH"
+fi
+
+PPATH="$PPATH/$1"
+mkdir $PPATH
+PPATH="$PPATH/$1"Library".php"
+TEMPLATE="<?php\n\tclass $1""Library\n\t{\n\t\tpublic function __construct()\n\t\t{"
+TEMPLATE="$TEMPLATE\n\t\t}\n\n"
+TEMPLATE="$TEMPLATE\t}\n?>"
+
+
+echo -e $TEMPLATE >> $PPATH

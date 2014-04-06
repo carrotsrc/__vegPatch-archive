@@ -1,0 +1,37 @@
+<html>
+<head>
+<title>Resource Query Testbed</title>
+
+<script src="rql.js"></script>
+</head>
+
+<body>
+<div style="margin-left: 50px; margin-top: 50px; font-family: 'DejaVu Sans';">
+	<div>
+	<b>Resource Query</b><br />
+	<input id="rql" type="text" size="60" />
+	<input type="button" value="Query" onclick="query('rql', 'runit')" />
+	<div style="margin-top: 5px; font-size:small;">
+		<input type="checkbox" id="runit" value="Run query" checked>Run Query
+	</div>
+</form>
+	</div>
+	
+	<div style="margin-top: 50px;">
+		<b>SQL</b>
+		<div id="sql">
+		No query sent
+		</div>
+	</div>
+	
+	<div style="margin-top: 50px;">
+		<b>Result</b>
+		<div id="result">
+		No query sent
+		</div>
+	</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+#!/bin/bash
+PPATH="/home/charlie/development/web/kit4/library/panel/$2"
+
+if [ "$1" == "" ]; then
+	echo "No name given"
+	echo "kpanel [PANEL-NAME] [SPACE]
+	exit 0
+fi
+
+if [ "$2" == "" ]; then
+	echo "No space given"
+	echo "kpanel [PANEL-NAME] [SPACE]
+	exit 0
+fi
+
+if [ ! -d "$PPATH" ]; then
+	mkdir $PPATH
+	echo "Created new space $PPATH"
+fi
+
+PPATH="$PPATH/$1"
+mkdir $PPATH
+PPATH="$PPATH/$1""Panel.php"
+TEMPLATE="<?php\n\tclass $1""Panel extends Panel\n\t{\n\t\tpublic function __construct()\n\t\t{\n\t\t\tparent::__construct();"
+TEMPLATE="$TEMPLATE\n\t\t\t\$this->setModuleName('$1');\n\t\t}\n\n"
+TEMPLATE="$TEMPLATE\t\tpublic function loadTemplate()\n\t\t{\n\n\t\t}\n\n"
+TEMPLATE="$TEMPLATE\t\tpublic function initialize(\$params = null)\n"
+TEMPLATE="$TEMPLATE\t\t{\n\n"
+TEMPLATE="$TEMPLATE\t\t\tparent::initialize();\n"
+TEMPLATE="$TEMPLATE\t\t}\n"
+TEMPLATE="$TEMPLATE\t\tpublic function applyRequest(\$result)\n"
+TEMPLATE="$TEMPLATE\t\t{\n\n"
+TEMPLATE="$TEMPLATE\t\t\tforeach(\$result as \$rs) {\n"
+TEMPLATE="$TEMPLATE\t\t\t\tswitch(\$rs['jack']) {\n"
+TEMPLATE="$TEMPLATE\t\t\t\t\t\n\n"
+TEMPLATE="$TEMPLATE\t\t\t\t}\n"
+TEMPLATE="$TEMPLATE\t\t\t}\n"
+TEMPLATE="$TEMPLATE\t\t}\n\n"
+TEMPLATE="$TEMPLATE\t\tpublic function setAssets()\n"
+TEMPLATE="$TEMPLATE\t\t{\n\n"
+TEMPLATE="$TEMPLATE\t\t}\n"
+TEMPLATE="$TEMPLATE\t}\n?>"
+
+
+echo -e $TEMPLATE >> $PPATH

@@ -1,0 +1,62 @@
+<html>
+<head>
+	<title>Resource Manager</title>
+
+	<script src="casserole.js"></script>
+	<script src="resman.js"></script>
+	<script>
+		var table = new Casserole.Widget.Table();
+	</script>
+
+	    <link rel="stylesheet" type="text/css" href="castyle.css" />
+	</head>
+
+	<body class="kura">
+Casserole Test<br />
+<a href="javascript:void()">link</a><br />
+<div class="interactive-row bgblue">
+<input type="button" value="Fade1" id="xyz" onclick="Casserole.Animation.fade('aone');"/> <br />
+<input type="button" value="Fade2" id="xyz" onclick="Casserole.Animation.fade('atwo');"/> <br />
+<input type="button" value="conv" id="xyz" onclick="Casserole.Animation.gradient('atwo', '288e00', '92ed6b', 1000, 200);"/> <br />
+<table>
+
+<div style="background-color: red" id="aone">
+fader
+</div>
+
+<div style="background-color: green" id="atwo">
+fader2
+</div>
+
+	<tr>
+	<td class="table-header">First Name</td>
+	<td class="table-header">Surname</td>
+	<td class="table-header">Age</td>
+	<td class="table-header">Status</td>
+	</tr>
+
+
+	<tr>
+	<td>Gertrude</td>
+	<td>Laurence</td>
+	<td>6</td>
+	<td>Annoying</td>
+	</tr>
+	
+	<tr>
+	<td>Hos</td>
+	<td>Fyvie-Gauld</td>
+	<td>16</td>
+	<td>Faithful</td>
+	</tr>
+	
+	<tr>
+	<td>Bosie</td>
+	<td>Fyvie-Gauld</td>
+	<td>18</td>
+	<td>Watching over</td>
+	</tr>
+</table>
+</div>
+</body>
+</html>

@@ -1,0 +1,4 @@
+Potential syntax:
+
+URL().{r,l} < Course('1'):spoken;
+[expression] < Course('1'):spoken;

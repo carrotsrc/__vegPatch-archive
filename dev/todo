@@ -1,0 +1,68 @@
+VegPatch 0.2
+============
+
+System:
+- License old files, always license new files
+- Spend some time reviewing the initialisation include tree and cleaning it up. Maybe moving it into it's own file.
+- Implement a session handler to use the database for holding the session data
+- Write a routine that generates a valid submit link which includes any specified global params in the url
+- Consolidate stdint and kbasic into vpatch in the panels (UPDATE: some progress)
+- Separate plugins into spaces
+- Make the install process easier (UPDATE: some progress)
+
+Resources:
+- Create a more comprehensive query system.
+- Implement subqueries on first relatee: (subquery)<(subquery).
+- ResMan::getResourceFromId() returns the reference for the handler. The array should reflect this.
+
+DevTools:
+- All tools should be locked down
+
+Library/Straps:
+- Add ability to have input and modify vars when loading strap
+- Do redundency checks on layoutcfg and areacfg, output current id and rid if they exist
+
+Library/Plugins
+- LocalRQ should check to see if an instance's channel has already been run to avoid rechecking the same channel
+
+System/Module:
+- Rename methods and properties of Component and Panel to more descriptive, less confusing names
+- Change panel<>component request structure to a class rather than an associative array
+
+System/Helpers
+- Session Implement serialising of session data in helper to use database
+- StrSan has inconsistant behaviour on mysqlDesanatize
+
+System/Plugins
+- Plugin manager should keep track of already included plugins so don't need to use include_once
+
+Asset/gscript.js
+- Add code for handling IE6 to gscript including async requests
+- Request queue in gscript always uses previous callback. Why this behaviour?
+- Have library function for dynamically loading js and css files. Include redundency check so scripts are not loaded twice and screwing it up.
+- Dynamically loaded scripts will be extension scripts for core component libraries
+
+kura 0.1
+========
+
+Resources:
+- Change the crud() resource to an edge type
+
+Library/Lib
+- mentor lib needs to check instance is ok when getting replies
+- Attachment lib needs to handle new attachment base
+
+Library/Panel
+- umessage_ui needs to pull inbox data in a local request so it doesn't rely soley on ajax
+- Modmanusers needs JS
+- quizman_ui desperately needs a JS interface
+
+Library/Components
+- Courseman::addActivity needs to do a proper clean up of the database if addActivity fails
+- Courseman::getManager include Type('Activity') to only deal with components associated as Activity Components
+- Quizman::remQuestion has strange behaviour when deleting last question from cache
+- Quizman::loadQuiz needs to check if reference is a valid child of the manager
+- Bulletin needs to handle the specified attachment in a particular way
+
+Additions:
+- Pull aspire Creative Commons data for reading list

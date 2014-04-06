@@ -1,0 +1,16 @@
+<obj name="modreg" space="vpatch">
+	<module type="component" name="vp_reguser" out="cid"/>
+</obj>
+<!--
+<obj name="wireframecfg" space="vpatch">
+	<layout name="vpl_random">
+		<node type="1">
+			<leaf type="1" pid="random_ui" cid="{cid}" ref="1" style="float: none;"/>
+		</node>
+	</layout>
+</obj>
+-->
+
+<obj name="areacfg" space="vpatch">
+	<area name="blah_area" surround="1" template="1" />
+</obj>

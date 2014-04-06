@@ -1,0 +1,11 @@
+<obj name="modreg" space="vpatch">
+	<module type="component" name="vp_blogman" space="vpatch" rout="ridb" out="bid" />
+	<module type="component" name="vp_blogview" space="vpatch" />
+	<module type="panel" name="vp_blogman_ui" space="vpatch" />
+
+	<module type="panel" name="vp_blogview_ui" space="vpatch" />
+	<moudle type="panel" name="vp_blogsingle_ui" space="vpatch" />
+</obj>
+
+<resource type="Instance" ref="1" label="sysc_blogman" out="ridi" />
+<relationship parent="{ridb}" child="{ridi}" />

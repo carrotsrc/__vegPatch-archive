@@ -1,0 +1,24 @@
+td.ressmall {
+	font-size: x-small;
+}
+td.restype {
+	color: black;
+	text-align: right;
+}
+
+
+
+td.resname {
+	color: black;
+	text-align: center;
+	padding-left: 5px;
+	padding-right: 5px
+}
+
+.lfloat {
+	float: left;
+}
+
+.rfloat {
+	float: right;
+}

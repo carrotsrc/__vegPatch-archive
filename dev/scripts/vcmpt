@@ -1,0 +1,28 @@
+#!/bin/bash
+PPATH="/home/charlie/development/web/kit4/library/components/$2/$1"
+
+if [ "$1" == "" ]; then
+	echo "No name given"
+	echo "vpcmpt [COMPONENT-NAME] [SPACE]"
+	exit 0
+if [ "$2" == "" ]; then
+	echo "No space given"
+	echo "vpcmpt [COMPONENT-NAME] [SPACE]"
+fi
+
+mkdir $PPATH
+
+PPATH="$PPATH/$1""Component.php"
+
+TEMPLATE="<?php\n\tclass $1""Component extends Component\n\t{\n"
+TEMPLATE="$TEMPLATE\t\tpublic function initialize()\n\t\t{\n\n\t\t}\n\n"
+TEMPLATE="$TEMPLATE\t\tpublic function run(\$channel = null, \$args = null)\n\t\t{\n"
+TEMPLATE="$TEMPLATE\t\t\t\$response = null;\n\n"
+TEMPLATE="$TEMPLATE\t\t\tswitch(\$channel)\n\t\t\t{\n\n\t\t\t}\n\n\t\t\tif(\$args == null)\n"
+TEMPLATE="$TEMPLATE\t\t\t\techo \$response;\n\n"
+TEMPLATE="$TEMPLATE\t\t\t return \$response;\n"
+TEMPLATE="$TEMPLATE\t\t}\n\n"
+TEMPLATE="$TEMPLATE\t}\n?>"
+
+
+echo -e $TEMPLATE > $PPATH
