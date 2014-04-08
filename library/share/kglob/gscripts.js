@@ -259,6 +259,10 @@ var KitJS = {
 		this.getElementById = function (id) {
 			return document.getElementById(this._pmod+"-"+id);
 		}
+
+		this.elementId = function (id) {
+			return this._pmod+"-"+id;
+		}
 	},
 
 	GlobalParams: new Array(),
