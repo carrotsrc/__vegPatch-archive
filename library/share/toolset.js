@@ -204,6 +204,21 @@ var KTSet = {
 			return e;
 		}
 
+		this.appendInput = function (type, value) {
+			try {
+				this.appendChild('input');
+					this.gotoLast();
+					this.node.type=type;
+					this.node.value = value;
+					this.gotoParent();
+			}
+			catch(e) { // catch IE's tantrum over low standards
+				this.gotoParent();
+				this.removeChild(this.node.lastChild);
+				this.node.innerHTML = this.node.innerHTML + "<input type=\""+type+"\" value=\""+value+"\" onclick=\"\" />";
+			}
+		}
+
 
 		this.appendText = function (text) {
 			if(text == undefined || text == null)
@@ -283,6 +298,12 @@ var KTSet = {
 		}
 
 		this.getChild = function (num) {
+			if(num > -1)
+				if(num < this.node.childNodes.length)
+					return this.node.childNodes[num];
+				else
+					return undefined;
+
 			var c = this.node.firstChild;
 			if(num  == -1) {
 				var r;
@@ -304,7 +325,7 @@ var KTSet = {
 
 var KTDoc = {
 	Table: {
-		open: function (id) {
+		element: function (id) {
 			var e = document.createElement('table');
 			e.id = id;
 			return e;
@@ -324,7 +345,7 @@ var KTDoc = {
 	},
 
 	Select: {
-		open: function (id) {
+		element: function (id) {
 			var select = document.createElement('select');
 			select.id = id;
 
