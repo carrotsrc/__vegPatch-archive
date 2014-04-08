@@ -1,15 +1,15 @@
 #!/bin/bash
-PPATH="/home/charlie/development/web/kit4/library/panel/$2"
+PPATH="/home/charlie/development/web/vpatch/library/panel/$2"
 
 if [ "$1" == "" ]; then
 	echo "No name given"
-	echo "kpanel [PANEL-NAME] [SPACE]
+	echo "vpanel [PANEL-NAME] [SPACE]"
 	exit 0
 fi
 
 if [ "$2" == "" ]; then
 	echo "No space given"
-	echo "kpanel [PANEL-NAME] [SPACE]
+	echo "vpanel [PANEL-NAME] [SPACE]"
 	exit 0
 fi
 

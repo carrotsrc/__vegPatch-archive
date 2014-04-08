@@ -1,13 +1,13 @@
 #!/bin/bash
-PPATH="/home/charlie/development/web/kit4/library/components/$2/$1"
+PPATH="/home/charlie/development/web/vpatch/library/components/$2/$1"
 
 if [ "$1" == "" ]; then
 	echo "No name given"
-	echo "vpcmpt [COMPONENT-NAME] [SPACE]"
+	echo "vcmpt [COMPONENT-NAME] [SPACE]"
 	exit 0
-if [ "$2" == "" ]; then
+elif [ "$2" == "" ]; then
 	echo "No space given"
-	echo "vpcmpt [COMPONENT-NAME] [SPACE]"
+	echo "vcmpt [COMPONENT-NAME] [SPACE]"
 fi
 
 mkdir $PPATH
