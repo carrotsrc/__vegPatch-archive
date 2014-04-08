@@ -217,6 +217,7 @@ var KitJS = {
 		this._cmpt = null;
 		this._inst = null;
 		this._gnid = null;
+		this._pmod = null;
 		this._group = null;
 		this._area = '__KAID__';   // Could make this a request with the server
 		this._loop = null;
@@ -231,7 +232,7 @@ var KitJS = {
 			this._pmod = this._name+pid;
 			this._local = local;
 			KitJS.CommonGroup.register(this._name, this._pnid, this._gnid, this);
-			self._loop = this;
+			self._loop = this; // DEPRECATED
 		}
 
 		this.request = function (channel, args, callback, post) {
@@ -264,6 +265,10 @@ var KitJS = {
 
 			e.href = "javascript:void(0)";
 			e.onclick = onevent;
+		}
+
+		this.getElementById = function (id) {
+			return document.getElementById(this._pmod+"-"+id);
 		}
 	},
 
