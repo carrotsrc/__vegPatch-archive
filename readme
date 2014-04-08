@@ -1,13 +1,24 @@
-Kura 0.1/Vegpatch 0.2
+Vegpatch 0.2.1
 ==============
-Version: 	0.2/vegptach
-Author: 	Carrotsrc, cfg
-Date: 		28/09/2013
-Updated:	17/02/2013
+Version: 	0.2.1/vegptach
+Author: 	cfg csorg
+Date: 		08/04/2014
+Updated:	08/04/2014
+
+VegPatch 0.2.1 Changelog
+========================
+
+- Started deprecating _loop property. Hasn't been necessary for over a year but forgot
+- Expanded PanelInterface
+	- added getElementById() to quickly grab panel elements
+	- added elementId() to quickly generate a panel element ID
+- Fixed request queue bug in gscript.js
+- Added KTSet.NodeUtl.appendInput to handle problems that IE has with <input type="">
+- Method to open Select and Table in KTDoc is now element() not open()
+- Fixed Strap and Module root tool so they load up the Managers object
 
 VegPatch 0.2 Changelog
 ======================
-
 - QParse and QPart are being used for processing resource queries and converting to SQL.
 - Removed use of '^' character in RQL. Explicit relationship is now required.
 - Fixed RQs that used ^. Now have explicit relationship
