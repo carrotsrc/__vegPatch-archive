@@ -30,7 +30,7 @@ var KitJS = {
 						try {
 							self.request = new ActiveXObject("Microsoft.XMLHTTP");
 						} catch(e) {
-							alert("Failed");
+							alert("Failed to create request object!");
 						}
 					}
 				}
@@ -45,7 +45,6 @@ var KitJS = {
 			self.valTimeout = 3000;
 
 			this.makeRequest = function (args, callback, post) {
-				self.initRequest();
 				if(self.isOpen)
 					push(args, post, callback);
 				else
@@ -64,6 +63,7 @@ var KitJS = {
 			}
 
 			var open = function (args, post, callback) {
+				self.initRequest();
 				self.isOpen = true;
 				url = KitJS.Ajax.requestURL;
 				if(args != null)
@@ -80,8 +80,9 @@ var KitJS = {
 					self.request.setRequestHeader('Content-Length', post.length);
 
 				var cfunc = callback;
+				self.request.cfunc = cfunc
 				self.request.onreadystatechange = function () {
-					statechange(cfunc);
+					statechange(this.cfunc);
 				}
 
 				self.request.timeout = self.valTimeout;
@@ -105,18 +106,6 @@ var KitJS = {
 
 			var statechange = function (callback) {
 				switch(self.request.readyState) {
-				case 0:
-				break;
-
-				case 1:
-				break;
-
-				case 2:
-				break;
-
-				case 3:
-				break;
-
 				case 4:
 					callback(self.request.responseText);
 					self.request.abort();
