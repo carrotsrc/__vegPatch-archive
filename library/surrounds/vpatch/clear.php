@@ -32,7 +32,7 @@
 	</div>
 
 	<div id="kr-title">
-		Kura Root
+		VPatch
 	</div>
 
 </div>

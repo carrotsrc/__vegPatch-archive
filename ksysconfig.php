@@ -11,12 +11,16 @@
 		public static $dbcPassword = '';
 		public static $dbcDatabase = '';
 
+		// added app dirctory property so you just change this to
+		// set the application in a sub directory
+		public static $appdir = ''; // '/app-dir'
+
 		public static function libraryPath($sub = null)
 		{
 			if($sub == null)
-				return $_SERVER["DOCUMENT_ROOT"]."/kura/library/";
+				return $_SERVER["DOCUMENT_ROOT"].self::$appdir."/library/";
 			else
-				return $_SERVER["DOCUMENT_ROOT"]."/kura/library/$sub";
+				return $_SERVER["DOCUMENT_ROOT"].self::$appdir."/library/$sub";
 		}
 		
 		public static function documentRootPath($sub = null)
@@ -30,24 +34,24 @@
 		public static function appRootPath($sub = null)
 		{
 			if($sub == null)
-				return $_SERVER["DOCUMENT_ROOT"]."/kura/";
+				return $_SERVER["DOCUMENT_ROOT"].self::$appdir."/";
 			else
-				return $_SERVER["DOCUMENT_ROOT"]."/kura/".$sub;
+				return $_SERVER["DOCUMENT_ROOT"].self::$appdir."/$sub";
 		}
 		public static function appServerRoot($sub = null)
 		{
 			if($sub == null)
-				return $_SERVER["SERVER_NAME"]."/kura/";
+				return $_SERVER["SERVER_NAME"].self::$appdir."/";
 			else
-				return $_SERVER["SERVER_NAME"]."/kura/".$sub;
+				return $_SERVER["SERVER_NAME"].self::$appdir."/$sub";
 		}
 
 		public static function appRelativePath($sub = null)
 		{
 			if($sub == null)
-				return "/kura/";
+				return self::$appdir."/";
 			else
-				return "/kura/".$sub;
+				return self::$appdir."/$sub";
 		}
 
 		public static function appScript()
@@ -62,8 +66,13 @@
 			$sz = sizeof($atoms)-2;
 			$r = 0;
 			$path = "";
+
+			$chk = self::$appdir;
+			if($chk == "");
+				$chk = null;
+
 			for($i = $sz; $i >= 0; $i--) {
-				if($atoms[$i] == 'kura')
+				if($atoms[$i] == $chk)
 					break;
 
 				$r++;

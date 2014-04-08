@@ -31,11 +31,11 @@
 <body>
 <div id="kr-header" class="solidbg2">
 	<div id="kr-version">
-		VegPatch v1.0	
+		VegPatch v1.0
 	</div>
 
 	<div id="kr-title">
-		Kura System 
+		VPatch
 	</div>
 
 </div>
