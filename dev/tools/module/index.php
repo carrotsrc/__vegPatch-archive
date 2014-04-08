@@ -7,6 +7,7 @@
 	include(SystemConfig::relativeAppPath("system/structure/blocks/schemablock.php"));
 	include(SystemConfig::relativeAppPath("system/dbacc.php"));
 	include(SystemConfig::relativeAppPath("system/structure/module/modman.php"));
+	include(SystemConfig::relativeAppPath("system/managers.php"));
 	include('lib.php');
 	$db = Koda::getDatabaseConnection('mysql');
 	$fm = Koda::getFileManager();
@@ -14,6 +15,7 @@
 	$db->selectDatabase(SystemConfig::$dbcDatabase);
 
 	$rman = new ResMan($db);
+	Managers::setResourceManager($rman);
 
 	$lduld = null;
 	$panel = "";

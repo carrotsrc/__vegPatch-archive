@@ -4,6 +4,7 @@
 	
 	include(SystemConfig::relativeAppPath("system/koda/koda.php"));
 	include(SystemConfig::relativeAppPath("system/resource/resman.php"));
+	include(SystemConfig::relativeAppPath("system/resource/managers.php"));
 	include("lib.php");
 
 	$db = Koda::getDatabaseConnection('mysql');
@@ -13,6 +14,7 @@
 	$panel = "";
 
 	$rman = new ResMan($db);
+	Managers::setResourceManager($rman);
 	$mlist = $fm->listDirectories("../");
 
 	if(isset($_GET['mode']) && $_GET['mode'] == "root") {
