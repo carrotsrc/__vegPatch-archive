@@ -10,8 +10,8 @@
 
 ?>
 	<div id="kr-layout">
-		<span class="ok-text-blue"><span class="tx-large"><b>Root Tools</b></span><br />
-		<b>Platform Version:</b><span class="ok-text-grey"> <b>0.2.1</b></span></span>
+		<span class="ok-text-blue"><b>VPatch Root Tools</b><br />
+		Version:<span class="ok-text-grey"> 0.2.1</span></span>
 		<div style="margin-top: 15px">
 			<div class="tools">
 			</div>

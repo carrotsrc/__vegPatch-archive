@@ -18,7 +18,6 @@ body {
 
 a {
 	text-decoration: none;
-	font-weight: bold;
 }
 
 #link-bar {
@@ -46,16 +45,20 @@ a {
 }
 
 #kr-layout-column {
-	width: 80%;
+	/*width: 80%;
+	width: 100%;*/
 	display: block;
 	background: white;
 	overflow: auto;
-	height: auto !important;
-	border-top-right-radius: 15px;
-	border-bottom-right-radius: 15px;
+	/*border-top-right-radius: 15px;
+	border-bottom-right-radius: 15px;*/
+	height: 500px;
 	min-height: 500px;
-	border: 1px solid #ADBF6B;
-	//float: left;
+	border-top: 1px solid #ADBF6B;
+	border-bottom: 1px solid #ADBF6B;
+	/*float: left;
+	-moz-box-sizing: border-box;*/
+
 }
 
 #kr-layout {
@@ -221,8 +224,18 @@ textarea {
 
 .tool-icon {
 	text-align: center;
+	float: left;
+	margin-left: 15px;
+	margin-bottom: 15px;
 }
 
 .tool-icon a {
-	color: #909090;
+	color: #808080;
+	font-weight: bold;
+	border-width: 0px;
 }
+.tool-icon img {
+	border-width: 0px;
+	margin-bottom: 5px;
+}
+

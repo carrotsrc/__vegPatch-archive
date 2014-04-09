@@ -1,17 +1,9 @@
 <?php
-	if(!include($_SERVER["DOCUMENT_ROOT"]."/ksysconfig.php"))
-			die("Setup Problem: Cannot locate SystemConfig.");
-	
-	include(SystemConfig::relativeAppPath("system/koda/koda.php"));
+	if(!defined('_ROOT_TOOL'))
+		die("Not logged in");
+
 	include(SystemConfig::relativeAppPath("system/resource/resman.php"));
 	include("lib.php");
-
-	$db = Koda::getDatabaseConnection('mysql');
-
-	$db->connect(SystemConfig::$dbcUsername, SystemConfig::$dbcPassword);
-	$db->selectDatabase(SystemConfig::$dbcDatabase);
-	
-	$fm = Koda::getFileManager();
 
 	$rman = new ResMan($db);
 	$panel = "";
@@ -60,49 +52,18 @@
 		$panel = ob_get_contents();
 		ob_end_clean();
 	}
-	$mlist = $fm->listDirectories("../");
 ?>
-<html>
-	<head>
-		<title>VegPatch Associations</title>
-		<link type="text/css" rel="stylesheet" href="template.css" />
-	</head>
-
-<body>
-<div id="header">
-<div id="vp-title">
-	Asssociations
-</div>
-
-<div id="vp-version">
-	SuperRoot VegPatch v0.1
-</div>
-</div>
-
-<div id="link-bar">
-<?php
-	echo "| ";
-	foreach($mlist as $d) {
-		if($d == 'tool-template')
-			continue;
-
-		echo "<a href=\"../$d\">$d</a>";
-		echo " | ";
-	}
-?>
-</div>
-<div id="kr-layout-column">
 	<div id="kr-layout">
 		<div class="tools">
 			<div class="tool-panel">
 			<b>Relationships</b>
-			<form method="post" action="index.php?mode=newrel">
+			<form method="post" action="index.php?tool=assoc&mode=newrel">
 				<input type="submit" class="form-button" value="Create Assoc" />
 			</form>
-			<form method="post" action="index.php?mode=manrel">
+			<form method="post" action="index.php?tool=assoc&mode=manrel">
 				<input type="submit" style="margin-top: -20px;" class="form-button" value="Manage Assoc" />
 			</form>
-			<form method="post" action="index.php?mode=edge">
+			<form method="post" action="index.php?tool=assoc&mode=edge">
 				<input type="submit" style="margin-top: -8px;" class="form-button" value="Manage Edges" />
 			</form>
 			</div>
@@ -113,6 +74,3 @@
 			</div>
 		</div>
 </div>
-
-</body>
-</html>

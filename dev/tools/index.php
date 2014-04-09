@@ -34,7 +34,7 @@
 <body>
 <div id="header">
 <!-- <div id="vp-title"> -->
-	<span class="ok-text-grey tx-xlarge">v<span class="ok-text-green">Patch</span></span>
+	<a href="index.php"><span class="ok-text-grey tx-xlarge">v<span class="ok-text-green">Patch</span></span></a>
 <!-- </div> -->
 
 <div id="vp-version">
@@ -43,12 +43,10 @@
 </div>
 
 <div id="kr-layout-column">
-	<div id="kr-layout">
 			<?php 
 				define('_ROOT_TOOL', 0xff);
 				include("$rtool/index.php");
 			?>
-	</div>
 </div>
 
 </body>

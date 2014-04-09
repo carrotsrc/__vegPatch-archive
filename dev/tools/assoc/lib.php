@@ -6,7 +6,7 @@
 		echo "<b>New Relationship</b><br />";
 		echo "<div style=\"float: left; width: 350px;\" class=\"font-small form-item\">";
 			echo "<b>Parent</b>";
-			echo "<form action=\"index.php?mode=newrel\" method=\"post\">";
+			echo "<form action=\"index.php?tool=assoc&mode=newrel\" method=\"post\">";
 				echo "<input autocomplete=\"off\" type=\"text\" class=\"form-text\" name=\"prq\" ";
 					if($prq != null)
 						echo "value=\"$prq\" ";
@@ -20,7 +20,7 @@
 
 		echo "<div style=\"float: left; width: 350px; margin-left: 10px;\" class=\"font-small form-item\">";
 			echo "<b>Child</b>";
-			echo "<form action=\"index.php?mode=newrel\" method=\"post\">";
+			echo "<form action=\"index.php?tool=assoc&mode=newrel\" method=\"post\">";
 				echo "<input autocomplete=\"off\" type=\"text\" class=\"form-text\" name=\"crq\" ";
 					if($crq != null)
 						echo "value=\"$crq\" ";
@@ -42,7 +42,7 @@
 		if($crq != null && $crq != "")
 			$cr = $rman->queryAssoc($crq);
 
-		echo "<form name=\"final-relationship\" method=\"post\" action=\"index.php?mode=newrel\" >";
+		echo "<form name=\"final-relationship\" method=\"post\" action=\"index.php?tool=assoc&mode=newrel\" >";
 		echo "<div style=\"float: left; width: 350px;\" class=\"font-small form-item\">";
 		echo "<div class=\"panel-box\">";
 			if($pr != null || $pr != false) {
@@ -100,6 +100,7 @@
 		echo "</div>";
 		echo "</div><br />";
 		echo "<input type=\"hidden\" name=\"op\" value=\"1\">";
+		echo "<input type=\"hidden\" name=\"tool\" value=\"assoc\">";
 		echo "<select class=\"form-text form-select float-l\" name=\"edge\">";
 			echo "<option value=\"0\">Normal Edge</option>";
 			foreach($etype as $edge) {
@@ -109,7 +110,7 @@
 		echo "</select>";
 		echo "<input type=\"submit\" style=\"margin-left: 6px;\" class=\"form-button float-r\" value=\"Create Relationship\">";
 		echo "</form>";
-		echo "<form method=\"post\" action=\"index.php?mode=newrel\">";
+		echo "<form method=\"post\" action=\"index.php?tool=assoc&mode=newrel\">";
 		echo "<input type=\"submit\"  class=\"form-button float-r\" value=\"clear\">";
 		echo "</form>";
 	}
@@ -151,7 +152,7 @@
 				
 			echo "<div class=\"form-item\" style=\"overflow: auto; padding: 0px; width: auto; min-width: 600px;\">";
 				echo "<b>Query</b>";
-				echo "<form action=\"index.php?mode=manrel\" method=\"post\">";
+				echo "<form action=\"index.php?tool=assoc&mode=manrel\" method=\"post\">";
 					echo "<input type=\"text\" style=\"width: 100%;\" class=\"form-text\" name=\"query\" ";
 						if($prq != null)
 							echo "value=\"$prq\" ";
@@ -160,7 +161,7 @@
 					echo "<br /><input type=\"submit\" class=\"form-button float-r\" value=\"query\">";
 				echo "</form><br />";
 
-				echo "<form action=\"index.php?mode=manrel\" method=\"post\">";
+				echo "<form action=\"index.php?tool=assoc&mode=manrel\" method=\"post\">";
 				echo "<div class=\"form-item panel-box\" >";
 					if($res != null || $res != false) {
 						echo "<table>";
@@ -204,9 +205,10 @@
 			echo "</div>";
 				echo "<input type=\"hidden\" name=\"op\" value=\"2\">";
 				echo "<input type=\"hidden\" name=\"query\" value=\"$prq\">";
+				echo "<input type=\"hidden\" name=\"tool\" value=\"assoc\">";
 				echo "<input type=\"submit\" value=\"remove\" style=\"margin-top: -10;\"class=\"form-button\" />";
 			echo "</form>";
-			echo "<form method=\"post\" action=\"index.php?mode=manrel\">";
+			echo "<form method=\"post\" action=\"index.php?tool=assoc&mode=manrel\">";
 				echo "<input type=\"submit\" value=\"clear\" style=\"margin-top: -21;\" class=\"form-button float-r\" />";
 			echo "</form>";
 	}
@@ -250,7 +252,7 @@
 				echo "<td>";
 				$o = ResCast::cast($e[1]);
 
-				echo "<a class=\"switch-a\" href=\"index.php?mode=edge&op=2&id={$e[0]}\">{$e[2]}</a>";
+				echo "<a class=\"switch-a\" href=\"index.php?tool=assoc&mode=edge&op=2&id={$e[0]}\">{$e[2]}</a>";
 				echo "</td>";
 
 				echo "<td>";
@@ -266,7 +268,7 @@
 			echo "New Edge<br />";
 		else
 			echo "Modify Edge<br />";
-		echo "<form method=\"post\" action=\"index.php?mode=edge\">";
+		echo "<form method=\"post\" action=\"index.php?tool=assoc&mode=edge\">";
 		echo "<div class=\"form-item font-small\">";
 		echo "<b>Type</b><br />";
 		echo "<select name=\"type\" class=\"form-text form-select\" style=\"margin-top: 0px;\">";
@@ -292,6 +294,7 @@
 			echo "<input type=\"hidden\" name=\"id\" value=\"$mod\">";
 			echo "<input type=\"hidden\" name=\"op\" value=\"3\">";
 		}
+		echo "<input type=\"hidden\" name=\"tool\" value=\"assoc\">";
 
 		if($det == null)
 			echo "<br /><input type=\"submit\" class=\"form-button\" value=\"Add\">";
@@ -301,7 +304,7 @@
 		echo "</form>";
 
 		if($det != null) {
-			echo "<form method=\"post\" action=\"index.php?mode=edge\">";
+			echo "<form method=\"post\" action=\"index.php?tool=assoc&mode=edge\">";
 			echo "<input type=\"submit\" class=\"form-button\" style=\"margin-top: -20px;\" value=\"cancel\">";
 			echo "</form>";
 		}
