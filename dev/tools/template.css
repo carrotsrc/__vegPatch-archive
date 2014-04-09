@@ -2,16 +2,23 @@ body {
 	font-family: sans-serif;
 	padding: 0px;
 	margin: 0px;
-	background-image: url('ticks.png');
+	background-image: url('shl.png');
 }
 #header {
 	color: #659A00;
-	background-color:#C7F66F; 
-	border-bottom: 2px solid #B3DD63;
+	border-bottom: 2px solid #ADBF6B;
+	background-image: url('small_green_grad.png');
 	width: 100%;
 	margin-bottom: 50px;
-	overflow: auto;
-	font-size: small;
+	height: 50px;
+	padding-top: 5px;
+	padding-left: 15px;
+	-moz-box-sizing: padding-box;
+}
+
+a {
+	text-decoration: none;
+	font-weight: bold;
 }
 
 #link-bar {
@@ -39,20 +46,22 @@ body {
 }
 
 #kr-layout-column {
-	width: 70%;
-	margin-left: 15%;
+	width: 80%;
+	display: block;
 	background: white;
 	overflow: auto;
 	height: auto !important;
-	border-radius: 15px;
+	border-top-right-radius: 15px;
+	border-bottom-right-radius: 15px;
 	min-height: 500px;
-	border: 1px solid grey;
-	float: left;
+	border: 1px solid #ADBF6B;
+	//float: left;
 }
 
 #kr-layout {
 	margin: 10px;
 	padding: 10px;
+	color: #909090;
 }
 
 .tools {
@@ -87,6 +96,7 @@ textarea {
 	margin-left: 15px;
 	clear:left;
 	margin-bottom: 15px;
+
 }
 
 .panel {
@@ -168,4 +178,51 @@ textarea {
 
 .li-active {
 	color: #B3DD63;
+}
+
+.ok-text-green {
+	color: #7D9E05;
+}
+
+.ok-text-grey {
+	color: #808080;
+}
+
+.ok-text-blue {
+	color: #63819F;
+}
+
+.ok-text-error {
+	color: #EF6459;
+}
+.tx-bold {
+	font-weight: bold;
+}
+
+.tx-lbreath-top {
+	margin-top: 7px;
+}
+
+.tx-mbreath-top {
+	margin-top: 10px;
+}
+
+.tx-detail {
+	font-size: 18px;
+}
+
+.tx-large {
+	font-size: 25px;
+}
+
+.tx-xlarge {
+	font-size: 30px;
+}
+
+.tool-icon {
+	text-align: center;
+}
+
+.tool-icon a {
+	color: #909090;
 }
