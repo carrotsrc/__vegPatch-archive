@@ -81,7 +81,7 @@
 			if($chk == "")
 				$chk = null;
 
-			for($i = $sz; $i >= 0; $i--) {
+			for($i = $sz; $i > 0; $i--) {
 				if("/{$atoms[$i]}" == $chk)
 					break;
 
