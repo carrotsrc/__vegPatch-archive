@@ -9,7 +9,7 @@
 				
 			echo "<div class=\"form-item\" style=\"overflow: auto; padding: 0px; width: auto; min-width: 600px;\">";
 				echo "<b>Query</b>";
-				echo "<form action=\"index.php?mode=rql\" method=\"post\">";
+				echo "<form action=\"index.php?tool=query&mode=rql\" method=\"post\">";
 					echo "<input type=\"text\" style=\"width: 100%;\" class=\"form-text\" name=\"query\" ";
 						if($prq != null)
 							echo "value=\"$prq\" ";
@@ -18,7 +18,7 @@
 					echo "<br /><input type=\"submit\" class=\"form-button float-r\" value=\"query\">";
 				echo "</form><br />";
 
-				echo "<form action=\"index.php?mode=rql\" method=\"post\">";
+				echo "<form action=\"index.php?tool=query&mode=rql\" method=\"post\">";
 				echo "<div class=\"form-item panel-box\" >";
 					if($res != null || $res != false) {
 						echo "<table>";
@@ -50,9 +50,6 @@
 				echo "<input type=\"hidden\" name=\"op\" value=\"2\">";
 				echo "<input type=\"hidden\" name=\"query\" value=\"$prq\">";
 				echo "<input type=\"submit\" value=\"remove\" style=\"margin-top: -10;\"class=\"form-button\" />";
-			echo "</form>";
-			echo "<form method=\"post\" action=\"index.php?mode=manrel\">";
-				echo "<input type=\"submit\" value=\"clear\" style=\"margin-top: -21;\" class=\"form-button float-r\" />";
 			echo "</form>";
 	}
 ?>
