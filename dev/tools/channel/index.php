@@ -1,16 +1,12 @@
 <?php
-	if(!include($_SERVER["DOCUMENT_ROOT"]."/ksysconfig.php"))
-			die("Setup Problem: Cannot locate SystemConfig.");
-	
-	include(SystemConfig::relativeAppPath("system/koda/koda.php"));
+	if(!defined('_ROOT_TOOL'))
+		die("Not logged in");
+
 	include(SystemConfig::relativeAppPath("system/resource/resman.php"));
 	include(SystemConfig::relativeAppPath("system/debugmicro.php"));
 	include("lib.php");
 
-	$db = Koda::getDatabaseConnection('mysql');
 	$fm = Koda::getFileManager();
-	$db->connect(SystemConfig::$dbcUsername, SystemConfig::$dbcPassword);
-	$db->selectDatabase(SystemConfig::$dbcDatabase);
 	$dbm = new DebugMicro();
 
 	$rman = new ResMan($db);
@@ -93,82 +89,51 @@
 	$mlist = $fm->listDirectories("../");
 	$plugins = $fm->listDirectories(SystemConfig::relativeAppPath("library/plugins"));
 ?>
-<html>
-	<head>
-		<title>VegPatch Channel Manager</title>
-		<link type="text/css" rel="stylesheet" href="template.css" />
-	</head>
-
-<body>
-<div id="header">
-<div id="vp-title">
-	Channel Manager
-</div>
-
-<div id="vp-version">
-	SuperRoot VegPatch v0.1
-</div>
-</div>
-<div id="link-bar">
-<?php
-	echo "| ";
-	foreach($mlist as $d) {
-		if($d == 'tool-template')
-			continue;
-
-		echo "<a href=\"../$d\">$d</a>";
-		echo " | ";
-	}
-?>
-</div>
-
-<div id="kr-layout-column">
-	<div id="kr-layout">
-		<div class="tools">
-			<div class="tool-panel">
-			<b>Plugins</b>
-			<form method="get" action="index.php" style="margin-top: -5px">
-				<input type="hidden" name="mode" value="plugin"/>
-				<select class="form-text form-select" name="cplugin" style="width: 150px;">
-					<?php 
-						foreach($plugins as $p) {
-							if($cplugin != null && $cplugin == $p)
-								echo "<option value=\"$p\" selected>{$p}</option>";
-							else
-								echo "<option value=\"{$p}\">{$p}</option>";
-						}
-					?>
-				</select><br />
-				<input type="submit" value="Manage Plugin" class="form-button"/>
-			</form>
-			</div>
-
-			<div class="tool-panel">
-			<b>Channels</b>
-			<form method="post" action="index.php?mode=nchan" style="margin-top: -5px">
-				<input type="submit" value="New Channel" class="form-button"/>
-			</form>
-			<form method="get" action="index.php" style="margin-top: -5px">
-				<input type="hidden" name="mode" value="channel"/>
-				<select class="form-text form-select" name="cchan" style="width: 150px;">
-					<?php 
-						foreach($channels as $c) {
-							if($cchan != null && $cchan == $c[0])
-								echo "<option value=\"{$c[0]}\" selected>{$c[2]}</option>";
-							else
-								echo "<option value=\"{$c[0]}\">{$c[2]}</option>";
-						}
-					?>
-				</select><br />
-				<input type="submit" value="Manage Channel" class="form-button"/>
-			</form>
-			</div>
+<div id="kr-layout">
+	<div class="tools">
+		<div class="tool-panel">
+		<b>Plugins</b>
+		<form method="get" action="index.php" style="margin-top: -5px">
+			<input type="hidden" name="tool" value="channel"/>
+			<input type="hidden" name="mode" value="plugin"/>
+			<select class="form-text form-select" name="cplugin" style="width: 150px;">
+				<?php 
+					foreach($plugins as $p) {
+						if($cplugin != null && $cplugin == $p)
+							echo "<option value=\"$p\" selected>{$p}</option>";
+						else
+							echo "<option value=\"{$p}\">{$p}</option>";
+					}
+				?>
+			</select><br />
+			<input type="submit" value="Manage Plugin" class="form-button"/>
+		</form>
 		</div>
 
-			<div class="panel">
-				<?php echo $panel; ?>
-			</div>
+		<div class="tool-panel">
+		<b>Channels</b>
+		<form method="post" action="index.php?tool=channel&mode=nchan" style="margin-top: -5px">
+			<input type="submit" value="New Channel" class="form-button"/>
+		</form>
+		<form method="get" action="index.php" style="margin-top: -5px">
+			<input type="hidden" name="tool" value="channel"/>
+			<input type="hidden" name="mode" value="channel"/>
+			<select class="form-text form-select" name="cchan" style="width: 150px;">
+				<?php 
+					foreach($channels as $c) {
+						if($cchan != null && $cchan == $c[0])
+							echo "<option value=\"{$c[0]}\" selected>{$c[2]}</option>";
+						else
+							echo "<option value=\"{$c[0]}\">{$c[2]}</option>";
+					}
+				?>
+			</select><br />
+			<input type="submit" value="Manage Channel" class="form-button"/>
+		</form>
 		</div>
+	</div>
+
+	<div class="panel">
+		<?php echo $panel; ?>
+	</div>
 </div>
-</body>
-</html>

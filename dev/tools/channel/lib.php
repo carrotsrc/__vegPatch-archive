@@ -57,10 +57,11 @@
 		echo "<b>$plugin</b>";
 		if($rid ==  null) {
 			echo "<form name=\"reg-plugin\">\n";
-				echo "<input type=\"hidden\" name=\"op\" value=\"1\">\n";
-				echo "<input type=\"hidden\" name=\"cplugin\" value=\"$plugin\">\n";
-				echo "<input type=\"hidden\" name=\"mode\" value=\"plugin\">\n";
-				echo "<input type=\"submit\" class=\"form-button\" value=\"Register Resource\">\n";
+				echo "<input type=\"hidden\" name=\"tool\" value=\"channel\" />\n";
+				echo "<input type=\"hidden\" name=\"op\" value=\"1\" />\n";
+				echo "<input type=\"hidden\" name=\"cplugin\" value=\"$plugin\" />\n";
+				echo "<input type=\"hidden\" name=\"mode\" value=\"plugin\" />\n";
+				echo "<input type=\"submit\" class=\"form-button\" value=\"Register Resource\" />\n";
 			echo "</form>";
 			echo "</div>";
 			return;
@@ -75,7 +76,7 @@
 				echo "<table>\n";
 				foreach($ls as $p) {
 					echo "<tr>";
-					echo "<td style=\"text-align: right;\"><a href=\"index.php?mode=plugin&op=2&id={$p['id']}&cplugin={$plugin}\" class=\"switch-a\">{$p['label']}</a></td>";
+					echo "<td style=\"text-align: right;\"><a href=\"index.php?tool=channel&mode=plugin&op=2&id={$p['id']}&cplugin={$plugin}\" class=\"switch-a\">{$p['label']}</a></td>";
 					echo "<td>=&gt; {$p['handler']}</td>";
 					echo "<td class=\"font-small\">({$p['id']})</td>";
 					echo "</tr>";
@@ -88,7 +89,7 @@
 
 		echo "<hr />";
 		echo "New Instance<br />";
-		echo "<form name=\"ninst\" method=\"post\" class=\"font-small form-item\" action=\"index.php?mode=plugin&cplugin=$plugin&op=2\">";
+		echo "<form name=\"ninst\" method=\"post\" class=\"font-small form-item\" action=\"index.php?tool=channel&mode=plugin&cplugin=$plugin&op=2\">";
 		echo "<b>Label</b><br />";
 		echo "<input type=\"text\" name=\"label\" class=\"form-text font-small\" style=\"margin-top: 0px; margin-bottom: 7px;\" /><br />";
 		echo "<b>Ref</b><br />";
@@ -168,6 +169,7 @@
 		echo "<b>{$channel[2]}</b> ({$channel[0]})";
 		if($rid == null) {
 			echo "<form name=\"reg-channel\">\n";
+				echo "<input type=\"hidden\" name=\"tool\" value=\"channel\" />\n";
 				echo "<input type=\"hidden\" name=\"op\" value=\"1\">\n";
 				echo "<input type=\"hidden\" name=\"cchan\" value=\"$cid\">\n";
 				echo "<input type=\"hidden\" name=\"mode\" value=\"channel\">\n";
@@ -190,19 +192,19 @@
 					echo "<tr>";
 					echo "<td><b>{$pa[1]}</b></td>";
 					echo "<td style=\"\">".getPluginLabel($p[3], $p[4], $rman)."</td>";
-					echo "<td>=&gt; <a href=\"index.php?mode=channel\" class=\"switch-a\">{$p[2]}</a></td>";
+					echo "<td>=&gt; <a href=\"index.php?tool=channel&mode=channel\" class=\"switch-a\">{$p[2]}</a></td>";
 					echo "<td class=\"font-small\">({$p[3]})</td>";
 					if($k > 1)
-						echo "<td><a href=\"index.php?mode=channel&cchan=$cid&op=5&nid={$p[0]}\" class=\"switch-a\">&uarr;</a></td>";
+						echo "<td><a href=\"index.php?tool=channel&mode=channel&cchan=$cid&op=5&nid={$p[0]}\" class=\"switch-a\">&uarr;</a></td>";
 					else
 						echo "<td>&nbsp</td>";
 
 					if($k <= $sz)
-						echo "<td><a href=\"index.php?mode=channel&cchan=$cid&op=6&nid={$p[0]}\" class=\"switch-a\">&darr;</a></td>";
+						echo "<td><a href=\"index.php?tool=channel&mode=channel&cchan=$cid&op=6&nid={$p[0]}\" class=\"switch-a\">&darr;</a></td>";
 					else
 						echo "<td>&nbsp</td>";
 
-					echo "<td><a style=\"color: red;\" href=\"index.php?mode=channel&cchan=$cid&op=7&nid={$p[0]}\" class=\"switch-a\">X</a></td>";
+					echo "<td><a style=\"color: red;\" href=\"index.php?tool=channel&mode=channel&cchan=$cid&op=7&nid={$p[0]}\" class=\"switch-a\">X</a></td>";
 					echo "</tr>";
 				}
 				echo "</table>";
@@ -215,6 +217,7 @@
 			echo "<hr /";
 			echo "<b>Add Plugin</b><br />";
 			echo "<form name=\"plugin-get\" method=\"get\" action=\"index.php\">";
+			echo "<input type=\"hidden\" name=\"tool\" value=\"channel\">\n";
 			echo "<input type=\"hidden\" name=\"cchan\" value=\"$cid\">\n";
 			echo "<input type=\"hidden\" name=\"mode\" value=\"channel\">\n";
 			echo "<select name=\"cplugin\" class=\"form-select form-text\">";
@@ -235,6 +238,7 @@
 			echo "Instance<br >";
 			if($ls != null && $rid != null) {
 				echo "<form name=\"instance-set\" method=\"get\" action=\"index.php\">";
+				echo "<input type=\"hidden\" name=\"tool\" value=\"channel\">\n";
 				echo "<input type=\"hidden\" name=\"cchan\" value=\"$cid\">\n";
 				echo "<input type=\"hidden\" name=\"mode\" value=\"channel\">\n";
 				echo "<input type=\"hidden\" name=\"cplugin\" value=\"$cplugin\">\n";
@@ -264,13 +268,14 @@
 
 		$cseq++;
 		$res = $rman->getResourceFromId($rid);
+		$plg = $rman->queryAssoc("Plugin(){r}>Instance($rid);");
 
-		$sql = "INSERT INTO channelnodes (channel, label, seq, rid) ";
+		$sql = "INSERT INTO channelnodes (channel, seq, pid, inst) ";
 		$sql .= "VALUES (";
 		$sql .= "\"$channel\", ";
-		$sql .= "\"{$res['label']}\", ";
 		$sql .= "\"$cseq\", ";
-		$sql .= "\"{$res['id']}\");";
+		$sql .= "\"{$plg[0][1]}\", ";
+		$sql .= "\"{$res['handler']}\");";
 		
 		$db->sendQuery($sql);
 	}
@@ -349,7 +354,7 @@
 	{
 		echo "<b>Add new channel</b><br />";
 		echo "<div class=\"form-item\" style=\"margin-top: 10px\">";
-		echo "<form action=\"index.php?mode=nchan\" method=\"post\">";
+		echo "<form action=\"index.php?tool=channel&mode=nchan\" method=\"post\">";
 				echo "<input type=\"hidden\" name=\"op\" value=\"1\">\n";
 				echo "<b><font class=\"font-small\">Label</font></b><br />";
 				echo "<input name=\"label\" type=\"text\" class=\"form-text\" style=\"margin-top: 0px;\"><br />";
