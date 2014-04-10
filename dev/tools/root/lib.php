@@ -33,7 +33,7 @@
 		else
 			$config = $config[0];
 
-		echo "<form method=\"post\" action=\"index.php?mode=config\">";
+		echo "<form method=\"post\" action=\"index.php?tool=root&mode=config\">";
 		echo "<table>";
 		foreach($config as $k => $v) {
 			echo "<tr>";
@@ -99,11 +99,11 @@
 							echo "<td>{$f[2]}</td>";
 							echo "<td>/{$f[0]}</td>";
 							echo "<td>";
-							echo "<a href=\"index.php?mode=asset&op=2&id=$id\" class=\"switch-a\" style=\"color:red;\">X</a>";
+							echo "<a href=\"index.php?tool=root&mode=asset&op=2&id=$id\" class=\"switch-a\" style=\"color:red;\">X</a>";
 							echo "</td>";
 						}
 						else {
-							echo "<td><a href=\"index.php?mode=asset&op=1&name={$f[0]}\" class=\"switch-a\">{$f[2]}</a></td>";
+							echo "<td><a href=\"index.php?tool=root&mode=asset&op=1&name={$f[0]}\" class=\"switch-a\">{$f[2]}</a></td>";
 							echo "<td>/{$f[0]}</td>";
 							echo "<td> </td>";
 						}
@@ -126,7 +126,7 @@
 					echo "<td>{$a[2]}</td>";
 					echo "<td>???</td>";
 					echo "<td>";
-					echo "<a href=\"index.php?mode=asset&op=2&id=$id\" class=\"switch-a\" style=\"color:red;\">X</a>";
+					echo "<a href=\"index.php?tool=root&mode=asset&op=2&id=$id\" class=\"switch-a\" style=\"color:red;\">X</a>";
 					echo "</td>";
 					echo "</tr>";
 				}
