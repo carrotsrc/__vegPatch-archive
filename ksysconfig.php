@@ -1,5 +1,11 @@
 <?php
-
+/* (C)opyright 2014, Carrotsrc.org
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+	
 	date_default_timezone_set('UTC');
 
 	class SystemConfig
@@ -10,6 +16,10 @@
 		public static $dbcUsername = '';
 		public static $dbcPassword = '';
 		public static $dbcDatabase = '';
+
+		// credentials for the root tools
+		public static $rootUser = '';
+		public static $rootPass = '';
 
 		// added app dirctory property so you just change this to
 		// set the application in a sub directory
@@ -68,11 +78,11 @@
 			$path = "";
 
 			$chk = self::$appdir;
-			if($chk == "");
+			if($chk == "")
 				$chk = null;
 
 			for($i = $sz; $i >= 0; $i--) {
-				if($atoms[$i] == $chk)
+				if("/{$atoms[$i]}" == $chk)
 					break;
 
 				$r++;
