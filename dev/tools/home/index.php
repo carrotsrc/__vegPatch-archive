@@ -1,4 +1,11 @@
 <?php
+/* (C)opyright 2014, Carrotsrc.org
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+	
 	if(!defined('_ROOT_TOOL'))
 		die("Not logged in");
 
@@ -9,12 +16,10 @@
 	$panel = "";
 
 ?>
-	<div id="kr-layout">
+	<div id="kr-layout" style="padding: 15px;">
 		<span class="ok-text-blue"><span class="tx-large"><b>Root Tools</b></span><br />
 		<b>Platform Version:</b><span class="ok-text-grey"> <b>0.2.1</b></span></span>
 		<div style="margin-top: 15px">
-			<div class="tools">
-			</div>
 			<div class="tool-icon">
 			<a href="?tool=area"><img src="area/icon.png" /><br />Areas</a>
 			</div>

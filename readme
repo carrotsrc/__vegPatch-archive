@@ -16,6 +16,11 @@ VegPatch 0.2.1 Changelog
 - Added KTSet.NodeUtl.appendInput to handle problems that IE has with <input type="">
 - Method to open Select and Table in KTDoc is now element() not open()
 - Fixed Strap and Module root tool so they load up the Managers object
+- Root Tools have been overhauled.
+	- top-down design so individual tools are run through the tool index
+	- Style is completely different
+	- A home page
+	- User is required to login. Credentials are held by SystemConfig
 
 VegPatch 0.2 Changelog
 ======================

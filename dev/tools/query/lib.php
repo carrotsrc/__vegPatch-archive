@@ -1,4 +1,11 @@
 <?php
+/* (C)opyright 2014, Carrotsrc.org
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+	
 	function rqlPanel($prq, $rman, $db)
 	{
 			echo "<b>Query Resource</b><br />";
@@ -19,7 +26,7 @@
 				echo "</form><br />";
 
 				echo "<form action=\"index.php?tool=query&mode=rql\" method=\"post\">";
-				echo "<div class=\"form-item panel-box\" >";
+				echo "<div class=\"form-item panel-box\" style=\"height: 300px\">";
 					if($res != null || $res != false) {
 						echo "<table>";
 						foreach($res as $r) {

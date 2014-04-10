@@ -1,5 +1,11 @@
 <?php
-
+/* (C)opyright 2014, Carrotsrc.org
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+	
 	function relationshipPanel($prq, $crq, $rman, $db)
 	{
 		$etype = $db->sendQuery("SELECT * FROM edgetype;", false, false);
@@ -44,7 +50,7 @@
 
 		echo "<form name=\"final-relationship\" method=\"post\" action=\"index.php?tool=assoc&mode=newrel\" >";
 		echo "<div style=\"float: left; width: 350px;\" class=\"font-small form-item\">";
-		echo "<div class=\"panel-box\">";
+		echo "<div class=\"panel-box\" style=\"height: 250px\">";
 			if($pr != null || $pr != false) {
 				echo "<table>";
 				foreach($pr as $r) {
@@ -73,7 +79,7 @@
 		echo "</div>";
 		
 		echo "<div style=\"float: left; width: 350px; margin-left: 10px;\" class=\"font-small form-item\">";
-		echo "<div class=\"panel-box\">";
+		echo "<div class=\"panel-box\" style=\"height: 250px\">";
 			if($cr != null || $cr != false) {
 				echo "<table>";
 				foreach($cr as $r) {
@@ -162,7 +168,7 @@
 				echo "</form><br />";
 
 				echo "<form action=\"index.php?tool=assoc&mode=manrel\" method=\"post\">";
-				echo "<div class=\"form-item panel-box\" >";
+				echo "<div class=\"form-item panel-box\"  style=\"height: 250px\">";
 					if($res != null || $res != false) {
 						echo "<table>";
 						foreach($res as $r) {

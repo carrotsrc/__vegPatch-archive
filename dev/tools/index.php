@@ -1,10 +1,20 @@
 <?php
-
+/* (C)opyright 2014, Carrotsrc.org
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+	
 	if(!include($_SERVER["DOCUMENT_ROOT"]."/ksysconfig.php"))
 			die("Setup Problem: Cannot locate SystemConfig.");
 	
 	include(SystemConfig::relativeAppPath("system/helpers/session.php"));
 	Session::start();
+	if(isset($_GET['taction']))
+		if($_GET['taction'] == "logout")
+			Session::uset('_rootid');
+
 	if(isset($_GET['cache']))
 		if($_GET['cache'] == "nuke")
 			Session::wipe();
@@ -37,8 +47,8 @@
 	<a href="index.php"><span class="ok-text-grey tx-xlarge">v<span class="ok-text-green">Patch</span></span></a>
 <!-- </div> -->
 
-<div id="vp-version">
-	VPatch 0.2
+<div id="vp-version" style="margin-right: 10px;">
+	<a href="?taction=logout"><span class="ok-text-grey">Logout</span></a> 
 </div>
 </div>
 

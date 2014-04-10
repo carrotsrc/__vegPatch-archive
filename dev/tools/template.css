@@ -29,7 +29,6 @@ a {
 
 #link-bar a {
 	color: #659A00;
-//	font-size: large;
 	text-decoration: none;
 }
 
@@ -42,28 +41,21 @@ a {
 #vp-version {
 	float: right;
 	margin: 3px;
+	margin-right: 10px;
 }
 
 #kr-layout-column {
-	/*width: 80%;
-	width: 100%;*/
 	display: block;
 	background: white;
 	overflow: auto;
-	/*border-top-right-radius: 15px;
-	border-bottom-right-radius: 15px;*/
 	height: 500px;
 	min-height: 500px;
 	border-top: 1px solid #ADBF6B;
 	border-bottom: 1px solid #ADBF6B;
-	/*float: left;
-	-moz-box-sizing: border-box;*/
 
 }
 
 #kr-layout {
-	margin: 10px;
-	padding: 10px;
 	color: #909090;
 }
 
@@ -71,6 +63,12 @@ a {
 	float: left;
 	overflow: auto;
 	margin-right: 20px;
+	height: 100%;
+	background-image: url('small_green_grad.png');
+	padding: 10px;
+	width: 200px;
+	border-right: 1px solid #ADBF6B;
+	-moz-box-sizing: padding-box;
 }
 
 input {
@@ -90,13 +88,7 @@ textarea {
 }
 .tool-panel {
 	color: #659A00;
-	background-color:#C7F66F; 
-	border: 3px solid #B5F63E;
-	border: 3px solid #B3DD63;
-	border-radius: 5px;
-	padding: 10px;
 	float: left;
-	margin-left: 15px;
 	clear:left;
 	margin-bottom: 15px;
 
@@ -104,14 +96,14 @@ textarea {
 
 .panel {
 	color: grey;
-	background-color: #FDF8F8;
-	border: 3px solid #D8D8D8;
+	border: 0px solid #D8D8D8;
 	border-radius: 5px;
 
 	padding: 10px;
 	float: left;
 	background-image: url('dl-grey.png');
 	background-repeat: repeat-x;
+	margin-top: 15px;
 }
 
 .panel-box {
@@ -121,6 +113,7 @@ textarea {
 	border-radius: 5px;
 
 	padding: 3px;
+	overflow-y: auto;
 }
 
 .panel-box td {
