@@ -60,7 +60,7 @@
 		echo "</div>";
 		if(!$res) {
 			?>
-			<form method="post" action="index.php?mode=manarea">
+			<form method="post" action="index.php?tool=area&mode=manarea">
 				<input type="hidden" name="aid" value="<?php echo $aid; ?>" />
 				<input type="hidden" name="op" value="1" />
 				<input type="submit" class="form-button" value="Register Resource" />
@@ -80,7 +80,7 @@
 		if(!$editMode) {
 		?>
 
-			<form method="post" action="index.php?mode=manarea">
+			<form method="post" action="index.php?tool=area&mode=manarea">
 				<input type="hidden" name="aid" value="<?php echo $aid; ?>" />
 				<input type="hidden" name="op" value="2" />
 				<input type="submit" value="Modify" class="form-button float-r" />
@@ -94,7 +94,7 @@
 				return;
 		?>
 			<hr />
-			<form method="post" action="index.php?mode=manarea">
+			<form method="post" action="index.php?tool=area&mode=manarea">
 			<?php
 			if($_POST['op'] == 2)  {
 			?>
@@ -139,7 +139,7 @@
 			<input type="hidden" name="aid" value="<?php echo $aid; ?>" />
 			</form>
 
-			<form method="post" action="index.php?mode=manarea">
+			<form method="post" action="index.php?tool=area&mode=manarea">
 			<input type="hidden" name="aid" value="<?php echo $aid; ?>" />
 			<input type="submit" value="Cancel" class="form-button"/>
 			</form>
@@ -163,7 +163,7 @@
 		if(!$surrounds)
 			return;
 
-		echo "<form method=\"post\" action=\"index.php?mode=newarea\">";
+		echo "<form method=\"post\" action=\"index.php?tool=area&mode=newarea\">";
 		if(!isset($_POST['op'])) { 
 		?>
 			<input name="label" class="form-text" /><br />
@@ -292,14 +292,14 @@
 				echo "<tr>";
 					echo"<td>";
 					if($id == "-")
-						echo "<a class=\"switch-a\" href=\"index.php?mode=mansur&op=1&name=$t&sid=$sid\">$t</a>";
+						echo "<a class=\"switch-a\" href=\"index.php?tool=area&mode=mansur&op=1&name=$t&sid=$sid\">$t</a>";
 					else
 						echo $t;
 					echo"</td>";
 					echo"<td>$id</td>";
 					echo "<td>";
 						if($id != "-")
-							echo "<a class=\"switch-a\" style=\"color: red;\" href=\"index.php?mode=mansur&op=2&tid=$id&sid=$sid\">X</a>";
+							echo "<a class=\"switch-a\" style=\"color: red;\" href=\"index.php?tool=area&mode=mansur&op=2&tid=$id&sid=$sid\">X</a>";
 						else
 							echo " ";
 					echo "</td>";
@@ -327,14 +327,14 @@
 				echo "<tr>";
 					echo"<td>";
 					if(!$loaded)
-						echo "<a class=\"switch-a\" href=\"index.php?mode=mansur&op=3&name={$a[0]}&sid=$sid\">{$a[2]}</a>";
+						echo "<a class=\"switch-a\" href=\"index.php?tool=area&mode=mansur&op=3&name={$a[0]}&sid=$sid\">{$a[2]}</a>";
 					else
 						echo $a[2];
 					echo"</td>";
 					echo"<td class=\"font-small\">({$a[0]})</td>";
 					echo "<td>";
 						if($loaded)
-							echo "<a class=\"switch-a\" style=\"color: red;\" href=\"index.php?mode=mansur&op=4&id=$id&sid=$sid\">X</a>";
+							echo "<a class=\"switch-a\" style=\"color: red;\" href=\"index.php?tool=area&mode=mansur&op=4&id=$id&sid=$sid\">X</a>";
 						else
 							echo " ";
 					echo "</td>";
@@ -376,7 +376,7 @@
 				if($loaded)
 					echo "<td><li class=\"li-active\"><font style=\"color:grey\">$f</font></li></td>";
 				else
-					echo "<td><li class=\"li-inactive\"><a href=\"index.php?mode=regsur&op=1&sur=$f\" class=\"switch-a\">$f</a></li></td>";
+					echo "<td><li class=\"li-inactive\"><a href=\"index.php?tool=area&mode=regsur&op=1&sur=$f\" class=\"switch-a\">$f</a></li></td>";
 				echo "</trd>";
 
 			}
