@@ -13,7 +13,7 @@
 		$types = $rman->getResCast();
 		echo "<b>New Resource</b><br />";
 		echo "<div class=\"font-item\">";
-			echo "<form method=\"post\" action=\"index.php?mode=newres\">";
+			echo "<form method=\"post\" action=\"index.php?tool=resource&mode=newres\">";
 				echo "<select name=\"type\" class=\"form-text form-select\">";
 					foreach($types as $t)
 						echo "<option value=\"{$t['id']}\">{$t['type']}</option>";
@@ -42,7 +42,7 @@
 		}
 		echo "<b>New Type</b><br />";
 		echo "<div class=\"font-item\">";
-			echo "<form method=\"post\" action=\"index.php?mode=newtype\">";
+			echo "<form method=\"post\" action=\"index.php?tool=resource&mode=newtype\">";
 				echo "<select name=\"base\" class=\"form-text form-select\">";
 					foreach($bases as $b)
 						echo "<option value=\"{$b[0]}\">{$b[1]}</option>";
