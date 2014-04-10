@@ -313,7 +313,7 @@
 					$out = "Error on load!";
 			}
 		}
-		echo "<form method=\"post\" action=\"index.php?mode=root\">";
+		echo "<form method=\"post\" action=\"index.php?tool=strap&mode=root\">";
 			echo "<input type=\"hidden\" name=\"op\" value=\"1\">";
 			echo "<input type=\"submit\" class=\"form-button\" value=\"Strap root system\" style=\"width: 100%; font-size:large;\">";
 		echo "</form>";
@@ -337,7 +337,7 @@
 		$straplist = $fm->listFiles($path);
 			
 		echo "<div class=\"form-item\">";
-		echo "<form method=\"post\" action=\"index.php?mode=system\">";
+		echo "<form method=\"post\" action=\"index.php?tool=strap&mode=system\">";
 			echo "<select name=\"name\" class=\"form-text form-select\" style=\"width: 170px;\">";
 				foreach($straplist as $f) {
 					$a = explode('.', $f);
