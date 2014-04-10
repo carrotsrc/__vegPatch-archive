@@ -1,15 +1,8 @@
 <?php
-	if(!include($_SERVER["DOCUMENT_ROOT"]."/ksysconfig.php"))
-			die("Setup Problem: Cannot locate SystemConfig.");
-	
-	include(SystemConfig::relativeAppPath("system/koda/koda.php"));
+	if(!defined('_ROOT_TOOL'))
+		die("Not logged in");
+
 	include(SystemConfig::relativeAppPath("system/resource/resman.php"));
-
-	$db = Koda::getDatabaseConnection('mysql');
-	$db->connect(SystemConfig::$dbcUsername, SystemConfig::$dbcPassword);
-	$db->selectDatabase(SystemConfig::$dbcDatabase);
-
-	$fm = Koda::getFileManager();
 	$rman = new ResMan($db);
 
 	$edit = null;
@@ -61,49 +54,21 @@
 		else
 			$hasres = $res[0][0];
 	}
-
-	$mlist = $fm->listDirectories("../");
 ?>
-<html>
-	<head>
-		<title>VegPatch Layouts</title>
-		<link type="text/css" rel="stylesheet" href="layout.css" />
-	</head>
-
-<body>
-<div id="header">
-<div id="vp-title">
-	System Layouts
-</div>
-
-<div id="vp-version">
-	SuperRoot VegPatch v0.1
-</div>
-</div>
-<div id="link-bar">
-<?php
-	echo "| ";
-	foreach($mlist as $d) {
-		if($d == 'tool-template')
-			continue;
-
-		echo "<a href=\"../$d\">$d</a>";
-		echo " | ";
-	}
-?>
-</div>
-<div id="kr-layout-column">
 <div id="kr-layout">
 <div class="tools">
-	<div class="splash">
+	<div class="tool-panel">
 	<b>New Layout</b>
-	<form method="post" action="index.php">
+	<form method="post" action="index.php?tool=layout">
 	<input type="submit" class="form-button" value="Create new layout" />
 	</form>
 	</div>
-	<div class="splash">
+	<div class="tool-panel">
 	<b>Edit layout</b>
-	<form method="post" action="index.php">
+	<form method="post" action="index.php?tool=layout">
+		<?php
+			echo "<input type=\"hidden\" name=\"tool\" value=\"layout\" />";
+		?>
 		<select name="lid" style="width: 150px" class="form-text form-select">
 		<?php
 			foreach($list as $ls) {
@@ -124,10 +89,11 @@
 <b>Layout Editor</b><br /><br />
 <?php
 ?>
-		<form name="layout-edit" method="post" action="index.php">
+		<form name="layout-edit" method="post" action="index.php?tool=layout">
 		
 		<?php
 			if($edit !== null) {
+				echo "<input type=\"hidden\" name=\"tool\" value=\"layout\" />";
 				echo "<input type=\"hidden\" name=\"op\" value=\"3\" />";
 				echo "<input type=\"hidden\" name=\"lid\" value=\"{$edit[0]}\" />";
 				echo "<input type=\"text\" name=\"name\" class=\"form-text\" value=\"{$edit[1]}\" /> ({$edit[0]})<br />";
@@ -145,7 +111,7 @@
 			if($hasres !== null && $hasres !== false) {
 				echo "<div style=\"float: left; margin-top: -25px;\">";
 				echo "<div style=\"float: left;\">Layout( $hasres )</div>";
-				echo "<form method=\"post\" action=\"index.php\" style=\"float: left; margin-left: 5px;\">";
+				echo "<form method=\"post\" action=\"index.php?tool=layout\" style=\"float: left; margin-left: 5px;\">";
 				echo "<input type=\"hidden\" name=\"op\" value=\"4\" />";
 				echo "<input type=\"hidden\" name=\"lid\" value=\"{$edit[0]}\" />";
 				echo "<input type=\"submit\" class=\"form-button\" style=\"margin-top: 0px;\" value=\"Remove\" />";
@@ -157,14 +123,14 @@
 			if($hasres !== null && $hasres === false) {
 				echo "<div style=\"float: left; margin-top: -25px;\">\n";
 				echo "<div style=\"float: left;\">Unregistered</div>\n";
-				echo "<form method=\"post\" action=\"index.php\" style=\"float: left; margin-left: 5px;\">\n";
+				echo "<form method=\"post\" action=\"index.php?tool=layout\" style=\"float: left; margin-left: 5px;\">\n";
 					echo "<input type=\"hidden\" name=\"op\" value=\"5\" />\n";
 					echo "<input type=\"hidden\" name=\"lid\" value=\"{$edit[0]}\" />\n";
 					echo "<input type=\"hidden\" name=\"name\" value=\"{$edit[1]}\" />\n";
 					echo "<input type=\"submit\" class=\"form-button\" style=\"margin-top: 0px;\" value=\"Register\" />\n";
 				echo "</form>\n";
 
-				echo "<form method=\"post\" action=\"index.php\" style=\"float: left; margin-left: 5px;\">\n";
+				echo "<form method=\"post\" action=\"index.php?tool=layout\" style=\"float: left; margin-left: 5px;\">\n";
 					echo "<input type=\"hidden\" name=\"op\" value=\"4\" />\n";
 					echo "<input type=\"hidden\" name=\"lid\" value=\"{$edit[0]}\" />\n";
 					echo "<input type=\"submit\" class=\"form-button\" style=\"margin-top: 0px;\" value=\"Remove\" />\n";
@@ -179,6 +145,3 @@
 
 </div>
 </div>
-</div>
-</body>
-</html>
