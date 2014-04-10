@@ -1,18 +1,15 @@
 <?php
-	if(!include($_SERVER["DOCUMENT_ROOT"]."/ksysconfig.php"))
-			die("Setup Problem: Cannot locate SystemConfig.");
+	if(!defined('_ROOT_TOOL'))
+		die("Not logged in");
+
 	
-	include(SystemConfig::relativeAppPath("system/koda/koda.php"));
 	include(SystemConfig::relativeAppPath("system/resource/resman.php"));
 	include(SystemConfig::relativeAppPath("system/structure/blocks/schemablock.php"));
 	include(SystemConfig::relativeAppPath("system/dbacc.php"));
 	include(SystemConfig::relativeAppPath("system/structure/module/modman.php"));
 	include(SystemConfig::relativeAppPath("system/managers.php"));
 	include('lib.php');
-	$db = Koda::getDatabaseConnection('mysql');
 	$fm = Koda::getFileManager();
-	$db->connect(SystemConfig::$dbcUsername, SystemConfig::$dbcPassword);
-	$db->selectDatabase(SystemConfig::$dbcDatabase);
 
 	$rman = new ResMan($db);
 	Managers::setResourceManager($rman);
@@ -152,139 +149,108 @@
 
 	if($cspace != null)
 		$regpnl = $db->sendQuery("SELECT id, module_name FROM modreg WHERE module_type='1' AND space='$cspace';", false, false);
-	$mlist = $fm->listDirectories("../");
 ?>
-<html>
-	<head>
-		<title>VegPatch Module Manager</title>
-		<link type="text/css" rel="stylesheet" href="template.css" />
-	</head>
+<div id="kr-layout">
+	<div class="tools">
+		<div class="tool-panel">
+		<b>Components</b>
 
-<body>
-<div id="header">
-<div id="vp-title">
-	Module Manager
-</div>
-
-<div id="vp-version">
-	SuperRoot VegPatch v0.1
-</div>
-</div>
-
-<div id="link-bar">
-<?php
-	echo "| ";
-	foreach($mlist as $d) {
-		if($d == 'tool-template')
-			continue;
-
-		echo "<a href=\"../$d\">$d</a>";
-		echo " | ";
-	}
-?>
-</div>
-<div id="kr-layout-column">
-	<div id="kr-layout">
-		<div class="tools">
-			<div class="tool-panel">
-			<b>Components</b>
-
-			<form method="get" action="index.php">
-				<input type="hidden" name="mode" value="cmptreg" />
-				<select class="form-text form-select" style="width: 150px;" name="nspace">
-					<?php 
-						foreach($cdir as $c) {
-							if($nspace != null && $nspace == $c)
-								echo "<option value=\"{$c}\" selected>{$c}</option>";
-							else
-								echo "<option value=\"{$c}\">{$c}</option>";
-						}
-					?>
-				</select><br />
-				<input type="submit" value="Load Space" class="form-button"/>
-			</form>
-			<?php
-				if($nspace != null) {
-			?>
-			<form method="post" action="index.php?mode=cmptreg&nspace=<?php echo $nspace; ?>">
-				<input type="submit" value="Component Registry" class="form-button"/>
-			</form>
-			<form method="post" action="index.php?mode=cmptman&nspace=<?php echo $nspace; ?>" style="margin-top: -5px">
-				<select class="form-text form-select" name="cid">
-					<?php 
-						foreach($regcmpt as $c) {
-							if($cid != null && $cid == $c[0])
-								echo "<option value=\"{$c[0]}\" selected>{$c[1]}</option>";
-							else
-								echo "<option value=\"{$c[0]}\">{$c[1]}</option>";
-						}
-					?>
-				</select><br />
-				<input type="submit" value="Manage Component" class="form-button"/>
-			</form>
-			<?php
-				}
-			?>
-			</div>
-
-
-
-			<div class="tool-panel">
-			<b>Panels</b>
-			<form method="get" action="index.php">
-				<select class="form-text form-select" style="width: 150px;" name="space">
-					<?php 
-						foreach($pspace as $c) {
-							if($cspace != null && $cspace == $c)
-								echo "<option value=\"{$c}\" selected>{$c}</option>";
-							else
-								echo "<option value=\"{$c}\">{$c}</option>";
-						}
-					?>
-				</select><br />
+		<form method="get" action="index.php">
+			<input type="hidden" name="tool" value="module" />
+			<input type="hidden" name="mode" value="cmptreg" />
+			<select class="form-text form-select" style="width: 150px;" name="nspace">
 				<?php 
-				echo"<input type=\"hidden\" name=\"mode\" value=\"panelreg\" />";
+					foreach($cdir as $c) {
+						if($nspace != null && $nspace == $c)
+							echo "<option value=\"{$c}\" selected>{$c}</option>";
+						else
+							echo "<option value=\"{$c}\">{$c}</option>";
+					}
 				?>
-				<input type="submit" value="Load Space" class="form-button"/>
-			</form>
-
-			<?php if($cspace != null) { ?>
-			<form method="get" action="index.php">
-				<input type="hidden" name="mode" value="panelreg" />
-				<input type="hidden" name="space" value="<?php echo $cspace; ?>" />
-				<input type="submit" value="Panel Registry" class="form-button" />
-			</form>
-
-			<form method="get" action="index.php">
-				<input type="hidden" name="mode" value="panelman" />
-				<input type="hidden" name="space" value="<?php echo $cspace; ?>" />
-				<select class="form-text form-select" style="width: 150px;" name="pid">
-					<?php 
-						foreach($regpnl as $c) {
-							if($pid != null && $pid == $c[0])
-								echo "<option value=\"{$c[0]}\" selected>{$c[1]}</option>";
-							else
-								echo "<option value=\"{$c[0]}\">{$c[1]}</option>";
-						}
-					?>
-				</select><br />
-				<input type="submit" value="Manage Panel" class="form-button" />
-			</form>
-			<?php } ?>
-			</div>
-
-
-		</div>
-			<div class="panel">
-				<?php
-					if(isset($_GET['mode']) && $_GET['mode'] == 'cmptreg')
-						cmptregPanel($lduld);
-					else
-						echo $panel;
+			</select><br />
+			<input type="submit" value="Load Space" class="form-button"/>
+		</form>
+		<?php
+			if($nspace != null) {
+		?>
+		<form method="post" action="index.php?tool=module&mode=cmptreg&nspace=<?php echo $nspace; ?>">
+			<input type="submit" value="Component Registry" class="form-button"/>
+		</form>
+		<form method="post" action="index.php?tool=module&mode=cmptman&nspace=<?php echo $nspace; ?>" style="margin-top: -5px">
+			<select class="form-text form-select" name="cid">
+				<?php 
+					foreach($regcmpt as $c) {
+						if($cid != null && $cid == $c[0])
+							echo "<option value=\"{$c[0]}\" selected>{$c[1]}</option>";
+						else
+							echo "<option value=\"{$c[0]}\">{$c[1]}</option>";
+					}
 				?>
-			</div>
+			</select><br />
+			<input type="submit" value="Manage Component" class="form-button"/>
+		</form>
+		<?php
+			}
+		?>
 		</div>
+
+
+
+		<div class="tool-panel">
+		<b>Panels</b>
+		<form method="get" action="index.php">
+			<input type="hidden" name="tool" value="module" />
+			<select class="form-text form-select" style="width: 150px;" name="space">
+				<?php 
+					foreach($pspace as $c) {
+						if($cspace != null && $cspace == $c)
+							echo "<option value=\"{$c}\" selected>{$c}</option>";
+						else
+							echo "<option value=\"{$c}\">{$c}</option>";
+					}
+				?>
+			</select><br />
+			<?php 
+			echo"<input type=\"hidden\" name=\"mode\" value=\"panelreg\" />";
+			?>
+			<input type="submit" value="Load Space" class="form-button"/>
+		</form>
+
+		<?php if($cspace != null) { ?>
+		<form method="get" action="index.php">
+			<input type="hidden" name="tool" value="module" />
+			<input type="hidden" name="mode" value="panelreg" />
+			<input type="hidden" name="space" value="<?php echo $cspace; ?>" />
+			<input type="submit" value="Panel Registry" class="form-button" />
+		</form>
+
+		<form method="get" action="index.php">
+			<input type="hidden" name="tool" value="module" />
+			<input type="hidden" name="mode" value="panelman" />
+			<input type="hidden" name="space" value="<?php echo $cspace; ?>" />
+			<select class="form-text form-select" style="width: 150px;" name="pid">
+				<?php 
+					foreach($regpnl as $c) {
+						if($pid != null && $pid == $c[0])
+							echo "<option value=\"{$c[0]}\" selected>{$c[1]}</option>";
+						else
+							echo "<option value=\"{$c[0]}\">{$c[1]}</option>";
+					}
+				?>
+			</select><br />
+			<input type="submit" value="Manage Panel" class="form-button" />
+		</form>
+		<?php } ?>
+		</div>
+
+
+	</div>
+	<div class="panel">
+		<?php
+			if(isset($_GET['mode']) && $_GET['mode'] == 'cmptreg')
+				cmptregPanel($lduld);
+			else
+				echo $panel;
+		?>
+	</div>
 </div>
-
-</body>
-</html>

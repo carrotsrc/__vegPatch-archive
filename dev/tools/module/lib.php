@@ -17,7 +17,7 @@
 				echo "<li style=\"color: grey;\">";
 			
 			if($cmpt[2] == 0)
-				echo "<a class=\"switch-a\" href=\"index.php?mode=cmptreg&op=1&id={$cmpt[1]}&nspace={$_GET['nspace']}\" style=\"color: grey;\">{$cmpt[1]}</a>";
+				echo "<a class=\"switch-a\" href=\"index.php?tool=module&mode=cmptreg&op=1&id={$cmpt[1]}&nspace={$_GET['nspace']}\" style=\"color: grey;\">{$cmpt[1]}</a>";
 			else {
 				echo "<font style=\"color: grey;\">{$cmpt[1]}</font></td>";
 				echo "<td style=\"padding-left: 10px; font-size: x-small;\"><font style=\"color: grey;\">{$cmpt[0]}</font>";
@@ -57,7 +57,7 @@
 		$res = $rman->queryAssoc($rq);
 		if(!$res) {
 			echo "<div class=\"form-item\">\n";
-			echo "<form method=\"post\" action=\"index.php?mode=cmptman&nspace={$_GET['nspace']}\">";
+			echo "<form method=\"post\" action=\"index.php?tool=module&mode=cmptman&nspace={$_GET['nspace']}\">";
 				echo "<input name=\"cid\" type=\"hidden\" value=\"$id\" class=\"form-button\"/>\n";
 				echo "<input name=\"name\" type=\"hidden\" value=\"{$details[2]}\" class=\"form-button\"/>\n";
 				echo "<input name=\"op\" type=\"hidden\" value=\"13\" class=\"form-button\"/>\n";
@@ -78,7 +78,7 @@
 				foreach($res as $r) {
 					$c = $rman->getResourceFromId($r[0]);
 					echo "<tr>";
-					echo "<td style=\"text-align: right;\"><a href=\"index.php?mode=cmptman&op=12&id={$c['id']}&cid={$id}&nspace={$_GET['nspace']}\" class=\"switch-a\">{$c['label']}</a></td>";
+					echo "<td style=\"text-align: right;\"><a href=\"index.php?tool=module&mode=cmptman&op=12&id={$c['id']}&cid={$id}&nspace={$_GET['nspace']}\" class=\"switch-a\">{$c['label']}</a></td>";
 					echo "<td>=&gt; {$c['handler']}</td>";
 					echo "<td class=\"font-small\">({$c['id']})</td>";
 					echo "</tr>";
@@ -101,7 +101,7 @@
 
 				echo "<div class=\"form-item\">";
 					echo "Edit Instance<br />";
-					echo "<form method=\"post\" action=\"index.php?mode=cmptman&nspace={$_GET['nspace']}\">";
+					echo "<form method=\"post\" action=\"index.php?tool=module&mode=cmptman&nspace={$_GET['nspace']}\">";
 
 					echo "<div class=\"form-item\">";
 						echo "<font class=\"font-small\"><b>Label</b><br /></font>";
@@ -115,7 +115,7 @@
 						echo "<input name=\"cid\" type=\"hidden\" value=\"$id\"/>";
 						echo "<input name=\"id\" type=\"hidden\" value=\"{$sel['id']}\"/>";
 						echo "<input name=\"submit\" type=\"submit\"  value=\"Modify\" style=\"margin-top: 0px; margin-left: 15px;\" class=\"form-button\" />";
-						echo "<a href=\"index.php?mode=cmptman&cid={$id}&nspace={$_GET['nspace']}\" class=\"switch-a\" style=\"margin-left: 15px\">cancel</a>";
+						echo "<a href=\"index.php?tool=module&mode=cmptman&cid={$id}&nspace={$_GET['nspace']}\" class=\"switch-a\" style=\"margin-left: 15px\">cancel</a>";
 					echo "</div>";
 
 					echo "</form>";
@@ -124,7 +124,7 @@
 			else {
 				echo "<div class=\"form-item\">";
 					echo "New Instance<br />";
-					echo "<form method=\"post\" action=\"index.php?mode=cmptman&nspace={$_GET['nspace']}\">";
+					echo "<form method=\"post\" action=\"index.php?tool=module&mode=cmptman&nspace={$_GET['nspace']}\">";
 
 					echo "<div class=\"form-item\">";
 						echo "<font class=\"font-small\"><b>Label</b><br /></font>";
@@ -209,7 +209,7 @@
 					echo "<li style=\"color: grey;\">";
 				
 				if($cmpt[2] == 0)
-					echo "<a class=\"switch-a\" href=\"index.php?mode=panelreg&space=$space&op=1&id={$cmpt[1]}\" style=\"color: grey;\">{$cmpt[1]}</a>";
+					echo "<a class=\"switch-a\" href=\"index.php?tool=module&mode=panelreg&space=$space&op=1&id={$cmpt[1]}\" style=\"color: grey;\">{$cmpt[1]}</a>";
 				else {
 					echo "<font style=\"color: grey;\">{$cmpt[1]}</font></td>";
 					echo "<td style=\"padding-left: 10px; font-size: x-small;\"><font style=\"color: grey;\">{$cmpt[0]}</font>";
@@ -266,6 +266,7 @@
 		if(!$res) {
 			echo "<div class=\"form-item\">";
 			echo "<form method=\"get\" action=\"index.php\">";
+				echo "<input name=\"tool\" type=\"hidden\" value=\"module\"/>";
 				echo "<input name=\"mode\" type=\"hidden\" value=\"panelman\"/>";
 				echo "<input name=\"op\" type=\"hidden\" value=\"1\"/>";
 				echo "<input name=\"space\" type=\"hidden\" value=\"$space\"/>";
