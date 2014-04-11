@@ -1,0 +1,13 @@
+VPatch 0.3e
+===========
+Version		0.3e
+Author:		cfg csorg
+Date:		2014/04/11
+Updated:	2014/04/11
+
+Version Notes
+=============
+
+-Add a widget config root tool
+-Branching for RQL statements on both side of the relationship
+
