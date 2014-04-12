@@ -9,5 +9,7 @@ Version Notes
 =============
 
 -Add a widget config root tool
--Branching for RQL statements on both side of the relationship
-
+-Branching for RQL statements on both sides of the relationship
+-Extended RQL feedback to show both sides of the relationship; important for the management of relationships through root tools
+-Add dynamic loading of asset as standard functionality of gscripts
+-Custom session handler. Record data as bin blobs behind db authentication instead of in the dodge /tmp files
