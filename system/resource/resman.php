@@ -318,6 +318,17 @@
 			return $id[0][0];
 		}
 
+		public function getEdgesOfType($type)
+		{
+			$s = "";
+			if(is_numeric($type))
+				$s = "`rescast`.`id`='$type'";
+			else
+				$s = "`rescast`.`type`='$type'";
+
+			return $this->db->sendQuery("SELECT `edgetype`.`id`, `edgetype`.`label` FROM `edgetype` JOIN `rescast` on `rescast`.`id`=`edgetype`.`rtype` WHERE $s;", false, false);
+		}
+
 		public function addResourceBase($label)
 		{
 			$sql = "SELECT id FROM resbase WHERE label='$label';";
