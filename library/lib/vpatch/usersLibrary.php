@@ -77,10 +77,13 @@
 
 		public function addAccount($username, $hash, $salt, $email = null)
 		{
-			return $this->arrayInsert('users', array('username' => $username,
-								'hash' => $hash,
-								'salt' => $salt,
-								'email' => $email));
+			 if(!$this->arrayInsert('users', array('username' => $username,
+									'hash' => $hash,
+									'salt' => $salt,
+									'email' => $email)))
+				return null;
+
+			return $this->db->getLastId();
 		}
 
 		public function getAccount($id)
