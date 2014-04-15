@@ -15,3 +15,4 @@ Version Notes
 -Custom session handler. Record data as bin blobs behind db authentication instead of in the dodge /tmp files
 -online merging of modules held on separate server into running platform via strap files
 -start dynamic UILib based off KTSet
+-User input on strap files... not sure how this might work but worth a go
