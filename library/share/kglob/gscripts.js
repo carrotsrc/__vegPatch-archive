@@ -166,6 +166,32 @@ var KitJS = {
 		}
 	},
 
+	extractQueryParams: function () {
+		if(window.location.queryParams != undefined)
+			return;
+		window.location.queryParams = new Array();
+
+		var qp = window.location.search.substr(1);
+		var p = qp.split("&")
+		var sz = p.length;
+		for(var i = 0; i < sz; i++) {
+			var atom = p[i].split("=");
+			window.location.queryParams.push({param: atom[0],value: atom[1]});
+		}
+	},
+
+	getQueryParam: function (param) {
+		if(window.location.searchParams == undefined);
+			KitJS.extractQueryParams();
+
+		var sz = window.location.queryParams.length;
+		for(var i = 0; i < sz; i++)
+			if(window.location.queryParams[i].param == param)
+				return window.location.queryParams[i].value;
+
+		return undefined;
+	},
+
 	CommonGroup: {
 		groups: {},
 		register: function (name, id, group, obj) {
@@ -263,6 +289,10 @@ var KitJS = {
 		this.elementId = function (id) {
 			return this._pmod+"-"+id;
 		}
+
+		this.queryParamValue = function (param) {
+			return KitJS.getQueryParam(param);
+		}
 	},
 
 	GlobalParams: new Array(),
@@ -279,5 +309,5 @@ var KitJS = {
 
 		return vargs;
 	}
-}
 
+}
