@@ -1,9 +1,15 @@
-Vegpatch 0.2.1
-==============
-Version: 	0.2.1/vegptach
+Vegpatch 0.2
+============
+Version: 	0.2.2/vegptach
 Author: 	cfg csorg
-Date: 		08/04/2014
-Updated:	08/04/2014
+Date: 		04/04/2014
+Updated:	06/04/2014
+
+VegPatch 0.2.2 Changelog
+========================
+
+- Added query parameter handler in gscripts. When requesting a query string parameter for the first time, 
+  it will load it up in window.location.queryParams as an array of {param, value} pairs
 
 VegPatch 0.2.1 Changelog
 ========================
