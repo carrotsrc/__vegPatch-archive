@@ -16,3 +16,4 @@ Version Notes
 -online merging of modules held on separate server into running platform via strap files
 -start dynamic UILib based off KTSet
 -User input on strap files... not sure how this might work but worth a go
+-[complete] Setup script for initial database and root configuration
