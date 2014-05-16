@@ -111,7 +111,8 @@
 	function newInstance($cplugin, $db, $rman)
 	{
 		$label = $_POST['label'];
-		$ref = $_POST['ref'];
+		$ref = $_POST['handler_ref'];
+		$_GET['cinst'] = $ref;
 		$rid = $rman->addResource('Instance', $ref, $label);
 		if(!$rid)
 			return;
@@ -119,6 +120,13 @@
 		$prid = pluginResource($cplugin, $rman);
 
 		$rman->createRelationship($prid, $rid);
+	}
+
+	function updateInstance($cplugin, $db, $rman)
+	{
+		$id = $_GET['id'];
+
+		$rid = $rman->modifyResource($id, $_POST);
 	}
 
 	function pluginPanel($plugin, $rman, $db)

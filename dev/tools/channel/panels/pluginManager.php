@@ -12,6 +12,8 @@
 		setWidgetConfig($type, $cid, $inst, $_POST, $db);
 	}
 
+	$sel = null;
+
 	echo "<b>Plugin Manager</b><br />";
 	$rid = pluginResource($plugin, $rman);
 	echo "<div class=\"form-item\" style=\"margin-top: 10px;\">";
@@ -38,6 +40,8 @@
 			foreach($ls as $p) {
 				echo "<tr>";
 				echo "<td style=\"text-align: right;\"><a href=\"index.php?tool=channel&mode=plugin&op=3&id={$p['id']}&cplugin={$plugin}&cinst={$p['handler']}\" class=\"switch-a\">{$p['label']}</a></td>";
+				if(isset($_GET['cinst']) && $p['handler'] == $_GET['cinst'])
+					$sel = $p;
 				echo "<td>=&gt; {$p['handler']}</td>";
 				echo "<td class=\"font-small\">({$p['id']})</td>";
 				echo "</tr>";
@@ -48,17 +52,18 @@
 			echo "No instances";
 	echo "</div>";
 
-	if(isset($_GET['op']) && $_GET['op'] == 3) {
+	if(isset($_GET['op']) && ($_GET['op'] == 3 || $_GET['op'] == 4) && $sel != null) {
 		include(SystemConfig::relativeAppPath("system/plugin/pluginman.php"));
 		$pluginman = new PluginMan($db);
 		echo "<hr />";
-		echo "Modify Instance<br />";
-		echo "<form name=\"ninst\" method=\"post\" class=\"font-small form-item\" action=\"index.php?tool=channel&mode=plugin&cplugin=$plugin&op=2\">";
+		echo "Edit Instance<br />";
+		echo "<form name=\"ninst\" method=\"post\" class=\"font-small form-item\" action=\"index.php?tool=channel&id={$_GET['id']}&mode=plugin&cplugin=$plugin&op=4&cinst={$_GET['cinst']}\">";
 		echo "<b>Label</b><br />";
-		echo "<input type=\"text\" name=\"label\" class=\"form-text font-small\" style=\"margin-top: 0px; margin-bottom: 7px;\" /><br />";
+		echo "<input type=\"text\" name=\"label\" class=\"form-text font-small\" value=\"{$sel['label']}\" style=\"margin-top: 0px; margin-bottom: 7px;\" /><br />";
 		echo "<b>Ref</b><br />";
-		echo "<input type=\"text\" name=\"ref\" class=\"form-text font-small\" style=\"margin-top: 0px; width: 40px;\"/>";
-		echo "<input type=\"submit\" class=\"form-button font-small\" value=\"Add\" style=\"margin-left: 10px; margin-top:0px;\" />";
+		echo "<input type=\"text\" name=\"handler_ref\" class=\"form-text font-small\" value=\"{$sel['handler']}\" style=\"margin-top: 0px; width: 40px;\"/>";
+		echo "<input type=\"submit\" class=\"form-button font-small\" value=\"Modify\" style=\"margin-left: 10px; margin-top:0px;\" />";
+		echo "<a href=\"index.php?tool=channel&mode=plugin&cplugin={$_GET['cplugin']}\" class=\"switch-a\" style=\"margin-left: 15px\">cancel</a>";
 		echo "</form>";
 		echo "</div>";
 

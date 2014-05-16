@@ -34,6 +34,10 @@
 		else
 		if(isset($_GET['op']) && $_GET['op'] == 2)
 			newInstance($cplugin, $db, $rman);
+		else
+		if(isset($_GET['op']) && $_GET['op'] == 4)
+			updateInstance($cplugin, $db, $rman);
+
 
 		if($cplugin != null) {
 			ob_start();
