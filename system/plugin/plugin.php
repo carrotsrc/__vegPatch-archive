@@ -41,5 +41,10 @@
 
 		abstract public function process(&$params);
 		abstract public function init($instance);
+
+		public function getConfigList()
+		{
+			return null;
+		}
 	}
 ?>

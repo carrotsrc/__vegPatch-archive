@@ -5,6 +5,78 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+ 	function loadWidgetConfig($cid, $ref, $db)
+	{
+		$sql = "SELECT `widget_cfgreg`.`id`, `widget_cfgreg`.`config`, `widget_cfgreg`.`value` FROM `widget_cfgreg` JOIN `rescast` ON `widget_cfgreg`.`type` = `rescast`.`id` ";
+		$sql .= "WHERE `rescast`.`type`='Plugin' AND `widget_cfgreg`.`inst`='{$ref}' ";
+		$sql .= "AND `widget_cfgreg`.`cid`='{$cid}'";
+		$r = $db->sendQuery($sql, false, false);
+		if(!$r)
+			return null;
+
+		return $r;
+	}
+
+	function setWidgetConfig($type, $cid, $ref, $configs, $db)
+	{
+		$vals = loadWidgetConfig($cid, $ref, $db);
+		// delete values first
+		if($vals != null) {
+			$q = array();
+			foreach($configs as $k => $v) {
+				if($v == "") {
+					foreach($vals as $r) {
+						if($r[1] == $k) {
+							$q[] = $r[0];
+							unset($configs[$k]);
+						}
+					}
+				}
+			}
+
+
+			if(($sz = sizeof($q)) > 0) {
+				$sz--;
+				$sql = "DELETE FROM `widget_cfgreg` WHERE ";
+				foreach($q as $id) {
+					$sql .= "`id`='$id'";
+					if($sz-- > 0)
+						$sql .= " OR ";
+				}
+				$db->sendQuery($sql);
+			}
+		}
+
+		// update values next
+		if($vals != null) {
+			$q = array();
+			foreach($configs as $k => $v) {
+				foreach($vals as $r)
+					if($r[1] == $k)
+						$q[] = $r[1];
+			}
+
+			if(($sz = sizeof($q)) > 0) {
+				foreach($q as $id) {
+					$sql = "UPDATE `widget_cfgreg` SET ";
+					$sql .= "`value`='{$configs[$id]}' ";
+					$sql .= "WHERE `config`='{$id}' AND ";
+					$sql .= "`cid`='$cid' AND `inst`='$ref';";
+					unset($configs[$id]);
+					$db->sendQuery($sql);
+				}
+			}
+		}
+
+		// insert any values left
+		foreach($configs as $cfg => $value) {
+			$sql = "INSERT INTO `widget_cfgreg` (`type`, `cid`, `inst`, `config`, `value`) VALUES ";
+			$sql .= "('{$type['id']}', '$cid', '$ref', '$cfg', '$value');";
+			//echo "<pre>$sql</pre>";
+			$r = $db->sendQuery($sql);
+		}
+	}
+
 	function pluginResource($plugin, $rman)
 	{
 		$rq = "Plugin('$plugin');";
@@ -39,7 +111,8 @@
 	function newInstance($cplugin, $db, $rman)
 	{
 		$label = $_POST['label'];
-		$ref = $_POST['ref'];
+		$ref = $_POST['handler_ref'];
+		$_GET['cinst'] = $ref;
 		$rid = $rman->addResource('Instance', $ref, $label);
 		if(!$rid)
 			return;
@@ -49,55 +122,16 @@
 		$rman->createRelationship($prid, $rid);
 	}
 
-	function pluginPanel($plugin, $rman)
+	function updateInstance($cplugin, $db, $rman)
 	{
-		echo "<b>Plugin Manager</b><br />";
-		$rid = pluginResource($plugin, $rman);
-		echo "<div class=\"form-item\" style=\"margin-top: 10px;\">";
-		echo "<b>$plugin</b>";
-		if($rid ==  null) {
-			echo "<form name=\"reg-plugin\">\n";
-				echo "<input type=\"hidden\" name=\"tool\" value=\"channel\" />\n";
-				echo "<input type=\"hidden\" name=\"op\" value=\"1\" />\n";
-				echo "<input type=\"hidden\" name=\"cplugin\" value=\"$plugin\" />\n";
-				echo "<input type=\"hidden\" name=\"mode\" value=\"plugin\" />\n";
-				echo "<input type=\"submit\" class=\"form-button\" value=\"Register Resource\" />\n";
-			echo "</form>";
-			echo "</div>";
-			return;
+		$id = $_GET['id'];
 
-		}
-		echo "<br ><font class=\"font-small\">Plugin($rid)</font>\n";
+		$rid = $rman->modifyResource($id, $_POST);
+	}
 
-//		$rid = pluginResource($plugin, $rman);
-		$ls = pluginInstances($rid, $rman);
-		echo "<div class=\"panel-box form-item\">";
-			if($ls != null){
-				echo "<table>\n";
-				foreach($ls as $p) {
-					echo "<tr>";
-					echo "<td style=\"text-align: right;\"><a href=\"index.php?tool=channel&mode=plugin&op=2&id={$p['id']}&cplugin={$plugin}\" class=\"switch-a\">{$p['label']}</a></td>";
-					echo "<td>=&gt; {$p['handler']}</td>";
-					echo "<td class=\"font-small\">({$p['id']})</td>";
-					echo "</tr>";
-				}
-				echo "</table>";
-			}
-			else
-				echo "No instances";
-		echo "</div>";
-
-		echo "<hr />";
-		echo "New Instance<br />";
-		echo "<form name=\"ninst\" method=\"post\" class=\"font-small form-item\" action=\"index.php?tool=channel&mode=plugin&cplugin=$plugin&op=2\">";
-		echo "<b>Label</b><br />";
-		echo "<input type=\"text\" name=\"label\" class=\"form-text font-small\" style=\"margin-top: 0px; margin-bottom: 7px;\" /><br />";
-		echo "<b>Ref</b><br />";
-		echo "<input type=\"text\" name=\"ref\" class=\"form-text font-small\" style=\"margin-top: 0px; width: 40px;\"/>";
-		echo "<input type=\"submit\" class=\"form-button font-small\" value=\"Add\" style=\"margin-left: 10px; margin-top:0px;\" />";
-		echo "</form>";
-
-		echo "</div>";
+	function pluginPanel($plugin, $rman, $db)
+	{
+		include("panels/pluginManager.php");
 	}
 
 	function getChannels($db)
