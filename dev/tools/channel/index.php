@@ -37,7 +37,7 @@
 
 		if($cplugin != null) {
 			ob_start();
-			pluginPanel($cplugin, $rman);
+			pluginPanel($cplugin, $rman, $db);
 			$panel = ob_get_contents();
 			ob_end_clean();
 		}
