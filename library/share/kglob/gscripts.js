@@ -4,7 +4,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-var KitJS = {
+var VPLib = {
 	Ajax: {
 		requestURL: "__URL_AJAX_REQ__",
 		requestOpen: false,
@@ -65,7 +65,7 @@ var KitJS = {
 			var open = function (args, post, callback) {
 				self.initRequest();
 				self.isOpen = true;
-				url = KitJS.Ajax.requestURL;
+				url = VPLib.Ajax.requestURL;
 				if(args != null)
 					url += "?"+args;
 
@@ -137,10 +137,10 @@ var KitJS = {
 		rox: null,
 
 		request: function (args, callback, post) {
-			if(KitJS.Ajax.rox == null)
-				KitJS.Ajax.rox = new KitJS.Ajax.rxo();
+			if(VPLib.Ajax.rox == null)
+				VPLib.Ajax.rox = new VPLib.Ajax.rxo();
 
-			KitJS.Ajax.rox.makeRequest(args, callback, post);
+			VPLib.Ajax.rox.makeRequest(args, callback, post);
 		},
 
 
@@ -220,7 +220,7 @@ var KitJS = {
 			this._gnid = gid;
 			this._pmod = this._name+pid;
 			this._local = local;
-			KitJS.CommonGroup.register(this._name, this._pnid, this._gnid, this);
+			VPLib.CommonGroup.register(this._name, this._pnid, this._gnid, this);
 			self._loop = this; // DEPRECATED
 		}
 
@@ -232,14 +232,14 @@ var KitJS = {
 			if(args != null)
 				vargs += "&"+args;
 
-			vargs += KitJS.printGlobalParams();
+			vargs += VPLib.printGlobalParams();
 			if(this._local != null) {
 				var sz = this._local.length;
 				for(var i = 0; i < sz; i++)
 					vargs += "&"+this._local[i][0] + "=" + this._local[i][1];
 			}
 
-			new KitJS.Ajax.request(vargs, callback, post); 
+			new VPLib.Ajax.request(vargs, callback, post); 
 		}
 
 		this.setCommonGroup = function (group) {
@@ -268,16 +268,17 @@ var KitJS = {
 	GlobalParams: new Array(),
 
 	addGlobalParam: function (param, value) {
-		KitJS.GlobalParams.push(new Array(param, value));
+		VPLib.GlobalParams.push(new Array(param, value));
 	},
 
 	printGlobalParams: function () {
-		var sz = KitJS.GlobalParams.length;
+		var sz = VPLib.GlobalParams.length;
 		vargs = "";
 		for(var i = 0; i < sz; i++)
-			vargs += "&"+KitJS.GlobalParams[i][0] + "=" + KitJS.GlobalParams[i][1];
+			vargs += "&"+VPLib.GlobalParams[i][0] + "=" + VPLib.GlobalParams[i][1];
 
 		return vargs;
 	}
 }
+var KitJS = VPLib;
 
