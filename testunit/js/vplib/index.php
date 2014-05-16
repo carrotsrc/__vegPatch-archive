@@ -13,7 +13,8 @@
 			die();
 
 		$content = $file->read();
-		$content = str_replace("__URL_AJAX_REQ__", $_SERVER['HTTP_HOST']."/testunit/js/vplib/loopback.php", $content);
+		$url = "http://".$_SERVER['HTTP_HOST']."/testunit/js/vplib/loopback.php"; 
+		$content = str_replace("__URL_AJAX_REQ__", $url, $content);
 		die($content);
 	}
 ?>
@@ -22,13 +23,25 @@
 <title>Javascript Libraries - VPLib</title>
 <script type="text/javascript" src="?reqjs=1"></script>
 <script type="text/javascript" src="vplib.js"></script>
+<style>
+	.feedback {
+		margin-top: 15px;
+		color: #808080;
+	}
+</style>
 </head>
 
 <body>
-	<div id="vplib-load">
+	<div id="vplib-load" class="feedback">
 	</div>
 
-	<div id="vplib-alias">
+	<div id="vplib-alias" class="feedback">
+	</div>
+
+	<div id="vplib-requestGet" class="feedback">
+	</div>
+
+	<div id="vplib-multiRequestGet" class="feedback">
 	</div>
 </body>
 
