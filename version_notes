@@ -3,12 +3,11 @@ VPatch 0.3e
 Version		0.3e
 Author:		cfg csorg
 Date:		2014/04/11
-Updated:	2014/04/11
+Updated:	2014/05/16
 
 Version Notes
 =============
 
--Add a widget config root tool
 -Branching for RQL statements on both sides of the relationship
 -Extended RQL feedback to show both sides of the relationship; important for the management of relationships through root tools
 -Add dynamic loading of asset as standard functionality of gscripts
@@ -17,3 +16,4 @@ Version Notes
 -start dynamic UILib based off KTSet
 -User input on strap files... not sure how this might work but worth a go
 -[complete] Setup script for initial database and root configuration
+-[complete] Add a widget config root tool
