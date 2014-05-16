@@ -85,5 +85,13 @@
 			return 102;
 		}
 
+		public function getConfigList()
+		{
+			if(!$this->maintainReady())
+				return null;
+
+			return array("wcaa", "wcab");
+		}
+
 	}
 ?>
