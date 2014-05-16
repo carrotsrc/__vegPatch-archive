@@ -164,5 +164,10 @@
 
 			return $r[0][0];
 		}
+		
+		public function getConfigList()
+		{
+			return null;
+		}
 	}
 ?>
