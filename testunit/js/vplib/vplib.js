@@ -2,11 +2,11 @@ vplib_load = function () {
 	present = true;
 	var str = "Checking VPLib is present...";
 	if(VPLib === undefined) {
-		str += "<span style=\"color: red;\">nope</span>";
+		str += "<span class=\"fail\">fail</span>";
 		present = false;
 	}
 	else
-		str += "<span style=\"color: green;\">ok</span>";
+		str += "<span class=\"pass\">ok</span>";
 
 	if(!present) {
 		str += "<br />Cannot recover"
@@ -25,11 +25,11 @@ vplib_alias = function () {
 	var str = "Checking VPLib alias KitJS...";
 
 	if(VPLib.Ajax.requestURL != KitJS.Ajax.requestURL) {
-		str += "<span style=\"color: red;\">nope</span>";
+		str += "<span class=\"fail\">fail</span>";
 		present = false;
 	}
 	else
-		str += "<span style=\"color: green;\">ok</span>";
+		str += "<span class=\"pass\">ok</span>";
 
 	if(!present) {
 		str += "<br />Cannot recover"
@@ -55,7 +55,7 @@ vplib_singleRequestGet = function () {
 vplib_multiRequestGet = function () {
 	var present = true;
 	var id = "vplib-multiRequestGet";
-	var str = "Performing multiple get request...";
+	var str = "Performing multiple get requests...";
 	document.getElementById(id).innerHTML = str;
 	VPLib.Ajax.request("request=1", callback_multiRequestGet, undefined);
 	VPLib.Ajax.request("request=2", callback_multiRequestGet, undefined);
@@ -66,10 +66,20 @@ vplib_multiRequestGet = function () {
 	return present;
 }
 
+vplib_singleRequestPost = function () {
+	var present = true;
+	var id = "vplib-requestPost";
+	var str = "Performing single post request...";
+	document.getElementById(id).innerHTML = str;
+	VPLib.Ajax.request("get1=hello&get2=world", callback_singleRequestPost, "post1=hello&post2=world");
+
+	return present;
+}
+
 callback_singleRequestGet = function (response) {
 	var present = true;
 	var id = "vplib-requestGet";
-	var str = "<span style=\"color: green;\">received</span>";
+	var str = "<span class=\"pass\">recieved</span>";
 	str += "<div style=\"margin-left: 15px\">"+response+"</div>";
 	var e = document.getElementById(id);
 	e.innerHTML += str;
@@ -78,7 +88,25 @@ callback_singleRequestGet = function (response) {
 callback_multiRequestGet = function (response) {
 	var present = true;
 	var id = "vplib-multiRequestGet";
-	var str = "<div><span style=\"color: green;\">received</span>";
+	var str = "<span class=\"pass\">recieved</span>";
+	str += "<div style=\"margin-left: 15px\">"+response+"</div></div>";
+	var e = document.getElementById(id);
+	e.innerHTML += str;
+}
+
+callback_singleRequestPost = function (response) {
+	var present = true;
+	var id = "vplib-requestPost";
+	var str = "<span class=\"pass\">recieved</span>";
+	str += "<div style=\"margin-left: 15px\">"+response+"</div>";
+	var e = document.getElementById(id);
+	e.innerHTML += str;
+}
+
+callback_multiRequestPost = function (response) {
+	var present = true;
+	var id = "vplib-multiRequestPost";
+	var str = "<span class=\"pass\">recieved</span>";
 	str += "<div style=\"margin-left: 15px\">"+response+"</div></div>";
 	var e = document.getElementById(id);
 	e.innerHTML += str;
@@ -95,5 +123,7 @@ window.onload = function () {
 	vplib_singleRequestGet();
 
 	vplib_multiRequestGet();
+
+	vplib_singleRequestPost();
 
 }

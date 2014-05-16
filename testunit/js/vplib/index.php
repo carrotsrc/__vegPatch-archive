@@ -28,6 +28,14 @@
 		margin-top: 15px;
 		color: #808080;
 	}
+
+	.pass {
+		color: #57AF15;
+	}
+
+	.fail {
+		color: #BF3D23;
+	}
 </style>
 </head>
 
@@ -42,6 +50,9 @@
 	</div>
 
 	<div id="vplib-multiRequestGet" class="feedback">
+	</div>
+
+	<div id="vplib-requestPost" class="feedback">
 	</div>
 </body>
 
