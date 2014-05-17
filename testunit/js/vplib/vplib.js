@@ -55,7 +55,7 @@ vplib_singleRequestGet = function () {
 vplib_multiRequestGet = function () {
 	var present = true;
 	var id = "vplib-multiRequestGet";
-	var str = "Performing multiple get requests...";
+	var str = "Performing 5 get requests...";
 	document.getElementById(id).innerHTML = str;
 	VPLib.Ajax.request("request=1", callback_multiRequestGet, undefined);
 	VPLib.Ajax.request("request=2", callback_multiRequestGet, undefined);
@@ -80,7 +80,7 @@ callback_singleRequestGet = function (response) {
 	var present = true;
 	var id = "vplib-requestGet";
 	var str = "<span class=\"pass\">recieved</span>";
-	str += "<div style=\"margin-left: 15px\">"+response+"</div>";
+	str += "<div style=\"margin-left: 15px; margin-top: 0px; margin-bottom: 5px;\">"+response+"</div>";
 	var e = document.getElementById(id);
 	e.innerHTML += str;
 }
@@ -89,7 +89,7 @@ callback_multiRequestGet = function (response) {
 	var present = true;
 	var id = "vplib-multiRequestGet";
 	var str = "<span class=\"pass\">recieved</span>";
-	str += "<div style=\"margin-left: 15px\">"+response+"</div></div>";
+	str += "<div style=\"margin-left: 15px; margin-top: 0px; margin-bottom: 5px;\">"+response+"</div>";
 	var e = document.getElementById(id);
 	e.innerHTML += str;
 }
@@ -98,7 +98,7 @@ callback_singleRequestPost = function (response) {
 	var present = true;
 	var id = "vplib-requestPost";
 	var str = "<span class=\"pass\">recieved</span>";
-	str += "<div style=\"margin-left: 15px\">"+response+"</div>";
+	str += "<div style=\"margin-left: 15px; margin-top: 0px; margin-bottom: 5px;\">"+response+"</div>";
 	var e = document.getElementById(id);
 	e.innerHTML += str;
 }
@@ -107,9 +107,24 @@ callback_multiRequestPost = function (response) {
 	var present = true;
 	var id = "vplib-multiRequestPost";
 	var str = "<span class=\"pass\">recieved</span>";
-	str += "<div style=\"margin-left: 15px\">"+response+"</div></div>";
+	str += "<div style=\"margin-left: 15px; margin-top: 0px; margin-bottom: 5px;\">"+response+"</div>";
 	var e = document.getElementById(id);
 	e.innerHTML += str;
+}
+
+
+vplib_globalParams = function () {
+	var present = true;
+	var id = "vplib-globalParams";
+	var str = "Adding 2 global params...";
+	VPLib.addGlobalParam("param1", "foo");
+	VPLib.addGlobalParam("param2", "bar");
+	var s = VPLib.printGlobalParams();
+	s = s.replace("&", "&amp;", "g");
+	str += "<span class=\"pass\">"+ s +"</span>";
+	document.getElementById(id).innerHTML = str;
+
+	return present;
 }
 
 window.onload = function () {
@@ -120,10 +135,14 @@ window.onload = function () {
 	if(!vplib_alias())
 		return;
 
+	vplib_globalParams();
+
 	vplib_singleRequestGet();
 
 	vplib_multiRequestGet();
 
 	vplib_singleRequestPost();
+
+	console.log("Log Check");
 
 }

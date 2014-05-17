@@ -46,6 +46,9 @@
 	<div id="vplib-alias" class="feedback">
 	</div>
 
+	<div id="vplib-globalParams" class="feedback">
+	</div>
+
 	<div id="vplib-requestGet" class="feedback">
 	</div>
 
@@ -54,6 +57,7 @@
 
 	<div id="vplib-requestPost" class="feedback">
 	</div>
+
 </body>
 
 </html>
