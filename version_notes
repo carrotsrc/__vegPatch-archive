@@ -10,10 +10,11 @@ Version Notes
 
 -Branching for RQL statements on both sides of the relationship
 -Extended RQL feedback to show both sides of the relationship; important for the management of relationships through root tools
--Add dynamic loading of asset as standard functionality of gscripts
 -Custom session handler. Record data as bin blobs behind db authentication instead of in the dodge /tmp files
 -online merging of modules held on separate server into running platform via strap files
 -start dynamic UILib based off KTSet
 -User input on strap files... not sure how this might work but worth a go
+
 -[complete] Setup script for initial database and root configuration
 -[complete] Add a widget config root tool
+-[complete] Add dynamic loading of asset as standard functionality of gscripts
