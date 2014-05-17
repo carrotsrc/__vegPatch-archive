@@ -165,6 +165,54 @@ var VPLib = {
 		}
 	},
 
+	Asset: {
+		loadedList: new Array(),
+		requestScript: function (url) {
+			var sz = VPLib.Asset.loadedList.length;
+			for(var i = 0; i < sz; i++) {
+				if(VPLib.Asset.loadedList[i] == url)
+					return false;
+			}
+
+			var r = document.createDocumentFragment();
+
+			r.insertBefore(document.createElement('script'), null);
+				r = r.lastChild;
+				r.type = "text/javascript";
+				r.src = url;
+
+			var c = document.getElementsByTagName("head");
+			c = c[0];
+			c.insertBefore(r, null);
+
+			VPLib.Asset.loadedList.push(url);
+			return true;
+		},
+
+		requestStyle: function (url) {
+			var sz = VPLib.Asset.loadedList.length;
+			for(var i = 0; i < sz; i++) {
+				if(VPLib.Asset.loadedList[i] == url)
+					return false;
+			}
+
+			var r = document.createDocumentFragment();
+
+			r.insertBefore(document.createElement('link'), null);
+				r = r.lastChild;
+				r.type = "text/css";
+				r.rel = "stylesheet";
+				r.href = url;
+
+			var c = document.getElementsByTagName("head");
+			c = c[0];
+			c.insertBefore(r, null);
+
+			VPLib.Asset.loadedList.push(url);
+			return true;
+		}
+	},
+
 	CommonGroup: {
 		groups: {},
 		register: function (name, id, group, obj) {
