@@ -79,7 +79,7 @@ vplib_singleRequestPost = function () {
 callback_singleRequestGet = function (response) {
 	var present = true;
 	var id = "vplib-requestGet";
-	var str = "<span class=\"pass\">recieved</span>";
+	var str = "<span class=\"pass\">received</span>";
 	str += "<div style=\"margin-left: 15px; margin-top: 0px; margin-bottom: 5px;\">"+response+"</div>";
 	var e = document.getElementById(id);
 	e.innerHTML += str;
@@ -88,7 +88,7 @@ callback_singleRequestGet = function (response) {
 callback_multiRequestGet = function (response) {
 	var present = true;
 	var id = "vplib-multiRequestGet";
-	var str = "<span class=\"pass\">recieved</span>";
+	var str = "<span class=\"pass\">received</span>";
 	str += "<div style=\"margin-left: 15px; margin-top: 0px; margin-bottom: 5px;\">"+response+"</div>";
 	var e = document.getElementById(id);
 	e.innerHTML += str;
@@ -97,7 +97,7 @@ callback_multiRequestGet = function (response) {
 callback_singleRequestPost = function (response) {
 	var present = true;
 	var id = "vplib-requestPost";
-	var str = "<span class=\"pass\">recieved</span>";
+	var str = "<span class=\"pass\">received</span>";
 	str += "<div style=\"margin-left: 15px; margin-top: 0px; margin-bottom: 5px;\">"+response+"</div>";
 	var e = document.getElementById(id);
 	e.innerHTML += str;
@@ -106,7 +106,7 @@ callback_singleRequestPost = function (response) {
 callback_multiRequestPost = function (response) {
 	var present = true;
 	var id = "vplib-multiRequestPost";
-	var str = "<span class=\"pass\">recieved</span>";
+	var str = "<span class=\"pass\">received</span>";
 	str += "<div style=\"margin-left: 15px; margin-top: 0px; margin-bottom: 5px;\">"+response+"</div>";
 	var e = document.getElementById(id);
 	e.innerHTML += str;
@@ -127,6 +127,42 @@ vplib_globalParams = function () {
 	return present;
 }
 
+vplib_dynamicScript = function () {
+	var present = true;
+	var id = "vplib-dynamicScript";
+	var str = "Dynamically loading script...";
+	VPLib.Asset.requestScript("dynamic.js");
+	str += "<span class=\"pass\">ok</span>";
+	str += "<br />";
+	str += "Duplicate script check...";
+	if(VPLib.Asset.requestScript("dynamic.js"))
+		str += "<span class=\"fail\">fail</span>";
+	else
+		str += "<span class=\"pass\">ok</span>";
+		
+	document.getElementById(id).innerHTML = str;
+
+	return present;
+}
+
+vplib_dynamicStyle = function () {
+	var present = true;
+	var id = "vplib-dynamicStyle";
+	var str = "Dynamically loading style...";
+	VPLib.Asset.requestStyle("dynamic.css");
+	str += "<span class=\"pass\">ok</span>";
+	str += "<br />";
+	str += "Duplicate style check...";
+	if(VPLib.Asset.requestScript("dynamic.css"))
+		str += "<span class=\"fail\">fail</span>";
+	else
+		str += "<span class=\"pass\">ok</span>";
+		
+	document.getElementById(id).innerHTML = str;
+
+	return present;
+}
+
 window.onload = function () {
 	
 	if(!vplib_load())
@@ -136,6 +172,10 @@ window.onload = function () {
 		return;
 
 	vplib_globalParams();
+
+	vplib_dynamicScript();
+
+	vplib_dynamicStyle();
 
 	vplib_singleRequestGet();
 

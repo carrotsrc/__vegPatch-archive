@@ -40,7 +40,7 @@
 </head>
 
 <body class="feedback">
-	<b>VBLib Basic Functionality Check</b>
+	<b>VPLib Basic Functionality Check</b>
 	<div id="vplib-load" class="feedback">
 	</div>
 
@@ -48,6 +48,12 @@
 	</div>
 
 	<div id="vplib-globalParams" class="feedback">
+	</div>
+
+	<div id="vplib-dynamicScript" class="feedback">
+	</div>
+
+	<div id="vplib-dynamicStyle" class="feedback">
 	</div>
 
 	<div id="vplib-requestGet" class="feedback">
