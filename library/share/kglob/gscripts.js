@@ -68,7 +68,6 @@ var VPLib = {
 				url = VPLib.Ajax.requestURL;
 				if(args != null)
 					url += "?"+args;
-
 				if(post == undefined || post == null)
 					self.request.open('GET', url, true);
 				else
@@ -126,7 +125,7 @@ var VPLib = {
 					self.lock = true;
 					var p = self.queue[0];
 					self.queue.splice(0, 1);
-					if(p[1] == undefined);
+					if(p[1] === undefined)
 						p[1] = null;
 					self.initRequest();
 					open(p[0], p[1], p[2]);
@@ -265,20 +264,28 @@ var VPLib = {
 		}
 	},
 
-	GlobalParams: new Array(),
+	globalParams: new Array(),
 
 	addGlobalParam: function (param, value) {
-		VPLib.GlobalParams.push(new Array(param, value));
+		VPLib.globalParams.push(new Array(param, value));
 	},
 
 	printGlobalParams: function () {
-		var sz = VPLib.GlobalParams.length;
+		var sz = VPLib.globalParams.length;
 		vargs = "";
-		for(var i = 0; i < sz; i++)
-			vargs += "&"+VPLib.GlobalParams[i][0] + "=" + VPLib.GlobalParams[i][1];
+		for(var i = 0; i < sz; i++) {
+			vargs += "&"+VPLib.globalParams[i][0] + "=" + VPLib.globalParams[i][1];
+		}
 
 		return vargs;
+	},
+
+	log: function (msg) {
+		alert(msg);
 	}
 }
 var KitJS = VPLib;
+
+if(window.console === undefined)
+	window.console = VPLib;
 
