@@ -278,14 +278,6 @@ var VPLib = {
 		}
 
 		return vargs;
-	},
-
-	log: function (msg) {
-		alert(msg);
 	}
 }
 var KitJS = VPLib;
-
-if(window.console === undefined)
-	window.console = VPLib;
-

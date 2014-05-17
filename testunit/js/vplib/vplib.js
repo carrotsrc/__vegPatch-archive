@@ -1,7 +1,7 @@
 vplib_load = function () {
 	present = true;
 	var str = "Checking VPLib is present...";
-	if(VPLib === undefined) {
+	if(typeof(VPLib) == undefined) {
 		str += "<span class=\"fail\">fail</span>";
 		present = false;
 	}

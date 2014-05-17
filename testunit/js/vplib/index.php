@@ -39,7 +39,8 @@
 </style>
 </head>
 
-<body>
+<body class="feedback">
+	<b>VBLib Basic Functionality Check</b>
 	<div id="vplib-load" class="feedback">
 	</div>
 
