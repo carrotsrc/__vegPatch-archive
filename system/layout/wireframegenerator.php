@@ -9,6 +9,7 @@
 	include_once("nodecon.php");
 	include_once("panelrep.php");
 	include_once("leafcon.php");
+	include_once("staticcon.php");
 	include_once("wireframe.php");
 
 	class WireframeGenerator
@@ -24,12 +25,28 @@
 			$cContainer = null;
 			$cStack = array();
 			$cRoot = array();
+			$slen = -1;
 			while(($tag = $parser->getNextTag()) != null)
 			{
+				if($slen >= 0 && get_class($cStack[$slen]) == "StaticCon") {
+					if($tag->element == "/static") {
+						$popped = $cStack[$slen];
+						array_pop($cStack);
+						$slen--;
+						if($slen >= 0)
+							$cStack[$slen]->content[] = $popped;
+						else
+							$cRoot[] = ($popped);
+
+						continue;
+					}
+					$cStack[$slen]->setContent($tag);
+					continue;
+				}
+
 				if($tag->element == "_text_")
 					continue;
-
-				$slen = sizeof($cStack)-1;
+				else
 				if($tag->element == "node" || $tag->element == "leaf")
 				{
 					$pRep = null;
@@ -46,6 +63,7 @@
 						$container = new LeafCon();
 						$container->content = NULL;
 						$pRep = new PanelRep();
+						$pRep->setGroup(0);
 					}
 
 					foreach($tag->attributes as $p => $v)
@@ -88,8 +106,10 @@
 						}
 					}
 
-					if($tag->element == "node")
+					if($tag->element == "node") {
 						$cStack[] = $container;
+						$slen++;
+					}
 					else
 					if($tag->element == "leaf")
 					{
@@ -104,14 +124,21 @@
 			
 				}
 				else
+				if($tag->element == "static") {
+					$container = new StaticCon();
+					$container->content = array();
+					$cStack[] = $container;
+					$slen++;
+				}
+				else
 				if($tag->element == "/node")
 				{
 					$popped = $cStack[$slen];
 					array_pop($cStack);
-					$slen = sizeof($cStack);
+					$slen--;
 
-					if($slen > 0)
-						$cStack[$slen-1]->content[] = $popped;
+					if($slen >= 0)
+						$cStack[$slen]->content[] = $popped;
 					else
 						$cRoot[] = ($popped);
 				}
