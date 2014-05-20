@@ -28,7 +28,7 @@
 			$slen = -1;
 			while(($tag = $parser->getNextTag()) != null)
 			{
-				if($slen >= 0 && get_class($cStack[$slen]) == "StaticCon") {
+				if($slen >= 0 && $cStack[$slen]->type == 2) {
 					if($tag->element == "/static") {
 						$popped = $cStack[$slen];
 						array_pop($cStack);
@@ -126,6 +126,7 @@
 				else
 				if($tag->element == "static") {
 					$container = new StaticCon();
+					$container->type =  2;
 					$container->content = array();
 					$cStack[] = $container;
 					$slen++;
