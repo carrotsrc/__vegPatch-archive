@@ -27,15 +27,14 @@
 
 			if($params['layout'] == null)
 				return $params;
-
 			if(!is_numeric($params['layout'])) {
-				$id = $this->resManager->queryAssoc("Layout('{$params['layout']}');");
+				$id = $this->resManager->queryAssoc("Layout('{$params['layout']}'){r};");
 				if(!$id) {
 					KLog::error("Layout resource does not exist");
 					return false;
 				}
 
-				$params['layout'] = $this->resManager->getHandlerRef($id[0][0]);
+				$params['layout'] = $id[0][1];
 			}
 
 			$wireframe = $this->loadWireframe($params['layout']);
