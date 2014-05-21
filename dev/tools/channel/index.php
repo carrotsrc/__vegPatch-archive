@@ -11,6 +11,7 @@
 
 	include(SystemConfig::relativeAppPath("system/resource/resman.php"));
 	include(SystemConfig::relativeAppPath("system/debugmicro.php"));
+	include(SystemConfig::relativeAppPath("system/managers.php"));
 	include("lib.php");
 
 	$fm = Koda::getFileManager();
