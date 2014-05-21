@@ -14,9 +14,9 @@ Version Notes
 -online merging of modules held on separate server into running platform via strap files
 -start dynamic UILib based off KTSet
 -User input on strap files... not sure how this might work but worth a go
--Static markup in layouts
 
 -[complete] Setup script for initial database and root configuration
 -[complete] Add a widget config root tool
 -[complete] Add dynamic loading of asset as standard functionality of gscripts
 -[complete] Deprecated KitJS, alias variable points to VPLib
+-[complete] Static markup in layouts
