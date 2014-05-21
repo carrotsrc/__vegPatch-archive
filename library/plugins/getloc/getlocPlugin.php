@@ -51,7 +51,7 @@
 			if(sizeof($atoms) > 1)
 				$layout = $atoms[1];
 			else {
-				$layout = Managers::ResourceManager()->queryAssoc("Layout()<Area('{$atoms[0]}'):index;");
+				$layout = Managers::ResourceManager()->queryAssoc("Layout(){r}<Area('{$atoms[0]}'):index;");
 				if(!$layout) {
 					KLog::error("Failed to find index for area");
 					$epage = $this->getConfig("e404");
@@ -61,12 +61,11 @@
 					$atoms = explode("/", $epage);
 
 					$params['area'] = $atoms[0];
-					$layout = Managers::ResourceManager()->queryAssoc("Layout('{$atoms[1]}')<Area('{$atoms[0]}');");
+					$layout = Managers::ResourceManager()->queryAssoc("Layout('{$atoms[1]}'){r}<Area('{$atoms[0]}');");
 					if(!$layout)
 						return false;
 				}
-
-				$layout = Managers::ResourceManager()->getHandlerRef($layout[0][0]);
+				$layout = $layout[0][1];
 			}
 
 			$params['layout'] = $layout;
