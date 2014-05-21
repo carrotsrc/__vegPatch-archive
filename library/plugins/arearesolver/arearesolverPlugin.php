@@ -22,8 +22,9 @@
 
 		public function process(&$params)
 		{
-			if(!isset($params['area']))
+			if(!isset($params['area'])) {
 				return false;
+			}
 
 			$area = null;
 			$prid = null;
@@ -32,7 +33,13 @@
 			$rid = $this->resolveArea($area);
 			if($rid == null) {
 				KLog::error("Unable to resolve area");
-				return false;
+				// redirect to the error page
+				if(!$this->errorPage($params))
+					return false;
+
+				// reresolve everything
+				$area = $params['area'];
+				$rid = $this->resolveArea($area);
 			}
 
 			if($srid != null) {
@@ -120,6 +127,28 @@
 				foreach($list as $p)
 					$cache[$t][] = array($aId, 0, 0, $p);
 
+		}
+
+		public function getConfigList()
+		{
+			return array("e404");
+		}
+
+		private function errorPage(&$params)
+		{
+			$epage = $this->getConfig("e404");
+			if($epage == null)
+				return false;
+
+			$atoms = explode("/", $epage);
+
+			$params['area'] = $atoms[0];
+			$layout = Managers::ResourceManager()->queryAssoc("Layout('{$atoms[1]}'){r}<Area('{$atoms[0]}');");
+			if(!$layout)
+				return false;
+
+			$params['layout'] = $layout[0][1];
+			return $params;
 		}
 	}
 
