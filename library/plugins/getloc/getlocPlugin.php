@@ -54,7 +54,16 @@
 				$layout = Managers::ResourceManager()->queryAssoc("Layout()<Area('{$atoms[0]}'):index;");
 				if(!$layout) {
 					KLog::error("Failed to find index for area");
-					return false;
+					$epage = $this->getConfig("e404");
+					if($epage == null)
+						return false;
+
+					$atoms = explode("/", $epage);
+
+					$params['area'] = $atoms[0];
+					$layout = Managers::ResourceManager()->queryAssoc("Layout('{$atoms[1]}')<Area('{$atoms[0]}');");
+					if(!$layout)
+						return false;
 				}
 
 				$layout = Managers::ResourceManager()->getHandlerRef($layout[0][0]);
@@ -79,6 +88,11 @@
 			$params['inst'] = $atoms[2];
 			$params['jack'] = $atoms[3];
 			return $params;
+		}
+
+		public function getConfigList()
+		{
+			return array("e404", "nu_redir");
 		}
 	}
 
