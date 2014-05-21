@@ -25,7 +25,7 @@
 
 	// We need these regardless
 	$appRootPath = SystemConfig::appRootPath();
-	define('KLOG_PATH', $appRootPath.".klog/kura_log");
+	define('KLOG_PATH', $appRootPath.".vlog/vplog");
 
 	require_once($appRootPath."system/koda/koda.php");
 	require_once($appRootPath."system/dbacc.php");

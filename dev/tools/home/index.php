@@ -18,7 +18,7 @@
 ?>
 	<div id="kr-layout" style="padding: 15px;">
 		<span class="ok-text-blue"><span class="tx-large"><b>Root Tools</b></span><br />
-		<b>Platform Version:</b><span class="ok-text-grey"> <b>0.2.1</b></span></span>
+		<b>Platform Version:</b><span class="ok-text-grey"> <b>0.3e</b></span></span>
 		<div style="margin-top: 15px">
 			<div class="tool-icon">
 			<a href="?tool=area"><img src="area/icon.png" /><br />Areas</a>
