@@ -97,11 +97,6 @@
 				
 			}
 		}
-
-		public function getConfigList()
-		{
-			return array("madwrld", "incep");
-		}
 	}
 
 ?>
