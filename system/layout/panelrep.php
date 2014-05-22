@@ -107,7 +107,7 @@
 		public function generateHTML()
 		{
 			if($this->panel == null)
-				return "";
+				return "<span class=\"vps-fail vps-bold\">Critical Panel Error</span>";
 			$this->panel->loadTemplate();
 			return $this->panel->getTemplate();
 		}
@@ -122,7 +122,8 @@
 
 		public function getComponentRequests()
 		{
-			return $this->panel->componentRequests();
+			if($this->panel != null)
+				return $this->panel->componentRequests();
 		}
 
 		public function applyRequest($result)
