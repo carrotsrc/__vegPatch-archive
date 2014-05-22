@@ -47,8 +47,7 @@
 
 			$atoms = explode('/', $location);
 			$params['area'] = $atoms[0];
-
-			if(sizeof($atoms) > 1)
+			if(sizeof($atoms) > 1 && $atoms[1] != "")
 				$layout = $atoms[1];
 			else {
 				$layout = Managers::ResourceManager()->queryAssoc("Layout(){r}<Area('{$atoms[0]}'):index;");
