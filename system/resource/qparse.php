@@ -47,8 +47,8 @@
 
 		public function parse($rql)
 		{
-			$sz = strlen($rql);
 			$state = array();
+			$sindex = 0;
 
 			$str = "";
 			$type = null;
@@ -61,15 +61,16 @@
 
 			$this->testPush($state, qp_block);
 
-			for($i = 0; $i < $sz; $i++) {
+			for($i = 0; isset($rql[$i]); $i++) {
 				$ch = $rql[$i];
-				$end = end($state);
+				$end = $state[$sindex];
 
 				switch($ch) {
 				case '(':
 					if($end == qp_block || $end == qp_rela) {
 						$this->testPush($state, qp_subq);
 						$this->testPush($state, qp_block);
+						$sindex += 2;
 						$tmp = new QPart();
 						$tmp->pparent = $cpart;
 						$cpart = $tmp;
@@ -77,23 +78,27 @@
 					else
 					if($end == qp_stat) {
 						$this->testPush($state, qp_iden);
+						$sindex++;
 						$type = $str;
 					}
 
 					$str = "";
-				break;
+					break;
 
 				case '[':
 					$this->testPush($state, qp_base);
-				break;
+					$sindex++;
+					break;
 
 				case '{':
 					$this->testPush($state, qp_xtra);
-				break;
+					$sindex++;
+					break;
 
 				case ':':
 					$this->testPush($state, qp_edge);
-				break;
+					$sindex++;
+					break;
 
 				case '<':
 				case '>':
@@ -102,6 +107,7 @@
 						$cpart = new QPart();
 
 					$this->testPush($state, qp_rela);
+					$sindex++;
 
 					if($ch == '<')
 						$cpart->setChild($base, $type, $iden, $xtra);
@@ -112,7 +118,7 @@
 					$base = $type = null;
 					$iden = array();
 					$xtra = array();
-				break;
+					break;
 
 				case ')':
 
@@ -126,11 +132,16 @@
 					}
 					
 					$this->testPop($state);
-					if(end($state) == qp_stat)
-						$this->testPop($state);
+					$sindex--;
 
-					if(end($state) == qp_rela) {
+					if($state[$sindex] == qp_stat) {
 						$this->testPop($state);
+						$sindex--;
+					}
+
+					if($state[$sindex] == qp_rela) {
+						$this->testPop($state);
+						$sindex--;
 
 						if($cpart->child == null)
 							$cpart->setChild($base, $type, $iden, $xtra);
@@ -138,12 +149,15 @@
 							$cpart->setParent($base, $type, $iden, $xtra);
 					}
 
-					if(end($state) == qp_subq) {
+					if($state[$sindex] == qp_subq) {
 						// we are closing a subquery
 						$this->testPop($state);
+						$sindex--;
 						// should be qp_rela anyway but no harm in checking
-						if(end($state) == qp_rela) {
+						if($state[$sindex] == qp_rela) {
 							$this->testPop($state);
+							$sindex--;
+
 							$tmp = $cpart;
 							$cpart = $tmp->pparent;
 							$tmp->pparent = null;
@@ -156,37 +170,42 @@
 					}
 
 					$str = "";
-				break;
+					break;
 				
 				case '}':
 					if($end == qp_xtra && $str != "")
 						$xtra[] = $str;
 
 					$this->testPop($state);
+					$sindex--;
 					$str = "";
 				break;
 				
 				case ']':
 					$this->testPop($state);
+					$sindex--;
 					if($end == qp_base) {
 						$base = $str;
 					}
 					$str = "";
-				break;
+					break;
 
 				case '\'':
 					if($end == qp_strn) {
 						$this->testPop($state);
-						$end = end($state);
+						$sindex--;
+						$end = $state[$sindex];
 
 						if($end == qp_iden)
 							$iden[] = $str;
 
 						$str = "";
 					}
-					else
+					else {
 						$this->testPush($state, qp_strn);
-				break;
+						$sindex++;
+					}
+					break;
 
 				case ',':
 
@@ -203,7 +222,7 @@
 						$str = "";
 					}
 
-				break;
+					break;
 
 				case ' ':
 					if($end == qp_strn)
@@ -217,6 +236,7 @@
 					if($end == qp_edge && $str != "") {
 						$edge = $str;
 						$this->testPop($state);
+						$sindex--;
 						$cpart->setEdge($edge);
 					}
 					else
@@ -225,12 +245,15 @@
 						$cpart->setParent($base, $type, $iden, $xtra);
 
 					$this->testPop($state);
+					$sindex--;
 					$str = "";
 				break;
 
 				default:
-					if($end == qp_block || $end == qp_rela)
+					if($end == qp_block || $end == qp_rela) {
 						$this->testPush($state, qp_stat);
+						$sindex++;
+					}
 
 					$str .= $ch;
 				break;
