@@ -1,0 +1,74 @@
+.container {
+	border: 0px solid #5BC72D;
+	border: 0px solid red;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	padding: 5px;
+	float: left;
+	margin: 2px;
+	display: block;
+}
+
+.purplec {
+	border-color: purple;
+	background: white;
+}
+
+.blackc {
+	border-color: black;
+	background: white;
+} 
+.drop {
+	border: 1px dotted green;
+	font-size: xx-small;
+}
+
+.node {
+	border-color: blue;
+}
+
+.leaf {
+	border-color: red;
+}
+
+.nl {
+	margin-left: 13px;
+	width: 10px;
+	height: 3px;
+}
+
+.holder {
+	border-style: dashed;
+}
+
+.end {
+	clear: left;
+}
+
+.layout {
+
+}
+
+.xsmallfont {
+	font-size: x-small;
+}
+
+.kr-form-group {
+	margin-top: 10px;
+}
+
+a {
+	text-decoration: none;
+}
+
+.vps-fail {
+	color: #BF3317;
+}
+
+.vps-pass {
+	color: #5F8F11;
+}
+
+.vps-bold {
+	font-weight: bold;
+}

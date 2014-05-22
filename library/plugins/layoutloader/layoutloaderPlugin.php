@@ -27,17 +27,19 @@
 
 			if($params['layout'] == null)
 				return $params;
-			if(!is_numeric($params['layout'])) {
-				$id = $this->resManager->queryAssoc("Layout('{$params['layout']}'){r};");
-				if(!$id) {
-					KLog::error("Layout resource does not exist");
-					return false;
-				}
 
-				$params['layout'] = $id[0][1];
+			if(!is_numeric($params['layout'])) {
+				if(!($id = $this->resManager->queryAssoc("Layout('{$params['layout']}'){r};"))) {
+					KLog::error("Layout resource does not exist");
+					if(!$this->errorPage($params))
+						return false;
+
+				}
+				else
+					$params['layout'] = $id[0][1];
 			}
 
-			$wireframe = $this->loadWireframe($params['layout']);
+			$wireframe = Managers::LayoutManager()->loadLayout($params['layout']);
 			if($wireframe == null) {
 				KLog::error("Failed to load wireframe");
 				return false;
@@ -50,9 +52,25 @@
 			return $params;
 		}
 
-		private function loadWireframe($id)
+		public function getConfigList()
 		{
-			return Managers::LayoutManager()->loadLayout($id);
+			return array("e404");
+		}
+
+		private function errorPage(&$params)
+		{
+			$epage = $this->getConfig("e404");
+			if($epage == null)
+				return false;
+
+			$atoms = explode("/", $epage);
+
+			$layout = Managers::ResourceManager()->queryAssoc("Layout('{$atoms[1]}'){r}<Area('{$atoms[0]}');");
+			if(!$layout)
+				return false;
+
+			$params['layout'] = $layout[0][1]; // just temporarily attach the error layout to the area
+			return $params;
 		}
 	}
 
