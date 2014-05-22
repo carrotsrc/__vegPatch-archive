@@ -99,12 +99,11 @@
 
 		private function runChannel($ref, $params)
 		{
-			$rq = "Channel()<Area('$ref');";
-			$r = $this->resourceManager->queryAssoc($rq);
+			$r = $this->resourceManager->queryAssoc("Channel(){r}<Area('$ref');");
 			if(!$r) 
 				return $params;
 
-			$cid = $r[0][0];
+			$ref = $r[0][1];
 			$ref = $this->resourceManager->getHandlerRef($cid);
 			$channel = $this->channelManager->getChannel($ref);
 			if($channel == null)	// There are no channel nodes
