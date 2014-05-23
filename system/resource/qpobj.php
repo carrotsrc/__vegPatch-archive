@@ -8,46 +8,55 @@
 	if(!defined('VP_LOADED'))
 		die("vegpatch system configuration error");
 	
-	define("qpp_relatee", 1);
-	define("qpp_part", 2);
+	define("qpp_item", 1);
+	define("qpp_relationship", 2);
 
-	define("qpo_void", 0);
-	define("qpo_parent", 1);
-	define("qpo_child", 2);
-	define("qpo_single", 3);
+	define("qpo_void", 1);
+	define("qpo_parent", 2);
+	define("qpo_child", 4);
+	define("qpo_single", 8);
 
-	class QRelatee
+	/*
+	* these two classes map out the behaviour for
+	* two different kinds of objects in a resource query:
+	* - a QRelationship is a container for a parent-child relationship
+	* - a QItem which is an individual relationship item; a parent or a child
+	*
+	* any relationship item in a QRelationship can also be a QRelationship so in effect
+	* you can query branches of relationships on both sides of a statement.
+	*/
+	class QItem
 	{
-		public $ctype = qpp_relatee;
+		public $ctype = qpp_item;
 
 		public $base;
 		public $type;
 		public $iden;
 		public $xtra;
 
-		public function generateSelect($level, $link)
+		public function generateSelect($level, $flag)
 		{
 			echo "SELECT `rp_$level`.`id`";
-			$this->generateXtra($level, $link);
+			$this->generateXtra($level, $flag);
 			echo " FROM `respool` AS `rp_$level` ";
 		}
 
-		public function generateJoin($level, $link, $ltable)
+		public function generateJoin($level, $flag, $ltable)
 		{
 			$alias;
-			if($link == qpo_parent)
+			if($flag == qpo_parent)
 				$alias = "p$level";
 			else
-			if($link == qpo_child)
+			if($flag == qpo_child)
 				$alias = "c$level";
 			else
-			if($link == qpo_single)
+			if($flag == qpo_single)
 				$alias = $level;
 
-			if($link != qpo_single) {
+			if($flag != qpo_single) {
 
 				echo "JOIN `respool` AS `rp_$alias` ON `$ltable`.";
-				if($link == qpo_parent)
+				if($flag == qpo_parent)
 					echo "`parent_id` ";
 				else
 					echo "`child_id` ";
@@ -61,18 +70,18 @@
 				echo "JOIN `resbase` AS `rb_$alias` ON `rc_$alias`.`base`=`rb_$alias`.`id` ";
 		}
 
-		public function generateConditional($level, $link)
+		public function generateConditional($level, $flag)
 		{
 			$sz = sizeof($this->iden);
 
 			$alias;
-			if($link == qpo_parent)
+			if($flag == qpo_parent)
 				$alias = "p$level";
 			else
-			if($link == qpo_child)
+			if($flag == qpo_child)
 				$alias = "c$level";
 			else
-			if($link == qpo_single)
+			if($flag == qpo_single)
 				$alias = $level;
 
 			if($this->base != null) {
@@ -104,10 +113,9 @@
 			echo ") ";
 		}
 
-		private function generateXtra($level, $link)
+		private function generateXtra($level, $flag)
 		{
-			$sz = sizeof($this->xtra);
-			if($sz == 0)
+			if(!isset($this->xtra[0]))
 				return;
 
 			$alias = "rp_$level";
@@ -130,9 +138,9 @@
 
 	}
 
-	class QPart
+	class QRelationship
 	{
-		public $ctype = qpp_part;
+		public $ctype = qpp_relationship;
 		public $out = null;
 
 		public $parent = null;
@@ -143,7 +151,7 @@
 
 		public function setParent($base, $type, $iden, $xtra)
 		{
-			$r = new QRelatee();
+			$r = new QItem();
 			$r->base = $base;
 			$r->type = $type;
 			$r->iden = $iden;
@@ -157,11 +165,13 @@
 		public function setParentObj($o)
 		{
 			$this->parent = $o;
+			if($this->out === null)
+				$this->out = qpo_parent;
 		}
 
 		public function setChild($base, $type, $iden, $xtra)
 		{
-			$r = new QRelatee();
+			$r = new QItem();
 			$r->base = $base;
 			$r->type = $type;
 			$r->iden = $iden;
@@ -175,6 +185,8 @@
 		public function setChildObj($o)
 		{
 			$this->child = $o;
+			if($this->out === null)
+				$this->out = qpo_child;
 		}
 
 		public function setEdge($e)
@@ -204,18 +216,19 @@
 			}
 		}
 
-		public function generateJoin($level, $link = null, $ltable = null)
+		public function generateJoin($level, $flag = null, $ltable = null)
 		{
 			if($this->child !== null) {
-				if($link == null && $ltable == null)
+				$clevel = $level;
+				if($flag == null && $ltable == null)
 					echo "JOIN `resnet` AS `net$level` ON `rp_$level`.`id` ";
 				else {
 					echo "JOIN `resnet` AS `net$level` ON `$ltable`.";
 
-					if($link == qpo_parent)
+					if($flag == qpo_parent)
 						echo "`parent_id` ";
 					else
-					if($link == qpo_child)
+					if($flag == qpo_child)
 						echo "`child_id` ";
 				}
 
@@ -229,40 +242,47 @@
 				if($this->edge != null)
 					echo "JOIN `edgetype` AS `e_$level` ON `net$level`.`edge`=`e_$level`.`id` ";
 
-				if($this->parent->ctype == qpp_relatee)
-					$this->parent->generateJoin($level, qpo_parent, "net$level");
-				else
-					$this->parent->generateJoin($level+1, qpo_parent, "net$level");
+				if($this->parent->ctype == qpp_item)
+					$this->parent->generateJoin($clevel, qpo_parent, "net$clevel");
+				else {
+					$this->parent->generateJoin($level+1, qpo_parent, "net$clevel");
+					if($level == 0)
+						$level = 64;
+				}
 
 
-				if($this->child->ctype == qpp_relatee)
-					$this->child->generateJoin($level, qpo_child, "net$level");
+				if($this->child->ctype == qpp_item)
+					$this->child->generateJoin($clevel, qpo_child, "net$clevel");
 				else
-					$this->child->generateJoin($level+1, qpo_child, "net$level");
+					$this->child->generateJoin($level+1, qpo_child, "net$clevel");
 			}
 			else
 				$this->parent->generateJoin($level, qpo_single, null);
 		}
 
-		public function generateConditional($level, $link = null)
+		public function generateConditional($level, $flag = null)
 		{
 			if($level == 0)
 				echo "WHERE ";
 
 			if($this->child !== null) {
-				if($this->parent->ctype == qpp_relatee)
-					$this->parent->generateConditional($level, qpo_parent);
-				else
+				$clevel = $level;
+				if($this->parent->ctype == qpp_item)
+					$this->parent->generateConditional($clevel, qpo_parent);
+				else {
 					$this->parent->generateConditional($level+1, qpo_parent);
+					if($level == 0)
+						$level = 64;
+				}
 
 				echo "AND ";
-				if($this->child->ctype == qpp_relatee)
-					$this->child->generateConditional($level, qpo_child);
+				if($this->child->ctype == qpp_item)
+					$this->child->generateConditional($clevel, qpo_child);
 				else
 					$this->child->generateConditional($level+1, qpo_child);
 
 				if($this->edge != null) {
-					echo "AND `e_$level`.`label`='{$this->edge}' ";
+					echo "AND `e_$clevel`.`label`='{$this->edge}' ";
 				}
 			}
 			else
