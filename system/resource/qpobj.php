@@ -8,8 +8,8 @@
 	if(!defined('VP_LOADED'))
 		die("vegpatch system configuration error");
 	
-	define("qpp_relatee", 1);
-	define("qpp_part", 2);
+	define("qpp_item", 1);
+	define("qpp_relationship", 2);
 
 	define("qpo_void", 1);
 	define("qpo_parent", 2);
@@ -19,15 +19,15 @@
 	/*
 	* these two classes map out the behaviour for
 	* two different kinds of objects in a resource query:
-	* - a QPart which is a container for a parent-child relationship
-	* - a QRelatee which is an individual relationship item
+	* - a QRelationship is a container for a parent-child relationship
+	* - a QItem which is an individual relationship item; a parent or a child
 	*
-	* any relationship item in a QPart can also be a QPart so in effect
-	* you can query branches of relationships on both sides of a statement
+	* any relationship item in a QRelationship can also be a QRelationship so in effect
+	* you can query branches of relationships on both sides of a statement.
 	*/
-	class QRelatee
+	class QItem
 	{
-		public $ctype = qpp_relatee;
+		public $ctype = qpp_item;
 
 		public $base;
 		public $type;
@@ -138,9 +138,9 @@
 
 	}
 
-	class QPart
+	class QRelationship
 	{
-		public $ctype = qpp_part;
+		public $ctype = qpp_relationship;
 		public $out = null;
 
 		public $parent = null;
@@ -151,7 +151,7 @@
 
 		public function setParent($base, $type, $iden, $xtra)
 		{
-			$r = new QRelatee();
+			$r = new QItem();
 			$r->base = $base;
 			$r->type = $type;
 			$r->iden = $iden;
@@ -171,7 +171,7 @@
 
 		public function setChild($base, $type, $iden, $xtra)
 		{
-			$r = new QRelatee();
+			$r = new QItem();
 			$r->base = $base;
 			$r->type = $type;
 			$r->iden = $iden;
@@ -242,7 +242,7 @@
 				if($this->edge != null)
 					echo "JOIN `edgetype` AS `e_$level` ON `net$level`.`edge`=`e_$level`.`id` ";
 
-				if($this->parent->ctype == qpp_relatee)
+				if($this->parent->ctype == qpp_item)
 					$this->parent->generateJoin($clevel, qpo_parent, "net$clevel");
 				else {
 					$this->parent->generateJoin($level+1, qpo_parent, "net$clevel");
@@ -251,7 +251,7 @@
 				}
 
 
-				if($this->child->ctype == qpp_relatee)
+				if($this->child->ctype == qpp_item)
 					$this->child->generateJoin($clevel, qpo_child, "net$clevel");
 				else
 					$this->child->generateJoin($level+1, qpo_child, "net$clevel");
@@ -267,7 +267,7 @@
 
 			if($this->child !== null) {
 				$clevel = $level;
-				if($this->parent->ctype == qpp_relatee)
+				if($this->parent->ctype == qpp_item)
 					$this->parent->generateConditional($clevel, qpo_parent);
 				else {
 					$this->parent->generateConditional($level+1, qpo_parent);
@@ -276,7 +276,7 @@
 				}
 
 				echo "AND ";
-				if($this->child->ctype == qpp_relatee)
+				if($this->child->ctype == qpp_item)
 					$this->child->generateConditional($clevel, qpo_child);
 				else
 					$this->child->generateConditional($level+1, qpo_child);

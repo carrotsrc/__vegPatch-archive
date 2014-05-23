@@ -8,7 +8,7 @@
 	if(!defined('VP_LOADED'))
 		die("vegpatch system configuration error");
 
-	include("qpart.php");
+	include("qpobj.php");
 
 	define('qp_block', 0);
 
@@ -61,7 +61,7 @@
 						array_push($state, qp_subq);
 						array_push($state, qp_block);
 						$sindex += 2;
-						$tmp = new QPart();
+						$tmp = new QRelationship();
 						$tmp->pparent = $cpart;
 						$cpart = $tmp;
 					}
@@ -97,7 +97,7 @@
 						*  so this side of the relationship will be an object
 						*/
 						$tmp = $cpart;
-						$cpart = new QPart();
+						$cpart = new QRelationship();
 						if($ch == '<')
 							$cpart->setChildObj($tmp);
 						else
@@ -112,7 +112,7 @@
 					}
 
 					if($cpart == null)
-						$cpart = new QPart();
+						$cpart = new QRelationship();
 
 					array_push($state, qp_rela);
 					$sindex++;
@@ -245,7 +245,7 @@
 
 				case ';':
 					if($cpart == null)
-						$cpart = new QPart();
+						$cpart = new QRelationship();
 
 					if($end == qp_edge && $str != "") {
 						$edge = $str;
