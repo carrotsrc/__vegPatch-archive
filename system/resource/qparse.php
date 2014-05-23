@@ -10,18 +10,6 @@
 
 	include("qpart.php");
 
-	/*
-	*  Class: QParse
-	*  Initial: 2013-12-04
-	*  Author: cfg
-	*  Updated: 2013-12-18
-	*  Mod: cfg
-	*
-	*  Version: 0.1
-	*  VegPatch: 0.2
-	*
-	*  Parse query lines for resources
-	*/
 	define('qp_block', 0);
 
 	define('qp_iden', 1);
@@ -34,6 +22,19 @@
 	define('qp_subq', 7);
 
 	define('qp_stat', 8);
+	define('qp_wait', 9);
+	global $stuff;
+		$stuff = array(
+			"block",
+			"iden",
+			"xtra",
+			"base",
+			"edge",
+			"rela",
+			"strn",
+			"subq",
+			"stat",
+			"wait");
 
 	/*
 	* TODO:
@@ -103,12 +104,24 @@
 				case '<':
 				case '>':
 					
+					if($end == qp_wait) {
+						$tmp = $cpart;
+						$cpart = new QPart();
+						if($ch == '<')
+							$cpart->setChildObj($tmp);
+						else
+							$cpart->setParentObj($tmp);
+
+						$this->testPop($state);
+						$this->testPush($state, qp_rela);
+						break;
+					}
+
 					if($cpart == null)
 						$cpart = new QPart();
 
 					$this->testPush($state, qp_rela);
 					$sindex++;
-
 					if($ch == '<')
 						$cpart->setChild($base, $type, $iden, $xtra);
 					else
@@ -153,8 +166,9 @@
 						// we are closing a subquery
 						$this->testPop($state);
 						$sindex--;
-						// should be qp_rela anyway but no harm in checking
+
 						if($state[$sindex] == qp_rela) {
+							// if it is in the second part of a relationship
 							$this->testPop($state);
 							$sindex--;
 
@@ -166,6 +180,11 @@
 								$cpart->setChildObj($tmp);
 							else
 								$cpart->setParentObj($tmp);
+						}
+						else {
+							// we are in the first part of a relationship
+							$this->testPush($state, qp_wait);
+							$sindex++;
 						}
 					}
 
@@ -265,14 +284,22 @@
 
 		private function testPush(&$a, $s)
 		{
+			global $stuff;
 			array_push($a, $s);
-			//var_dump($a);
+			foreach($a as $c) {
+				echo $stuff[$c] . " ";
+			}
+			echo "<br />";
 		}
 
 		private function testPop(&$a)
 		{
+			global $stuff;
 			array_pop($a);
-			//var_dump($a);
+			foreach($a as $c) {
+				echo $stuff[$c] . " ";
+			}
+			echo "<br />";
 		}
 
 		public function generate($qpart)

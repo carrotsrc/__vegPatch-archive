@@ -11,10 +11,10 @@
 	define("qpp_relatee", 1);
 	define("qpp_part", 2);
 
-	define("qpo_void", 0);
-	define("qpo_parent", 1);
-	define("qpo_child", 2);
-	define("qpo_single", 3);
+	define("qpo_void", 1);
+	define("qpo_parent", 2);
+	define("qpo_child", 4);
+	define("qpo_single", 8);
 
 	class QRelatee
 	{
@@ -25,29 +25,29 @@
 		public $iden;
 		public $xtra;
 
-		public function generateSelect($level, $link)
+		public function generateSelect($level, $flag)
 		{
 			echo "SELECT `rp_$level`.`id`";
-			$this->generateXtra($level, $link);
+			$this->generateXtra($level, $flag);
 			echo " FROM `respool` AS `rp_$level` ";
 		}
 
-		public function generateJoin($level, $link, $ltable)
+		public function generateJoin($level, $flag, $ltable)
 		{
 			$alias;
-			if($link == qpo_parent)
+			if($flag == qpo_parent)
 				$alias = "p$level";
 			else
-			if($link == qpo_child)
+			if($flag == qpo_child)
 				$alias = "c$level";
 			else
-			if($link == qpo_single)
+			if($flag == qpo_single)
 				$alias = $level;
 
-			if($link != qpo_single) {
+			if($flag != qpo_single) {
 
 				echo "JOIN `respool` AS `rp_$alias` ON `$ltable`.";
-				if($link == qpo_parent)
+				if($flag == qpo_parent)
 					echo "`parent_id` ";
 				else
 					echo "`child_id` ";
@@ -61,18 +61,18 @@
 				echo "JOIN `resbase` AS `rb_$alias` ON `rc_$alias`.`base`=`rb_$alias`.`id` ";
 		}
 
-		public function generateConditional($level, $link)
+		public function generateConditional($level, $flag)
 		{
 			$sz = sizeof($this->iden);
 
 			$alias;
-			if($link == qpo_parent)
+			if($flag == qpo_parent)
 				$alias = "p$level";
 			else
-			if($link == qpo_child)
+			if($flag == qpo_child)
 				$alias = "c$level";
 			else
-			if($link == qpo_single)
+			if($flag == qpo_single)
 				$alias = $level;
 
 			if($this->base != null) {
@@ -104,10 +104,9 @@
 			echo ") ";
 		}
 
-		private function generateXtra($level, $link)
+		private function generateXtra($level, $flag)
 		{
-			$sz = sizeof($this->xtra);
-			if($sz == 0)
+			if(!isset($this->xtra[0]))
 				return;
 
 			$alias = "rp_$level";
@@ -204,18 +203,18 @@
 			}
 		}
 
-		public function generateJoin($level, $link = null, $ltable = null)
+		public function generateJoin($level, $flag = null, $ltable = null)
 		{
 			if($this->child !== null) {
-				if($link == null && $ltable == null)
+				if($flag == null && $ltable == null)
 					echo "JOIN `resnet` AS `net$level` ON `rp_$level`.`id` ";
 				else {
 					echo "JOIN `resnet` AS `net$level` ON `$ltable`.";
 
-					if($link == qpo_parent)
+					if($flag == qpo_parent)
 						echo "`parent_id` ";
 					else
-					if($link == qpo_child)
+					if($flag == qpo_child)
 						echo "`child_id` ";
 				}
 
@@ -244,7 +243,7 @@
 				$this->parent->generateJoin($level, qpo_single, null);
 		}
 
-		public function generateConditional($level, $link = null)
+		public function generateConditional($level, $flag = null)
 		{
 			if($level == 0)
 				echo "WHERE ";
