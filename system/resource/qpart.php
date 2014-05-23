@@ -16,6 +16,15 @@
 	define("qpo_child", 4);
 	define("qpo_single", 8);
 
+	/*
+	* these two classes map out the behaviour for
+	* two different kinds of objects in a resource query:
+	* - a QPart which is a container for a parent-child relationship
+	* - a QRelatee which is an individual relationship item
+	*
+	* any relationship item in a QPart can also be a QPart so in effect
+	* you can query branches of relationships on both sides of a statement
+	*/
 	class QRelatee
 	{
 		public $ctype = qpp_relatee;
@@ -156,6 +165,8 @@
 		public function setParentObj($o)
 		{
 			$this->parent = $o;
+			if($this->out === null)
+				$this->out = qpo_parent;
 		}
 
 		public function setChild($base, $type, $iden, $xtra)
@@ -174,6 +185,8 @@
 		public function setChildObj($o)
 		{
 			$this->child = $o;
+			if($this->out === null)
+				$this->out = qpo_child;
 		}
 
 		public function setEdge($e)
@@ -206,6 +219,7 @@
 		public function generateJoin($level, $flag = null, $ltable = null)
 		{
 			if($this->child !== null) {
+				$clevel = $level;
 				if($flag == null && $ltable == null)
 					echo "JOIN `resnet` AS `net$level` ON `rp_$level`.`id` ";
 				else {
@@ -229,15 +243,18 @@
 					echo "JOIN `edgetype` AS `e_$level` ON `net$level`.`edge`=`e_$level`.`id` ";
 
 				if($this->parent->ctype == qpp_relatee)
-					$this->parent->generateJoin($level, qpo_parent, "net$level");
-				else
-					$this->parent->generateJoin($level+1, qpo_parent, "net$level");
+					$this->parent->generateJoin($clevel, qpo_parent, "net$clevel");
+				else {
+					$this->parent->generateJoin($level+1, qpo_parent, "net$clevel");
+					if($level == 0)
+						$level = 64;
+				}
 
 
 				if($this->child->ctype == qpp_relatee)
-					$this->child->generateJoin($level, qpo_child, "net$level");
+					$this->child->generateJoin($clevel, qpo_child, "net$clevel");
 				else
-					$this->child->generateJoin($level+1, qpo_child, "net$level");
+					$this->child->generateJoin($level+1, qpo_child, "net$clevel");
 			}
 			else
 				$this->parent->generateJoin($level, qpo_single, null);
@@ -249,19 +266,23 @@
 				echo "WHERE ";
 
 			if($this->child !== null) {
+				$clevel = $level;
 				if($this->parent->ctype == qpp_relatee)
-					$this->parent->generateConditional($level, qpo_parent);
-				else
+					$this->parent->generateConditional($clevel, qpo_parent);
+				else {
 					$this->parent->generateConditional($level+1, qpo_parent);
+					if($level == 0)
+						$level = 64;
+				}
 
 				echo "AND ";
 				if($this->child->ctype == qpp_relatee)
-					$this->child->generateConditional($level, qpo_child);
+					$this->child->generateConditional($clevel, qpo_child);
 				else
 					$this->child->generateConditional($level+1, qpo_child);
 
 				if($this->edge != null) {
-					echo "AND `e_$level`.`label`='{$this->edge}' ";
+					echo "AND `e_$clevel`.`label`='{$this->edge}' ";
 				}
 			}
 			else

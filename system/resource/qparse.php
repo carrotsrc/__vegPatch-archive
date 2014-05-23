@@ -22,25 +22,14 @@
 	define('qp_subq', 7);
 
 	define('qp_stat', 8);
-	define('qp_wait', 9);
-	global $stuff;
-		$stuff = array(
-			"block",
-			"iden",
-			"xtra",
-			"base",
-			"edge",
-			"rela",
-			"strn",
-			"subq",
-			"stat",
-			"wait");
+	define('qp_lsub', 9);
 
 	/*
-	* TODO:
-	* Need to implement subqueries on first relation
-	* instead of just on second. This means before
-	* shifting intp qp_rela state i.e. < and > symbols
+	* This class handles parsing RQL statements and
+	* generating objects which will then encode the 
+	* information into valid SQL.
+	* As of v0.3 the parsing handles branching on
+	* both sides of the statement.
 	*/
 
 	class QParse
@@ -60,7 +49,7 @@
 			$cpart = null;
 			$rpart = null;
 
-			$this->testPush($state, qp_block);
+			array_push($state, qp_block);
 
 			for($i = 0; isset($rql[$i]); $i++) {
 				$ch = $rql[$i];
@@ -69,8 +58,8 @@
 				switch($ch) {
 				case '(':
 					if($end == qp_block || $end == qp_rela) {
-						$this->testPush($state, qp_subq);
-						$this->testPush($state, qp_block);
+						array_push($state, qp_subq);
+						array_push($state, qp_block);
 						$sindex += 2;
 						$tmp = new QPart();
 						$tmp->pparent = $cpart;
@@ -78,7 +67,7 @@
 					}
 					else
 					if($end == qp_stat) {
-						$this->testPush($state, qp_iden);
+						array_push($state, qp_iden);
 						$sindex++;
 						$type = $str;
 					}
@@ -87,24 +76,26 @@
 					break;
 
 				case '[':
-					$this->testPush($state, qp_base);
+					array_push($state, qp_base);
 					$sindex++;
 					break;
 
 				case '{':
-					$this->testPush($state, qp_xtra);
+					array_push($state, qp_xtra);
 					$sindex++;
 					break;
 
 				case ':':
-					$this->testPush($state, qp_edge);
+					array_push($state, qp_edge);
 					$sindex++;
 					break;
 
 				case '<':
 				case '>':
-					
-					if($end == qp_wait) {
+					if($end == qp_lsub) {
+						/* this is when we have a left-hand subquery
+						*  so this side of the relationship will be an object
+						*/
 						$tmp = $cpart;
 						$cpart = new QPart();
 						if($ch == '<')
@@ -112,15 +103,18 @@
 						else
 							$cpart->setParentObj($tmp);
 
-						$this->testPop($state);
-						$this->testPush($state, qp_rela);
+						array_pop($state);
+						array_push($state, qp_rela);
+						$base = $type = null;
+						$iden = array();
+						$xtra = array();
 						break;
 					}
 
 					if($cpart == null)
 						$cpart = new QPart();
 
-					$this->testPush($state, qp_rela);
+					array_push($state, qp_rela);
 					$sindex++;
 					if($ch == '<')
 						$cpart->setChild($base, $type, $iden, $xtra);
@@ -144,16 +138,16 @@
 						}
 					}
 					
-					$this->testPop($state);
+					array_pop($state);
 					$sindex--;
 
 					if($state[$sindex] == qp_stat) {
-						$this->testPop($state);
+						array_pop($state);
 						$sindex--;
 					}
 
 					if($state[$sindex] == qp_rela) {
-						$this->testPop($state);
+						array_pop($state);
 						$sindex--;
 
 						if($cpart->child == null)
@@ -163,13 +157,14 @@
 					}
 
 					if($state[$sindex] == qp_subq) {
-						// we are closing a subquery
-						$this->testPop($state);
+						/* we are closing a subquery
+						*  so we need to process it
+						*/
+						array_pop($state);
 						$sindex--;
-
 						if($state[$sindex] == qp_rela) {
-							// if it is in the second part of a relationship
-							$this->testPop($state);
+							// we are in the right hand side of a statement
+							array_pop($state);
 							$sindex--;
 
 							$tmp = $cpart;
@@ -182,8 +177,8 @@
 								$cpart->setParentObj($tmp);
 						}
 						else {
-							// we are in the first part of a relationship
-							$this->testPush($state, qp_wait);
+							// we are in the left hand side of a statement
+							array_push($state, qp_lsub);
 							$sindex++;
 						}
 					}
@@ -195,13 +190,13 @@
 					if($end == qp_xtra && $str != "")
 						$xtra[] = $str;
 
-					$this->testPop($state);
+					array_pop($state);
 					$sindex--;
 					$str = "";
 				break;
 				
 				case ']':
-					$this->testPop($state);
+					array_pop($state);
 					$sindex--;
 					if($end == qp_base) {
 						$base = $str;
@@ -211,7 +206,7 @@
 
 				case '\'':
 					if($end == qp_strn) {
-						$this->testPop($state);
+						array_pop($state);
 						$sindex--;
 						$end = $state[$sindex];
 
@@ -221,7 +216,7 @@
 						$str = "";
 					}
 					else {
-						$this->testPush($state, qp_strn);
+						array_push($state, qp_strn);
 						$sindex++;
 					}
 					break;
@@ -254,7 +249,7 @@
 
 					if($end == qp_edge && $str != "") {
 						$edge = $str;
-						$this->testPop($state);
+						array_pop($state);
 						$sindex--;
 						$cpart->setEdge($edge);
 					}
@@ -263,14 +258,14 @@
 						// this is what happens when it's a single query
 						$cpart->setParent($base, $type, $iden, $xtra);
 
-					$this->testPop($state);
+					array_pop($state);
 					$sindex--;
 					$str = "";
 				break;
 
 				default:
 					if($end == qp_block || $end == qp_rela) {
-						$this->testPush($state, qp_stat);
+						array_push($state, qp_stat);
 						$sindex++;
 					}
 
@@ -284,22 +279,12 @@
 
 		private function testPush(&$a, $s)
 		{
-			global $stuff;
 			array_push($a, $s);
-			foreach($a as $c) {
-				echo $stuff[$c] . " ";
-			}
-			echo "<br />";
 		}
 
 		private function testPop(&$a)
 		{
-			global $stuff;
 			array_pop($a);
-			foreach($a as $c) {
-				echo $stuff[$c] . " ";
-			}
-			echo "<br />";
 		}
 
 		public function generate($qpart)

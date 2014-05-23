@@ -21,7 +21,7 @@
 		print_r($cpart);
 		echo "</pre>";
 		echo "<div style=\"color: #808080;\">";
-		//echo str_replace("<", "&lt;", $parser->generate($cpart));
+		echo str_replace("<", "&lt;", $parser->generate($cpart));
 		echo "</div>";
 
 		echo "</div>";
@@ -34,9 +34,9 @@
 //	echo "<hr style=\"margin-bottom: 30px; border-color: #d8d8d8;\" />";
 //	parse("User()<Area();");
 //	echo "<hr style=\"margin-bottom: 30px; border-color: #d8d8d8;\" />";
-//	parse("User()<(Group()<Area());");
+	parse("(User(){l}<Group('G1'))<(Area()<Area('AP'));");
 	//	QPART           <	   QPART
-	parse("(User()<Region())<(Group()<Area());");
+//	parse("(User()<Region())<(Group()<Area());");
 	//	     QR			QR
 ?>
 </body>
