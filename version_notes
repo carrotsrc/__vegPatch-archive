@@ -3,12 +3,12 @@ VPatch 0.3e
 Version		0.3e
 Author:		cfg csorg
 Date:		2014/04/11
-Updated:	2014/05/17
+Updated:	2014/05/23
 
 Version Notes
 =============
 
--Branching for RQL statements on both sides of the relationship
+
 -Extended RQL feedback to show both sides of the relationship; important for the management of relationships through root tools
 -Custom session handler. Record data as bin blobs behind db authentication instead of in the dodge /tmp files
 -online merging of modules held on separate server into running platform via strap files
@@ -22,3 +22,4 @@ Version Notes
 -[complete] Static markup in layouts
 -[complete] Error page handling on plugins
 -[complete] Error handling when there is no panel to perform requests on wireframe
+-[complete] Branching for RQL statements on both sides of the relationship
