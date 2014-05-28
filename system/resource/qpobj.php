@@ -170,15 +170,15 @@
 			$r->xtra = $xtra;
 			$this->parent = $r;
 
-			if($this->out === null)
-				$this->out = qpo_parent;
+			if(!($this->out&qpo_child) && !($this->out&qpo_parent))
+				$this->out ^= qpo_parent;
 		}
 
 		public function setParentObj($o)
 		{
 			$this->parent = $o;
-			if($this->out === null)
-				$this->out = qpo_parent;
+			if(!($this->out&qpo_child) && !($this->out&qpo_parent))
+				$this->out ^= qpo_parent;
 		}
 
 		public function setChild($base, $type, $iden, $xtra)
@@ -190,14 +190,14 @@
 
 			$r->xtra = $xtra;
 			$this->child = $r;
-			if($this->out === null)
+			if(!($this->out&qpo_child) && !($this->out&qpo_parent))
 				$this->out ^= qpo_child;
 		}
 
 		public function setChildObj($o)
 		{
 			$this->child = $o;
-			if($this->out === null)
+			if(!($this->out&qpo_child) && !($this->out&qpo_parent))
 				$this->out ^= qpo_child;
 		}
 
@@ -256,6 +256,10 @@
 					echo "`child_id` ";
 
 				if($this->out & qpo_parent_child) {
+					/* it will always be on net0 because that is
+					*  the relationship that is requested from
+					*  the network
+					*/
 					echo "AND `rpck`.`id` = `net0`.";
 					if($flag & qpo_parent)
 						echo "`child_id` ";
