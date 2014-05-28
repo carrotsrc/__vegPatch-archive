@@ -77,6 +77,7 @@
 
 			if($this->base != null)
 				echo "JOIN `resbase` AS `rb_$alias` ON `rc_$alias`.`base`=`rb_$alias`.`id` ";
+
 		}
 
 		public function generateConditional($level, $flag)
@@ -212,17 +213,17 @@
 
 		public function setFlag($flag)
 		{
-			$this->out &= $flag;
+			$this->out ^= $flag;
 		}
 
 		public function generateSelect($level)
 		{
-			if($this->out&qpo_parent) {
-				$this->parent->generateSelect($level, qpo_child&($this->out&qpo_parent_child));
+			if($this->out & qpo_parent) {
+				$this->parent->generateSelect($level, qpo_child^($this->out&qpo_parent_child));
 			}
 			else
-			if($this->out&qpo_child) {
-				$this->child->generateSelect($level, qpo_parent&($this->out&qpo_parent_child));
+			if($this->out & qpo_child) {
+				$this->child->generateSelect($level, qpo_parent^($this->out&qpo_parent_child));
 			}
 		}
 
@@ -230,6 +231,10 @@
 		{
 			if($this->child !== null) {
 				$clevel = $level;
+
+				if($this->out & qpo_parent_child)
+					echo "JOIN `respool` AS `rpck` ";
+
 				if($flag == null && $ltable == null)
 					echo "JOIN `resnet` AS `net$level` ON `rp_$level`.`id` ";
 				else {
@@ -240,14 +245,24 @@
 					else
 					if($flag & qpo_child)
 						echo "`child_id` ";
+
 				}
 
 				echo "= `net$level`.";
 				if($this->out & qpo_parent)
-					echo "`parent_id`";
+					echo "`parent_id` ";
 				else
 				if($this->out & qpo_child)
-					echo "`child_id`";
+					echo "`child_id` ";
+
+				if($this->out & qpo_parent_child) {
+					echo "AND `rpck`.`id` = `net0`.";
+					if($flag & qpo_parent)
+						echo "`child_id` ";
+					else
+					if($flag & qpo_child)
+						echo "`parent_id` ";
+				}
 
 				if($this->edge != null)
 					echo "JOIN `edgetype` AS `e_$level` ON `net$level`.`edge`=`e_$level`.`id` ";
