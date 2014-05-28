@@ -16,6 +16,8 @@
 	define("qpo_child", 4);
 	define("qpo_single", 8);
 
+	define("qpo_parent_child", 16);
+
 	/*
 	* these two classes map out the behaviour for
 	* two different kinds of objects in a resource query:
@@ -37,26 +39,33 @@
 		public function generateSelect($level, $flag)
 		{
 			echo "SELECT `rp_$level`.`id`";
-			$this->generateXtra($level, $flag);
+			if($flag & qpo_parent_child) {
+				$this->generateXtra($level, $flag^qpo_parent_child);
+				echo ", `rpck`.`id` ";
+				$this->generateXtra($level, $flag);
+			}
+			else
+				$this->generateXtra($level, $flag);
+
 			echo " FROM `respool` AS `rp_$level` ";
 		}
 
 		public function generateJoin($level, $flag, $ltable)
 		{
 			$alias;
-			if($flag == qpo_parent)
+			if($flag & qpo_parent)
 				$alias = "p$level";
 			else
-			if($flag == qpo_child)
+			if($flag & qpo_child)
 				$alias = "c$level";
 			else
-			if($flag == qpo_single)
+			if($flag & qpo_single)
 				$alias = $level;
 
 			if($flag != qpo_single) {
 
 				echo "JOIN `respool` AS `rp_$alias` ON `$ltable`.";
-				if($flag == qpo_parent)
+				if($flag & qpo_parent)
 					echo "`parent_id` ";
 				else
 					echo "`child_id` ";
@@ -68,6 +77,7 @@
 
 			if($this->base != null)
 				echo "JOIN `resbase` AS `rb_$alias` ON `rc_$alias`.`base`=`rb_$alias`.`id` ";
+
 		}
 
 		public function generateConditional($level, $flag)
@@ -75,13 +85,13 @@
 			$sz = sizeof($this->iden);
 
 			$alias;
-			if($flag == qpo_parent)
+			if($flag & qpo_parent)
 				$alias = "p$level";
 			else
-			if($flag == qpo_child)
+			if($flag & qpo_child)
 				$alias = "c$level";
 			else
-			if($flag == qpo_single)
+			if($flag & qpo_single)
 				$alias = $level;
 
 			if($this->base != null) {
@@ -119,6 +129,8 @@
 				return;
 
 			$alias = "rp_$level";
+			if($flag & qpo_parent_child)
+				$alias = "rpck";
 
 			foreach($this->xtra as $v) {
 				switch($v) {
@@ -158,15 +170,15 @@
 			$r->xtra = $xtra;
 			$this->parent = $r;
 
-			if($this->out === null)
-				$this->out = qpo_parent;
+			if(!($this->out&qpo_child) && !($this->out&qpo_parent))
+				$this->out ^= qpo_parent;
 		}
 
 		public function setParentObj($o)
 		{
 			$this->parent = $o;
-			if($this->out === null)
-				$this->out = qpo_parent;
+			if(!($this->out&qpo_child) && !($this->out&qpo_parent))
+				$this->out ^= qpo_parent;
 		}
 
 		public function setChild($base, $type, $iden, $xtra)
@@ -178,15 +190,15 @@
 
 			$r->xtra = $xtra;
 			$this->child = $r;
-			if($this->out === null)
-				$this->out = qpo_child;
+			if(!($this->out&qpo_child) && !($this->out&qpo_parent))
+				$this->out ^= qpo_child;
 		}
 
 		public function setChildObj($o)
 		{
 			$this->child = $o;
-			if($this->out === null)
-				$this->out = qpo_child;
+			if(!($this->out&qpo_child) && !($this->out&qpo_parent))
+				$this->out ^= qpo_child;
 		}
 
 		public function setEdge($e)
@@ -199,20 +211,19 @@
 			$this->pparent = $p;
 		}
 
-		public function dump()
+		public function setFlag($flag)
 		{
-			var_dump($this->parent);
-			var_dump($this->child);
+			$this->out ^= $flag;
 		}
 
 		public function generateSelect($level)
 		{
-			if($this->out == qpo_parent) {
-				$this->parent->generateSelect($level, qpo_child);
+			if($this->out & qpo_parent) {
+				$this->parent->generateSelect($level, qpo_child^($this->out&qpo_parent_child));
 			}
 			else
-			if($this->out == qpo_child) {
-				$this->child->generateSelect($level, qpo_parent);
+			if($this->out & qpo_child) {
+				$this->child->generateSelect($level, qpo_parent^($this->out&qpo_parent_child));
 			}
 		}
 
@@ -220,30 +231,48 @@
 		{
 			if($this->child !== null) {
 				$clevel = $level;
+
+				if($this->out & qpo_parent_child)
+					echo "JOIN `respool` AS `rpck` ";
+
 				if($flag == null && $ltable == null)
 					echo "JOIN `resnet` AS `net$level` ON `rp_$level`.`id` ";
 				else {
 					echo "JOIN `resnet` AS `net$level` ON `$ltable`.";
 
-					if($flag == qpo_parent)
+					if($flag & qpo_parent)
 						echo "`parent_id` ";
 					else
-					if($flag == qpo_child)
+					if($flag & qpo_child)
 						echo "`child_id` ";
+
 				}
 
 				echo "= `net$level`.";
-				if($this->out == qpo_parent)
-					echo "`parent_id`";
+				if($this->out & qpo_parent)
+					echo "`parent_id` ";
 				else
-				if($this->out == qpo_child)
-					echo "`child_id`";
+				if($this->out & qpo_child)
+					echo "`child_id` ";
+
+				if($this->out & qpo_parent_child) {
+					/* it will always be on net0 because that is
+					*  the relationship that is requested from
+					*  the network
+					*/
+					echo "AND `rpck`.`id` = `net0`.";
+					if($flag & qpo_parent)
+						echo "`child_id` ";
+					else
+					if($flag & qpo_child)
+						echo "`parent_id` ";
+				}
 
 				if($this->edge != null)
 					echo "JOIN `edgetype` AS `e_$level` ON `net$level`.`edge`=`e_$level`.`id` ";
 
 				if($this->parent->ctype == qpp_item)
-					$this->parent->generateJoin($clevel, qpo_parent, "net$clevel");
+					$this->parent->generateJoin($clevel, qpo_parent^($this->out&qpo_parent_child), "net$clevel");
 				else {
 					$this->parent->generateJoin($level+1, qpo_parent, "net$clevel");
 					if($level == 0)
@@ -252,7 +281,7 @@
 
 
 				if($this->child->ctype == qpp_item)
-					$this->child->generateJoin($clevel, qpo_child, "net$clevel");
+					$this->child->generateJoin($clevel, qpo_child^($this->out&qpo_parent_child), "net$clevel");
 				else
 					$this->child->generateJoin($level+1, qpo_child, "net$clevel");
 			}

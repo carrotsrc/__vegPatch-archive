@@ -238,6 +238,12 @@
 
 					break;
 
+				case '%':
+					if($cpart != null) {
+						$cpart->setFlag(qpo_parent_child);
+					}
+					break;
+
 				case ' ':
 					if($end == qp_strn)
 						$str += " ";
@@ -275,16 +281,6 @@
 			}
 
 			return $cpart;
-		}
-
-		private function testPush(&$a, $s)
-		{
-			array_push($a, $s);
-		}
-
-		private function testPop(&$a)
-		{
-			array_pop($a);
 		}
 
 		public function generate($qpart)

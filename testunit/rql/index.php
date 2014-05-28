@@ -27,17 +27,14 @@
 		echo "</div>";
 	}
 
-//	parse("Area();");
-//	parse("Area(23);");
-//	parse("Area('2');");
-//	parse("Area('foo');");
-//	echo "<hr style=\"margin-bottom: 30px; border-color: #d8d8d8;\" />";
-//	parse("User()<Area();");
-//	echo "<hr style=\"margin-bottom: 30px; border-color: #d8d8d8;\" />";
-	parse("(User(){l}<Group('G1'))<(Area()<Area('AP'));");
-	//	QPART           <	   QPART
-//	parse("(User()<Region())<(Group()<Area());");
-	//	     QR			QR
+	parse("Area();");
+	parse("Area(23);");
+	parse("Area('2');");
+	parse("Area('foo');");
+	echo "<hr style=\"margin-bottom: 30px; border-color: #d8d8d8;\" />";
+	parse("User()<Area();");
+	echo "<hr style=\"margin-bottom: 30px; border-color: #d8d8d8;\" />";
+	parse("(%User(){l}<Group('G1'))<(Area()<Area('AP'));");
 ?>
 </body>
 </html>
