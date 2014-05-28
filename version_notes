@@ -1,0 +1,24 @@
+VPatch 0.3e
+===========
+Version		0.3e
+Author:		cfg csorg
+Date:		2014/04/11
+Updated:	2014/05/28
+
+Version Notes
+=============
+
+-Custom session handler. Record data as bin blobs behind db authentication instead of in the dodge /tmp files
+-online merging of modules held on separate server into running platform via strap files
+-start dynamic UILib based off KTSet
+-User input on strap files... not sure how this might work but worth a go
+
+-[complete] Setup script for initial database and root configuration
+-[complete] Add a widget config root tool
+-[complete] Add dynamic loading of asset as standard functionality of gscripts
+-[complete] Deprecated KitJS, alias variable points to VPLib
+-[complete] Static markup in layouts
+-[complete] Error page handling on plugins
+-[complete] Error handling when there is no panel to perform requests on wireframe
+-[complete] Branching for RQL statements on both sides of the relationship
+-[complete] Extended RQL feedback to show both sides of the relationship; important for the management of relationships through root tools
