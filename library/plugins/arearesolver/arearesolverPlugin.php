@@ -104,7 +104,6 @@
 				return $params;
 
 			$ref = $r[0][1];
-			$ref = $this->resourceManager->getHandlerRef($cid);
 			$channel = $this->channelManager->getChannel($ref);
 			if($channel == null)	// There are no channel nodes
 				return $params;
