@@ -27,29 +27,9 @@
 		public function  __construct($databaseConnection)
 		{
 			$this->db = $databaseConnection;
-			//$this->rqSql = new RQSQL();
-			
-			//	Initialize the static objects used
-			//	in working with resources
 			ResCast::init($databaseConnection);
-				
-			//ResRel::init();
-			
 		}	
 
-		public function typeCast($type)
-		{
-			return ResCast::cast($type);
-		}
-
-		public function addTypeHandler($type, $handler)
-		{
-			if($this->getTypeHandler($type) != null)
-				return false;
-			
-			$query = "INSERT INTO rescast (type, handler) VALUES ('$type', '$handler');"; 
-		}
-		
 		public function getTypeHandler($type)
 		{
 			$query = null;
@@ -84,7 +64,7 @@
 		public function addResource($typeId, $handlerRef, $label)
 		{
 			if(!is_numeric($typeId)) {
-				if(($tp = $this->typeCast($typeId)) != null)
+				if(($tp = ResCast::cast($typeId)) != null)
 					$typeId = $tp['id'];
 				else
 					return false;
@@ -103,9 +83,9 @@
 //			$this->cleanEdges($rid);
 		}
 		
-		public function getResourceFromId($id)
+		public function getResourceFromId($rid)
 		{
-			$query = "SELECT * FROM respool WHERE id='$id';";
+			$query = "SELECT * FROM respool WHERE id='$rid';";
 			$result = $this->db->sendQuery($query);
 
 			if(!$result)
@@ -125,7 +105,7 @@
 			*  this needs to be changed represent the rest of the system
 			*/
 
-			return array('id' => $id, 'type' => $type, 'label' => $label, 'handler' => $hid);
+			return array('id' => $rid, 'type' => $type, 'label' => $label, 'handler' => $hid);
 		}
 
 		public function modifyResource($rid, $modify)
@@ -143,34 +123,6 @@
 			}
 			$sql .= " WHERE id='$rid';";
 			return $this->db->sendQuery($sql);
-		}
-
-		public function getResourcesOfType($cast)
-		{
-			$query = "SELECT respool.id, respool.label FROM respool ".
-					 "LEFT JOIN rescast ".
-					 "ON respool.type_id = rescast.id ".
-					 "WHERE rescast.type='$cast'";
-
-			$result = $this->db->sendQuery($query);
-			
-			if(!$result)
-				return null;
-				
-			if(!mysql_num_rows($result))
-				return null;
-
-			$res = array();
-
-			while($row = mysql_fetch_assoc($result))
-			{
-				$id = $row['id'];
-				$label = $row['label'];
-
-				$res[] = new Resource(null, $label, null, $id, null);
-			}
-
-			return $res;
 		}
 
 		public function getHandlerRef($rid)
@@ -197,45 +149,13 @@
 			return $this->db->sendQuery($sql, false, false);
 		}
 
-		public function getResources($offset = 1, $count = 0, $filter = null)
-		{
-			$sql = "SELECT * FROM respool WHERE id >= $offset";
-			if($count != 0)
-				$sql .= " LIMIT $count";
-			$sql .= ";";
-			return $this->db->sendQuery($sql, false, false);
-		}
-
-		public function getResourcePage($page = 1, $count = 10)
-		{
-			$targ = ($count * ($page-1));
-
-			$sql = "SELECT * FROM respool LIMIT $count OFFSET $targ;";
-			return $this->db->sendQuery($sql, false, false);
-		}
-		
-		public function getRID($type, $hRef)
-		{
-			$type = ResCast::cast($type);
-			if($type == null)
-				return false;
-
-			$sql = "SELECT id FROM respool WHERE handler_ref='$hRef' AND type_id='".$type['id']."'";
-			$result = $this->db->sendQuery($sql, false, false);
-
-			if(!$result)
-				return false;
-
-			return $result[0][0];
-		}
-
 		public function getTypeFromId($rid)
 		{
 			$ro = $this->getResourceFromId($rid);
 			if($ro == null)
 				return null;
 
-			return $this->typeCast($ro['type']);
+			return ResCast::cast($ro['type']);
 		}
 
 		public function cleanEdges($rid)
@@ -255,11 +175,6 @@
 
 		public function queryAssoc($query, $rnid = false)
 		{
-			/*$root = new RQuery($this->rqSql);
-			$root->setRequestRNID($rnid);
-			$root->initBuild($query);
-			$sql = $root->generateSQL();
-			*/
 			$qp = new QParse();
 			$q = $qp->parse($query);
 			$sql = $qp->generate($q);
