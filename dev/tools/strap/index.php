@@ -20,6 +20,7 @@
 		width: 600px;
 		overflow-y: auto;
 		height: 250px;
+		height: 60%;
 	}
 </style>
 <?php
