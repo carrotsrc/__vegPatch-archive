@@ -62,7 +62,7 @@
 
 		global $resManager;
 		if(!file_exists(SystemConfig::relativeAppPath("library/straps/baseobj/$space/$name.php"))) {
-			$log[] = "Strapper $space/$name does not exist";
+			$log[] = "! Strapper $space/$name does not exist";
 			return null;
 		}
 		include_once(SystemConfig::relativeAppPath("library/straps/baseobj/$space/$name.php"));
@@ -374,9 +374,29 @@
 		echo "</div>";
 		echo "<div class=\"log\">";
 		echo "<pre>Log\n---\n\n";
-		if($out != null)
-			foreach($log as $l)
+		if($out != null) {
+			$errors = 0;
+			$dup = 0;
+
+			foreach($log as $l) {
+				if(isset($l[0])) {
+					if($l[0] == "!")
+						$errors++;
+					else
+					if($l[0] == "#")
+						$dup++;
+				}
+
+
 				echo "$l\n";
+			}
+
+			if($errors)
+				echo "\nerrors: $errors";
+
+			if($dup)
+				echo "\nduplicated: $dup";
+		}
 		echo "</pre>";
 		echo "</div>";
 	}
@@ -389,6 +409,7 @@
 		if(isset($_POST['name'])) {
 			$log[] = "Loading strap file `{$_POST['name']}`...";
 			$log[] = date("H:i:s d-m-Y", time('now'));
+			$log[] = "";
 			if(loadStrap("$path/{$_POST['name']}", $fm, $db, $rman))
 				$out = "Loaded strap file.";
 			else
@@ -412,9 +433,29 @@
 		echo "</div>";
 		echo "<div class=\"log\">";
 		echo "<pre>Log\n---\n\n";
-		if($out != null)
-			foreach($log as $l)
+		if($out != null) {
+			$errors = 0;
+			$dup = 0;
+
+			foreach($log as $l) {
+				if(isset($l[0])) {
+					if($l[0] == "!")
+						$errors++;
+					else
+					if($l[0] == "#")
+						$dup++;
+				}
+
+
 				echo "$l\n";
+			}
+
+			if($errors)
+				echo "\nerrors: $errors";
+
+			if($dup)
+				echo "\nduplicated: $dup";
+		}
 		echo "</pre>";
 		echo "</div>";
 	}
