@@ -9,7 +9,10 @@
 	This includes the channels required to get a page
 	out of the system
 -->
-
+<echo>
+vegPatch Base Environment
+-------------------------
+</echo>
 <obj name="modreg" space="vpatch">
 	<module type="plugin" name="getloc" rout="ridp" out="getloc"/>
 </obj>
