@@ -10,16 +10,16 @@
 		public function process(&$xml)
 		{
 			while(($tag = $xml->getNextTag()) != null) {
-				if($tag->element == "/obj")
+				if($tag->name == "/obj")
 					break;
 
-				if($tag->element == "module")
+				if($tag->name == "module")
 					$this->handleModule($tag);
 				else
-				if($tag->element == "instance")
+				if($tag->name == "instance")
 					$this->handleInstance($tag, $xml);
 				else
-				if($tag->element == "relationship")
+				if($tag->name == "relationship")
 					addRelationship($tag);
 
 			}
@@ -32,6 +32,8 @@
 			$type = "";
 			$out = null;
 			$rout = null;
+			global $log;
+
 			foreach($tag->attributes as $a => $v)
 				if($a == "name")
 					$name = $v;
@@ -56,6 +58,11 @@
 				if($a == "rout")
 					$rout = $v;
 
+			if($type < 2 && $space == "") {
+				$log[] = "! Error registering module $name - space unspecified";
+				return;
+			}
+
 			$sql = "SELECT id FROM modreg WHERE module_name='$name' AND module_type='$type' AND space='$space';";
 			$id = $this->db->sendQuery($sql, false, false);
 			$rid = null;
@@ -69,7 +76,11 @@
 					else
 					if($type == 2)
 						$rtype = "Plugin";
+
+
+					$log[] = "+ Registered $rtype $space/$name";
 					$rid = $this->resManager->addResource($rtype, $id, $name);
+					$log[] = "+ Added resource $rtype('$name') => $id";
 				}
 			}
 			else {
@@ -84,6 +95,7 @@
 
 				$res = $this->resManager->queryAssoc("$rtype('$id');");
 				$rid = $res[0][0];
+				$log[] = "< Retrieved $space / $rtype('$name') => $id";
 			}
 
 			if($out != null)
@@ -113,6 +125,8 @@
 			$out = null;
 			$rout = null;
 			$params = array();
+			global $log;
+
 			foreach($tag->attributes as $a => $v)
 				if($a == "label")
 					$label = $v;
@@ -128,26 +142,34 @@
 					$rout = $v;
 
 			while(($tag = $xml->getNextTag())  != null) {
-				if($tag->element == "/instance")
+				if($tag->name == "/instance")
 					break;
 
-				if($tag->element == "param")
+				if($tag->name == "param")
 					if(isset($tag->attributes['name']) && isset($tag->attributes['value']))
 						$params[$tag->attributes['name']] = $tag->attributes['value'];
 			}
 			$obj = null;
 			
 			$obj = ModMan::getComponent($id, 0, $this->db);
+			if($obj == null) {
+				$log[] = "! Component('$id') class does not exist, cannot create instance";
+				return null;
+			}
 
 			$cid = $obj->createInstance($params);
 			$ridi = $this->resManager->addResource("Instance", $cid, $label);
+			$log[] = "+ Created instance of Component('$id') -> Instance($ridi)";
 
 			$ridc = $this->resManager->queryAssoc("Component('$id');");
-			if(!$ridc)
+			if(!$ridc) {
+				$log[] = "! No registered resource for Component('$id')";
 				return null;
+			}
 			$ridc = $ridc[0][0];
 
 			$this->resManager->createRelationship($ridc, $ridi);
+			$log[] = "+ Created Realtionship between $ridc < $ridi :0";
 
 			if($out != null)
 				setVariable($out, $cid);

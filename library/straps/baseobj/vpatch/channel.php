@@ -11,17 +11,18 @@
 
 		public function process(&$xml)
 		{
+			global $log;
 			$name = "";
 			$out = null;
 			$rout = null;
 			$cid = null;
 			while(($tag = $xml->getNextTag()) != null) {
-				if($tag->element == "/obj")
+				if($tag->name == "/obj")
 					break;
 
-				if($tag->element == "channel" || $tag->element == "crudops") {
+				if($tag->name == "channel" || $tag->name == "crudops") {
 					$rtype = "Channel";
-					if($tag->element == "crudops")
+					if($tag->name == "crudops")
 						$rtype = "CrudOps";
 
 					foreach($tag->attributes as $a => $v)
@@ -35,18 +36,32 @@
 							$rout = $v;
 
 					$this->handleChannel($xml);
-
+					if($this->db->sendQuery("SELECT `id` FROM `channelpool` WHERE `label`='$name';")) {
+						$log[] = "# Channel('$name') already exists";
+						return;
+					}
 					$cid = $this->arrayInsert('channelpool', array('label' => $name));
-					if($cid != false)
-						$cid = $this->db->getLastId();
+
+					if(!$cid) {
+						$log[] = "! Failed to create $rtype('$name')";
+						return;
+					}
+					
+					$cid = $this->db->getLastId();
+					$log[] = "+ Created $rtype('$name')";
 
 					foreach($this->channel as $k => $c) {
 						$k++;
-						$this->arrayInsert('channelnodes', array(
+						if(!$this->arrayInsert('channelnodes', array(
 											'seq' => $k,
 											'pid' => $c[0],
 											'inst' => $c[1],
-											'channel' => $cid));
+											'channel' => $cid))) {
+							$log[] = "!\tFailed to add Plugin('{$c[0]}') -> {$c[1]} to $rtype('$name')";
+						}
+						else
+							$log[] = "+\tAdded Plugin('{$c[0]}') -> {$c[1]} to $rtype('$name')";
+
 					}
 
 					$ridc = $this->resManager->addResource($rtype, $cid, $name);
@@ -64,10 +79,10 @@
 		private function handleChannel(&$xml)
 		{
 			while(($tag = $xml->getNextTag()) != null) {
-				if($tag->element == "/channel" || $tag->element == "/crudops")
+				if($tag->name == "/channel" || $tag->name == "/crudops")
 					break;
 
-				if($tag->element == "plugin")
+				if($tag->name == "plugin")
 					$this->handlePlugin($tag);
 
 			}

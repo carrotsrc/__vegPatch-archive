@@ -14,7 +14,7 @@
 
 	class VPTag
 	{
-		public $element = null;
+		public $name = null;
 		public $attributes = null;
 	}
 
@@ -58,7 +58,7 @@
 						$this->popState();
 						$this->popState();
 						$cTag = new VPTag();
-						$cTag->element = "_comment_";
+						$cTag->name = "_comment_";
 						$cTag->attributes['content'] = $cCom;
 						$this->offset += (($i+3)-$this->offset);
 						$cCom = "";
@@ -83,7 +83,7 @@
 							continue;
 
 						$cTag = new VPTag();
-						$cTag->element = $cStr;
+						$cTag->name = $cStr;
 						$this->pushState(VPX_ATTR);
 						$cStr = "";
 					}
@@ -134,7 +134,7 @@
 				case '<':
 					if(strlen($cStr) > 0) {
 						$cTag = new VPTag();
-						$cTag->element = "_text_";
+						$cTag->name = "_text_";
 
 						$cTag->attributes= array('content' => $cStr);
 						$this->offset += ($i-$this->offset);
@@ -172,7 +172,7 @@
 					if($this->cState == VPX_TAG)
 					{
 						$cTag = new VPTag();
-						$cTag->element = $cStr;
+						$cTag->name = $cStr;
 					}
 
 					$this->popState();
@@ -243,7 +243,7 @@
 			{
 				$cTag = new VPTag();
 
-				$cTag->element = "_text_";
+				$cTag->name = "_text_";
 				$cTag->attributes = array('content' => $cStr);
 				return $cTag;
 			}

@@ -8,7 +8,22 @@
 	
 	if(!defined('_ROOT_TOOL'))
 		die("Not logged in");
-	
+?>
+<style>
+	.log {
+		background-color: #EFEFEF;
+		border: 1px solid #909090;
+		/*float: left;*/
+		margin-top: 20px;
+		/*margin-left: 30px;*/
+		padding: 10px;
+		width: 600px;
+		overflow-y: auto;
+		height: 250px;
+		height: 60%;
+	}
+</style>
+<?php
 	include(SystemConfig::relativeAppPath("system/resource/resman.php"));
 	include(SystemConfig::relativeAppPath("system/managers.php"));
 	include("lib.php");

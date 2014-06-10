@@ -123,6 +123,9 @@
 			}
 
 			$inc = SystemConfig::libraryPath() . "components/$space/$component/{$component}Component.php";
+			if(!file_exists($inc))
+				return null;
+
 			include_once($inc);
 			$class = $component."Component";
 			$obj = new $class($instance, $row['id']);

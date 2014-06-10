@@ -10,10 +10,10 @@
 		public function process(&$xml)
 		{
 			while(($tag = $xml->getNextTag()) != null) {
-				if($tag->element == "/obj")
+				if($tag->name == "/obj")
 					break;
 
-				if($tag->element == "area")
+				if($tag->name == "area")
 					$this->handleArea($tag);
 			}
 		}
@@ -25,6 +25,7 @@
 
 			$out = null;
 			$rout = null;
+			global $log;
 
 			if(isset($tag->attributes['out']))
 				$out = $tag->attributes['out'];
@@ -34,6 +35,7 @@
 
 			if(($id = $this->db->sendQuery("SELECT id FROM areapool WHERE name='$name';", false, false))) {
 				$id = $id[0][0];
+				$log[] = "< Retrieved Area('$name') => $id";
 
 				if($out != null)
 					setVariable($out, $id[0][0]);
@@ -50,9 +52,15 @@
 
 			$sql = "INSERT INTO `areapool` (`name`, `s_id`, `st_id`) VALUES (";
 			$sql .= "'$name', '{$tag->attributes['surround']}', '{$tag->attributes['template']}');";
-			$this->db->sendQuery($sql, false, false);
+			if(!$this->db->sendQuery($sql, false, false)) {
+				$log[] = "! Failed to create Area('$name')";
+				return;
+			}
+
 			$id = $this->db->getLastId();
 			$rid = $this->resManager->addResource("Area", $id, $name);
+			$log[] = "+ Created Area('$name') => $id - S{$tag->attributes['surround']} / T{$tag->attributes['template']}";
+
 			if($out != null)
 				setVariable($out, $id);
 

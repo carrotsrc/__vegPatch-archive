@@ -10,16 +10,17 @@
 		public function process(&$xml)
 		{
 			while(($tag = $xml->getNextTag()) != null) {
-				if($tag->element == "/obj")
+				if($tag->name == "/obj")
 					break;
 
-				if($tag->element == "insert")
+				if($tag->name == "insert")
 					$this->handleInsert($tag, $xml);
 			}
 		}
 
 		private function handleInsert($tag, &$xml)
 		{
+			global $log;
 			$table = null;
 			$cols = array();
 			foreach($tag->attributes as $a => $v)
@@ -27,10 +28,10 @@
 					$table = $v;
 
 			while(($tag = $xml->getNextTag()) != null) {
-				if($tag->element == "/insert")
+				if($tag->name == "/insert")
 					break;
 
-				if($tag->element == "col") {
+				if($tag->name == "col") {
 					$cn = null;
 					$cv = null;
 					foreach($tag->attributes as $a => $v) {
@@ -62,7 +63,13 @@
 			}
 
 			$sql .= "($c) VALUES ($v);";
-			$this->db->sendQuery($sql, false, false);
+			if(!$this->db->sendQuery($sql, false, false)) {
+				$log[] = "! Database INSERT failed";
+				$log[] = "$sql";
+				return;
+			}
+
+			$log[] = "+ Performed INSERT successfully";
 		}
 	}
 ?>
