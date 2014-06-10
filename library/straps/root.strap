@@ -1,7 +1,7 @@
 <!--
 	Strap: Root
 	Type: Critical
-	Version: 0.1.3
+	Version: 0.1.4
 	Author: carrotsrc.org / cfg
 
 	This will strap in the database and
@@ -9,196 +9,198 @@
 -->
 
 <!-- all the base tables -->
-<edge name="admin" type="Area" />
+<echo>
+Root Environment
+----------------
+
+Generating tables...</echo>
 <table name="rootconfig">
-	<field name="title" type="varchar(32)" extra="NOT NULL" />
-	<field name="assetrequest" type="varchar(128)" extra="NOT NULL" />
-	<field name="ajaxrequest" type="varchar(128)" extra="NOT NULL" />
-	<field name="submitrequest" type="varchar(128)" extra="NOT NULL" />
-	<field name="boilerplate" type="varchar(16)" extra="NOT NULL" />
-	<field name="libshare" type="varchar(128)" extra="NOT NULL" />
-	<field name="globalasset" type="varchar(128)" extra="NOT NULL" />
-	<field name="assetgrouping" type="int(11)" extra="NOT NULL" />
+	<column name="title" type="varchar(32)" extra="NOT NULL" />
+	<column name="assetrequest" type="varchar(128)" extra="NOT NULL" />
+	<column name="ajaxrequest" type="varchar(128)" extra="NOT NULL" />
+	<column name="submitrequest" type="varchar(128)" extra="NOT NULL" />
+	<column name="boilerplate" type="varchar(16)" extra="NOT NULL" />
+	<column name="libshare" type="varchar(128)" extra="NOT NULL" />
+	<column name="globalasset" type="varchar(128)" extra="NOT NULL" />
+	<column name="assetgrouping" type="int(11)" extra="NOT NULL" />
 </table>
 
 <table name="rootasset">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="type" type="varchar(6)" extra="NOT NULL" />
-	<field name="name" type="varchar(16)" extra="NOT NULL" />
-	<field name="value" type="varchar(32)" extra="NOT NULL" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="type" type="varchar(6)" extra="NOT NULL" />
+	<column name="name" type="varchar(16)" extra="NOT NULL" />
+	<column name="value" type="varchar(32)" extra="NOT NULL" />
 	<primary name="id" />
 </table>
 
 <table name="modreg">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="module_type" type="int(11)" extra="NOT NULL" />
-	<field name="module_name" type="varchar(32)" extra="NOT NULL" />
-	<field name="space" type="varchar(16)" extra="NOT NULL" />
-	<field name="active" type="int(11)" extra="NOT NULL" />
-	<field name="version" type="text" extra="NOT NULL" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="module_type" type="int(11)" extra="NOT NULL" />
+	<column name="module_name" type="varchar(32)" extra="NOT NULL" />
+	<column name="space" type="varchar(16)" extra="NOT NULL" />
+	<column name="active" type="int(11)" extra="NOT NULL" />
+	<column name="version" type="text" extra="NOT NULL" />
 	<primary name="id" />
 </table>
 
 <table name="interfacepool">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="name" type="varchar(32)" extra="NOT NULL" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="name" type="varchar(32)" extra="NOT NULL" />
 	<primary name="id" />
 </table>
 
 <table name="interfacenodes">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="interface" type="int(11)" extra="NOT NULL" />
-	<field name="jack" type="int(11)" extra="NOT NULL" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="interface" type="int(11)" extra="NOT NULL" />
+	<column name="jack" type="int(11)" extra="NOT NULL" />
 	<primary name="id" />
 </table>
 
-<table name="resbase" engine="InnoDB" charset="utf8">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="label" type="varchar(16)" extra="NOT NULL" />
+<table name="resbase">
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="label" type="varchar(16)" extra="NOT NULL" />
 	<primary name="id" />
+	<index name="label">
+		<column name="label" />
+	</index>
 </table>
 
 <table name="rescast" engine="InnoDB" charset="utf8">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="type" type="varchar(16)" extra="NOT NULL" />
-	<field name="handler" type="int(11)" extra="NOT NULL" />
-	<field name="base" type="int(11)" extra="NOT NULL" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="type" type="varchar(16)" extra="NOT NULL" />
+	<column name="handler" type="int(11)" extra="NOT NULL" />
+	<column name="base" type="int(11)" extra="NOT NULL" />
 	<primary name="id" />
 </table>
 
 <table name="edgetype">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="rtype" type="int(11)" extra="NOT NULL" />
-	<field name="label" type="varchar(32)" extra="NOT NULL" />
-	<field name="default" type="tinyint(1)" extra="NOT NULL" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="rtype" type="int(11)" extra="NOT NULL" />
+	<column name="label" type="varchar(32)" extra="NOT NULL" />
+	<column name="default" type="tinyint(1)" extra="NOT NULL" />
 	<primary name="id" />
 </table>
-<table name"resbase">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="label" type="varchar(16)" extra="NOT NULL" />
-	<primary name="id" />
-	<key name="label">
-		<index col="label" />
-	</key>
-</table>
+
 
 <table name="resnet">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="parent_id" type="int(11)" extra="NOT NULL" />
-	<field name="child_id" type="int(11)" extra="NOT NULL" />
-	<field name="edge" type="int(11)" extra="NOT NULL DEFAULT \'0\'" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="parent_id" type="int(11)" extra="NOT NULL" />
+	<column name="child_id" type="int(11)" extra="NOT NULL" />
+	<column name="edge" type="int(11)" extra="NOT NULL DEFAULT \'0\'" />
 	<primary name="id">
-	<key name="parent_id">
-		<index col="parent_id" />
-	</key>
+	<index name="parent_id">
+		<column name="parent_id" />
+	</index>
 
-	<key name="child_id">
-		<index col="child_id" />
-	</key>
+	<index name="child_id">
+		<column name="child_id" />
+	</index>
 
-	<key name="edge">
-		<index col="edge" />
-	</key>
+	<index name="edge">
+		<column name="edge" />
+	</index>
 </table>
 
 <table name="respool">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="type_id" type="int(11)" extra="NOT NULL" />
-	<field name="handler_ref" type="int(11)" extra="NOT NULL" />
-	<field name="label" type="varchar(64)" extra="NOT NULL" />
-	<field name="created" type="TIMESTAMP" extra="NOT NULL DEFAULT CURRENT_TIMESTAMP" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="type_id" type="int(11)" extra="NOT NULL" />
+	<column name="handler_ref" type="int(11)" extra="NOT NULL" />
+	<column name="label" type="varchar(64)" extra="NOT NULL" />
+	<column name="created" type="TIMESTAMP" extra="NOT NULL DEFAULT CURRENT_TIMESTAMP" />
 	<primary name="id">
-	<key name="type_id">
-		<index col="type_id" />
-	</key>
-	<key name="handler_ref">
-		<index col="handler_ref" />
-	</key>
-	<key name="label">
-		<index col="label" />
-	</key>
+	<index name="type_id">
+		<column name="type_id" />
+	</index>
+	<index name="handler_ref">
+		<column name="handler_ref" />
+	</index>
+	<index name="label">
+		<column name="label" />
+	</index>
 </table>
 
 <table name="areapool">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="rid" type="int(11)" extra="NOT NULL" />
-	<field name="name" type="varchar(16)" extra="NOT NULL" />
-	<field name="s_id" type="int(11)" extra="NOT NULL" />
-	<field name="st_id" type="int(11)" extra="NOT NULL" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="rid" type="int(11)" extra="NOT NULL" />
+	<column name="name" type="varchar(16)" extra="NOT NULL" />
+	<column name="s_id" type="int(11)" extra="NOT NULL" />
+	<column name="st_id" type="int(11)" extra="NOT NULL" />
 	<primary name="id">
 </table>
 
 <table name="surpool">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="name" type="varchar(16)" extra="NOT NULL" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="name" type="varchar(16)" extra="NOT NULL" />
 	<primary name="id" />
 </table>
 
 <table name="surtemplate">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="s_id" type="int(11)" extra="NOT NULL" />
-	<field name="t_id" type="int(11)" extra="NOT NULL" />
-	<field name="value" type="varchar(32)" extra="NOT NULL" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="s_id" type="int(11)" extra="NOT NULL" />
+	<column name="t_id" type="int(11)" extra="NOT NULL" />
+	<column name="value" type="varchar(32)" extra="NOT NULL" />
 	<primary name="id" />
 </table>
 
 <table name="surasset">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="s_id" type="int(11)" extra="NOT NULL" />
-	<field name="loc" type="int(11)" extra="NOT NULL" />
-	<field name="type" type="varchar(8)" extra="NOT NULL" />
-	<field name="name" type="varchar(16)" extra="NOT NULL" />
-	<field name="value" type="varchar(32)" extra="NOT NULL" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="s_id" type="int(11)" extra="NOT NULL" />
+	<column name="loc" type="int(11)" extra="NOT NULL" />
+	<column name="type" type="varchar(8)" extra="NOT NULL" />
+	<column name="name" type="varchar(16)" extra="NOT NULL" />
+	<column name="value" type="varchar(32)" extra="NOT NULL" />
 	<primary name="id" />
 </table>
 
 <table name="layoutpool">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="name" type="varchar(64)" extra="NOT NULL" />
-	<field name="cml" type="text" extra="NOT NULL" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="name" type="varchar(64)" extra="NOT NULL" />
+	<column name="cml" type="text" extra="NOT NULL" />
 	<primary name="id" />
 </table>
 
 <table name="widget_cfgreg">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="type" type="int(11)" extra="NOT NULL" />
-	<field name="cid" type="int(11)" extra="NOT NULL" />
-	<field name="inst" type="int(11)" extra="NOT NULL" />
-	<field name="config" type="varchar(8)" extra="NOT NULL" />
-	<field name="value" type="text" extra="NOT NULL" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="type" type="int(11)" extra="NOT NULL" />
+	<column name="cid" type="int(11)" extra="NOT NULL" />
+	<column name="inst" type="int(11)" extra="NOT NULL" />
+	<column name="config" type="varchar(8)" extra="NOT NULL" />
+	<column name="value" type="text" extra="NOT NULL" />
 	<primary name="id" />
-	<key name="type">
-		<index col="type" />
-	</key>
-	<key name="cid">
-		<index col="cid" />
-	</key>
-	<key name="inst">
-		<index col="inst" />
-	</key>
-	<key name="config">
-		<index col="config" />
-	</key>
+	<index name="type">
+		<column name="type" />
+	</index>
+	<index name="cid">
+		<column name="cid" />
+	</index>
+	<index name="inst">
+		<column name="inst" />
+	</index>
+	<index name="config">
+		<column name="config" />
+	</index>
 </table>
 
 <table name="channelpool">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="default" type="int(11)" extra="NOT NULL DEFAULT \'1\'" />
-	<field name="label" type="varchar(32)" extra="NOT NULL" />
-	<field name="root" type="int(11)" extra="NOT NULL" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="default" type="int(11)" extra="NOT NULL DEFAULT \'1\'" />
+	<column name="label" type="varchar(32)" extra="NOT NULL" />
+	<column name="root" type="int(11)" extra="NOT NULL" />
 	<primary name="id" />
 </table>
 
 <table name="channelnodes">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="channel" type="int(11)" extra="NOT NULL" />
-	<field name="seq" type="int(11)" extra="NOT NULL" />
-	<field name="pid" type="int(11)" extra="NOT NULL" />
-	<field name="inst" type="int(11)" extra="NOT NULL" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="channel" type="int(11)" extra="NOT NULL" />
+	<column name="seq" type="int(11)" extra="NOT NULL" />
+	<column name="pid" type="int(11)" extra="NOT NULL" />
+	<column name="inst" type="int(11)" extra="NOT NULL" />
 	<primary name="id" />
 </table>
 
 <!-- setup the resource bases -->
+<echo>
+Generating resource bases...</echo>
 <rbase name="abstract">
 <rbase name="entity">
 <rbase name="expression">
@@ -207,6 +209,8 @@
 <rbase name="attachment">
 
 <!-- setup all the basic resource types for functionality -->
+<echo>
+Generating resource types...</echo>
 <rtype name="Component" base="seed" />
 <rtype name="Interface" base="abstract" />
 <rtype name="Panel" base="abstract" />
@@ -226,6 +230,9 @@
 <rtype name="CrudOps" base="abstract" />
 
 <!-- setup the edges -->
+<echo>
+Generating edges...</echo>
 <edge name="index" type="Area" />
 <edge name="admin" type="Area" />
 <edge name="gchild" type="Graph" />
+<edge name="admin" type="Area" />
