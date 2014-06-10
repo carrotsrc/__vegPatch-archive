@@ -20,6 +20,7 @@
 
 		private function handleInsert($tag, &$xml)
 		{
+			global $log;
 			$table = null;
 			$cols = array();
 			foreach($tag->attributes as $a => $v)
@@ -62,7 +63,13 @@
 			}
 
 			$sql .= "($c) VALUES ($v);";
-			$this->db->sendQuery($sql, false, false);
+			if(!$this->db->sendQuery($sql, false, false)) {
+				$log[] = "! Database INSERT failed";
+				$log[] = "$sql";
+				return;
+			}
+
+			$log[] = "+ Performed INSERT successfully";
 		}
 	}
 ?>

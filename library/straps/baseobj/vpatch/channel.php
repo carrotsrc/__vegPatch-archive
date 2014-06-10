@@ -11,6 +11,7 @@
 
 		public function process(&$xml)
 		{
+			global $log;
 			$name = "";
 			$out = null;
 			$rout = null;
@@ -37,16 +38,27 @@
 					$this->handleChannel($xml);
 
 					$cid = $this->arrayInsert('channelpool', array('label' => $name));
-					if($cid != false)
-						$cid = $this->db->getLastId();
+
+					if(!$cid) {
+						$log[] = "! Failed to create $rtype('$name')";
+						return;
+					}
+					
+					$cid = $this->db->getLastId();
+					$log[] = "+ Created $rtype('$name')";
 
 					foreach($this->channel as $k => $c) {
 						$k++;
-						$this->arrayInsert('channelnodes', array(
+						if(!$this->arrayInsert('channelnodes', array(
 											'seq' => $k,
 											'pid' => $c[0],
 											'inst' => $c[1],
-											'channel' => $cid));
+											'channel' => $cid))) {
+							$log[] = "\t! Failed to add Plugin('{$c[0]}') -> {$c[1]} to $rtype('$name')";
+						}
+						else
+							$log[] = "\t+ Added Plugin('{$c[0]}') -> {$c[1]} to $rtype('$name')";
+
 					}
 
 					$ridc = $this->resManager->addResource($rtype, $cid, $name);
