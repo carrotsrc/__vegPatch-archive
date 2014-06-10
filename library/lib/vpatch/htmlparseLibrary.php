@@ -23,7 +23,7 @@
 		public function findElement($element, $count = 1)
 		{
 			while(($tag = $this->vxml->getNextTag()) != null)
-				if($tag->element == $element)
+				if($tag->name == $element)
 					if($count-- == 1)
 						return $tag;
 

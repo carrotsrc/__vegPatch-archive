@@ -10,10 +10,10 @@
 		public function process(&$xml)
 		{
 			while(($tag = $xml->getNextTag()) != null) {
-				if($tag->element == "/obj")
+				if($tag->name == "/obj")
 					break;
 
-				if($tag->element == "insert")
+				if($tag->name == "insert")
 					$this->handleInsert($tag, $xml);
 			}
 		}
@@ -28,10 +28,10 @@
 					$table = $v;
 
 			while(($tag = $xml->getNextTag()) != null) {
-				if($tag->element == "/insert")
+				if($tag->name == "/insert")
 					break;
 
-				if($tag->element == "col") {
+				if($tag->name == "col") {
 					$cn = null;
 					$cv = null;
 					foreach($tag->attributes as $a => $v) {

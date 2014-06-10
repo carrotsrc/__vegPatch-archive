@@ -29,7 +29,7 @@
 			while(($tag = $parser->getNextTag()) != null)
 			{
 				if($slen >= 0 && $cStack[$slen]->type == 2) {
-					if($tag->element == "/static") {
+					if($tag->name == "/static") {
 						$popped = $cStack[$slen];
 						array_pop($cStack);
 						$slen--;
@@ -44,13 +44,13 @@
 					continue;
 				}
 
-				if($tag->element == "_text_")
+				if($tag->name == "_text_")
 					continue;
 				else
-				if($tag->element == "node" || $tag->element == "leaf")
+				if($tag->name == "node" || $tag->name == "leaf")
 				{
 					$pRep = null;
-					if($tag->element == "node")
+					if($tag->name == "node")
 					{
 						$container = new NodeCon();
 						$container->content = array();
@@ -58,7 +58,7 @@
 							$container->addAttribute($p, $v);
 					}
 					else
-					if($tag->element == "leaf")
+					if($tag->name == "leaf")
 					{
 						$container = new LeafCon();
 						$container->content = NULL;
@@ -106,12 +106,12 @@
 						}
 					}
 
-					if($tag->element == "node") {
+					if($tag->name == "node") {
 						$cStack[] = $container;
 						$slen++;
 					}
 					else
-					if($tag->element == "leaf")
+					if($tag->name == "leaf")
 					{
 						if($pRep != null) {
 							$header[] = $pRep;
@@ -124,7 +124,7 @@
 			
 				}
 				else
-				if($tag->element == "static") {
+				if($tag->name == "static") {
 					$container = new StaticCon();
 					$container->type =  2;
 					$container->content = array();
@@ -132,7 +132,7 @@
 					$slen++;
 				}
 				else
-				if($tag->element == "/node")
+				if($tag->name == "/node")
 				{
 					$popped = $cStack[$slen];
 					array_pop($cStack);

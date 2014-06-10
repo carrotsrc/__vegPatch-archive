@@ -90,16 +90,16 @@
 		$xml->init($fxml);
 		
 		while(($tag = $xml->getNextTag()) != null) {
-			if($tag->element == 'table') {
+			if($tag->name == 'table') {
 				$table = loadTableData($tag, $xml);
 				if($table == null) {
-					echo "Error in strap structure with parent: {$tag->element}<br />";
+					echo "Error in strap structure with parent: {$tag->name}<br />";
 					return false;
 				}
 				strapTable($table, $db);
 			}
 			else
-			if($tag->element == 'rtype') {
+			if($tag->name == 'rtype') {
 				$type = array();
 				foreach($tag->attributes as $a => $v) {
 					if($a == 'name')
@@ -128,7 +128,7 @@
 			
 			}
 			else
-			if($tag->element == 'edge') {
+			if($tag->name == 'edge') {
 				$edge = array();
 				foreach($tag->attributes as $a => $v) {
 					if($a == 'name')
@@ -155,7 +155,7 @@
 					$log[] = "# {$edge['type']}:{$edge['name']} already exists";
 			}
 			else
-			if($tag->element == 'var') {
+			if($tag->name == 'var') {
 				$name = "";
 				$value = "";
 				foreach($tag->attributes as $a => $v)
@@ -168,21 +168,21 @@
 				setVariable($name, $value);
 			}
 			else
-			if($tag->element == "resource") {
+			if($tag->name == "resource") {
 				addResource($tag);
 			}
 			else
-			if($tag->element == "relationship") {
+			if($tag->name == "relationship") {
 				addRelationship($tag);
 			}
 			else
-			if($tag->element == "rbase") {
+			if($tag->name == "rbase") {
 				addResourceBase($tag);
 			}
 			else
-			if($tag->element == "echo") {
+			if($tag->name == "echo") {
 				while(($tag = $xml->getNextTag()) != null) {
-					if($tag->element == "/echo")
+					if($tag->name == "/echo")
 						break;
 					if(!isset($tag->attributes['content']))
 						continue;
@@ -191,7 +191,7 @@
 				}
 			}
 			else
-			if($tag->element == "obj") {
+			if($tag->name == "obj") {
 				$name = "";
 				$space = "";
 				foreach($tag->attributes as $a => $v)
@@ -227,10 +227,10 @@
 		}
 
 		while(($tag = $xml->getNextTag()) != null) {
-			if($tag->element == '/table')
+			if($tag->name == '/table')
 				return $table;
 
-			if($tag->element == 'column') {
+			if($tag->name == 'column') {
 				$column = new s_table_column();
 
 				foreach($tag->attributes as $a => $v) {
@@ -251,16 +251,16 @@
 				$table->columns[] = $column;
 			}
 			else
-			if($tag->element == 'primary') {
+			if($tag->name == 'primary') {
 				foreach($tag->attributes as $a => $v)
 					if($a == 'name')
 						$table->primary = $v;
 			}
 			else
-			if($tag->element == 'index') {
+			if($tag->name == 'index') {
 				$key = loadIndecies($tag, $xml);
 				if($key == null) {
-					echo "Error in strap structure with parent: {$tag->element}<br />";
+					echo "Error in strap structure with parent: {$tag->name}<br />";
 					return null;
 				}
 
@@ -281,13 +281,13 @@
 				$index->name = $v;
 
 		while(($tag = $xml->getNextTag()) != null) {
-			if($tag->element == 'column') {
+			if($tag->name == 'column') {
 				foreach($tag->attributes as $a => $v)
 					if($a == 'name')
 						$index->cols[] = $v;
 			}
 			else
-			if($tag->element == '/index')
+			if($tag->name == '/index')
 				return $index;
 		}
 

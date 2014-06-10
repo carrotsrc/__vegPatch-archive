@@ -17,12 +17,12 @@
 			$rout = null;
 			$cid = null;
 			while(($tag = $xml->getNextTag()) != null) {
-				if($tag->element == "/obj")
+				if($tag->name == "/obj")
 					break;
 
-				if($tag->element == "channel" || $tag->element == "crudops") {
+				if($tag->name == "channel" || $tag->name == "crudops") {
 					$rtype = "Channel";
-					if($tag->element == "crudops")
+					if($tag->name == "crudops")
 						$rtype = "CrudOps";
 
 					foreach($tag->attributes as $a => $v)
@@ -79,10 +79,10 @@
 		private function handleChannel(&$xml)
 		{
 			while(($tag = $xml->getNextTag()) != null) {
-				if($tag->element == "/channel" || $tag->element == "/crudops")
+				if($tag->name == "/channel" || $tag->name == "/crudops")
 					break;
 
-				if($tag->element == "plugin")
+				if($tag->name == "plugin")
 					$this->handlePlugin($tag);
 
 			}

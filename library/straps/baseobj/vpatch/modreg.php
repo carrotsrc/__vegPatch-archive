@@ -10,16 +10,16 @@
 		public function process(&$xml)
 		{
 			while(($tag = $xml->getNextTag()) != null) {
-				if($tag->element == "/obj")
+				if($tag->name == "/obj")
 					break;
 
-				if($tag->element == "module")
+				if($tag->name == "module")
 					$this->handleModule($tag);
 				else
-				if($tag->element == "instance")
+				if($tag->name == "instance")
 					$this->handleInstance($tag, $xml);
 				else
-				if($tag->element == "relationship")
+				if($tag->name == "relationship")
 					addRelationship($tag);
 
 			}
@@ -142,10 +142,10 @@
 					$rout = $v;
 
 			while(($tag = $xml->getNextTag())  != null) {
-				if($tag->element == "/instance")
+				if($tag->name == "/instance")
 					break;
 
-				if($tag->element == "param")
+				if($tag->name == "param")
 					if(isset($tag->attributes['name']) && isset($tag->attributes['value']))
 						$params[$tag->attributes['name']] = $tag->attributes['value'];
 			}

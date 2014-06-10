@@ -10,10 +10,10 @@
 		public function process(&$xml)
 		{
 			while(($tag = $xml->getNextTag()) != null) {
-				if($tag->element == "/obj")
+				if($tag->name == "/obj")
 					break;
 
-				if($tag->element == "layout")
+				if($tag->name == "layout")
 					$this->handleWireframe($xml, $tag);
 			}
 		}
@@ -39,23 +39,23 @@
 
 
 			while(($tag = $xml->getNextTag()) != null) {
-				if($tag->element == "_comment_")
+				if($tag->name == "_comment_")
 					continue;
 
-				if($tag->element == "/layout")
+				if($tag->name == "/layout")
 					break;
 
-				if($tag->element == "_text_") {
+				if($tag->name == "_text_") {
 					$wireframe .= $tag->attributes['content'];
 					continue;
 				}
 
-				$wireframe .= "<{$tag->element}";
+				$wireframe .= "<{$tag->name}";
 				foreach($tag->attributes as $a => $v) {
 					$v = processVariable($v);
 					$wireframe .= " $a=\"$v\"";
 				}
-				if($tag->element == "leaf")
+				if($tag->name == "leaf")
 					$wireframe .= " /";
 				$wireframe .= ">\n";
 			}

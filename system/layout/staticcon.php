@@ -12,7 +12,7 @@
 		public function generateHTML($index, $path)
 		{
 			foreach($this->content as $tag) {
-				switch($tag->element) {
+				switch($tag->name) {
 				case "_text_":
 					echo $tag->attributes['content'];
 					break;
@@ -20,7 +20,7 @@
 					break;
 
 				default: 
-					echo "<".$tag->element;
+					echo "<".$tag->name;
 					if(($sz = sizeof($tag->attributes)) > 0) {
 						$sz--;
 						foreach($tag->attributes as $k => $v) {
