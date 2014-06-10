@@ -1,11 +1,11 @@
 <!--
 	Strap: Vegpatch
 	Type: Critical
-	Version: 0.1.2
+	Version: 0.1.3
 	Author: carrotsrc.org / cfg
 
 	This will strap in everything that will be used
-	by the basic functionality of a vegpatch system
+	by the basic functionality of a vegpatch environment
 	This includes the channels required to get a page
 	out of the system
 -->
@@ -13,19 +13,19 @@
 <obj name="modreg" space="vpatch">
 	<module type="plugin" name="getloc" rout="ridp" out="getloc"/>
 </obj>
-<resource type="Instance" ref="1" label="syspg_getloc" out="ridc" />
+<resource type="Instance" ref="1" label="syspg_getloc" rout="ridc" />
 <relationship parent="{ridp}" child="{ridc}" />
 
 <obj name="modreg" space="vpatch">
 	<module type="plugin" name="fltanch" rout="ridp" out="fltanch"/>
 </obj>
-<resource type="Instance" ref="1" label="syspg_fltanch" out="ridc" />
+<resource type="Instance" ref="1" label="syspg_fltanch" rout="ridc" />
 <relationship parent="{ridp}" child="{ridc}" />
 
 <obj name="modreg" space="vpatch">
 	<module type="plugin" name="userchk" rout="ridp" out="userchk" />
 </obj>
-<resource type="Instance" ref="1" label="syspg_userchk" out="ridc" />
+<resource type="Instance" ref="1" label="syspg_userchk" rout="ridc" />
 <relationship parent="{ridp}" child="{ridc}" />
 
 <obj name="channel" space="vpatch">
@@ -43,7 +43,7 @@
 <obj name="modreg" space="vpatch">
 	<module type="plugin" name="arearesolver" rout="ridp" out="arearesolver"/>
 </obj>
-<resource type="Instance" ref="1" label="syspg_arearesolver" out="ridc" />
+<resource type="Instance" ref="1" label="syspg_arearesolver" rout="ridc" />
 <relationship parent="{ridp}" child="{ridc}" />
 
 <obj name="channel" space="vpatch">
@@ -57,37 +57,37 @@
 <obj name="modreg" space="vpatch">
 	<module type="plugin" name="edanchor" rout="ridp" out="edanchor"/>
 </obj>
-<resource type="Instance" ref="1" label="syspg_edanchor" out="ridc" />
+<resource type="Instance" ref="1" label="syspg_edanchor" rout="ridc" />
 <relationship parent="{ridp}" child="{ridc}" />
 
 <obj name="modreg" space="vpatch">
 	<module type="plugin" name="layoutloader" rout="ridp" out="layoutloader"/>
 </obj>
-<resource type="Instance" ref="1" label="syspg_layoutloader" out="ridc" />
+<resource type="Instance" ref="1" label="syspg_layoutloader" rout="ridc" />
 <relationship parent="{ridp}" child="{ridc}" />
 
 <obj name="modreg" space="vpatch">
 	<module type="plugin" name="sessioncmpt" rout="ridp" out="sessioncmpt"/>
 </obj>
-<resource type="Instance" ref="1" label="syspg_sessioncmpt" out="ridc" />
+<resource type="Instance" ref="1" label="syspg_sessioncmpt" rout="ridc" />
 <relationship parent="{ridp}" child="{ridc}" />
 
 <obj name="modreg" space="vpatch">
 	<module type="plugin" name="acachemk" rout="ridp" out="acachemk"/>
 </obj>
-<resource type="Instance" ref="1" label="syspg_acachemk" out="ridc" />
+<resource type="Instance" ref="1" label="syspg_acachemk" rout="ridc" />
 <relationship parent="{ridp}" child="{ridc}" />
 
 <obj name="modreg" space="vpatch">
 	<module type="plugin" name="localrq" rout="ridp" out="localrq"/>
 </obj>
-<resource type="Instance" ref="1" label="syspg_localrq" out="ridc" />
+<resource type="Instance" ref="1" label="syspg_localrq" rout="ridc" />
 <relationship parent="{ridp}" child="{ridc}" />
 
 <obj name="modreg" space="vpatch">
 	<module type="plugin" name="pagegen" rout="ridp" out="pagegen"/>
 </obj>
-<resource type="Instance" ref="1" label="syspg_pagegen" out="ridc" />
+<resource type="Instance" ref="1" label="syspg_pagegen" rout="ridc" />
 <relationship parent="{ridp}" child="{ridc}" />
 
 <obj name="channel" space="vpatch">
@@ -111,13 +111,13 @@
 <obj name="modreg" space="vpatch">
 	<module type="plugin" name="cmptint" rout="ridp" out="cmptint" />
 </obj>
-<resource type="Instance" ref="1" label="syspg_cmptint" out="ridc" />
+<resource type="Instance" ref="1" label="syspg_cmptint" rout="ridc" />
 <relationship parent="{ridp}" child="{ridc}" />
 
 <obj name="modreg" space="vpatch">
 	<module type="plugin" name="copld" rout="ridp" out="copld"/>
 </obj>
-<resource type="Instance" ref="1" label="syspg_copld" out="ridc" />
+<resource type="Instance" ref="1" label="syspg_copld" rout="ridc" />
 <relationship parent="{ridp}" child="{ridc}" />
 
 <obj name="channel" space="vpatch">
@@ -133,7 +133,7 @@
 <obj name="modreg" space="vpatch">
 	<module type="plugin" name="acacheld" rout="ridp" out="acacheld"/>
 </obj>
-<resource type="Instance" ref="1" label="syspg_acacheld" out="ridc" />
+<resource type="Instance" ref="1" label="syspg_acacheld" rout="ridc" />
 <relationship parent="{ridp}" child="{ridc}" />
 
 <obj name="channel" space="vpatch">
