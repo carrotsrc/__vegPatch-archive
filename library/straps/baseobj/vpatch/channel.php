@@ -36,7 +36,10 @@
 							$rout = $v;
 
 					$this->handleChannel($xml);
-
+					if($this->db->sendQuery("SELECT `id` FROM `channelpool` WHERE `label`='$name';")) {
+						$log[] = "# Channel('$name') already exists";
+						return;
+					}
 					$cid = $this->arrayInsert('channelpool', array('label' => $name));
 
 					if(!$cid) {
@@ -54,10 +57,10 @@
 											'pid' => $c[0],
 											'inst' => $c[1],
 											'channel' => $cid))) {
-							$log[] = "\t! Failed to add Plugin('{$c[0]}') -> {$c[1]} to $rtype('$name')";
+							$log[] = "!\tFailed to add Plugin('{$c[0]}') -> {$c[1]} to $rtype('$name')";
 						}
 						else
-							$log[] = "\t+ Added Plugin('{$c[0]}') -> {$c[1]} to $rtype('$name')";
+							$log[] = "+\tAdded Plugin('{$c[0]}') -> {$c[1]} to $rtype('$name')";
 
 					}
 
