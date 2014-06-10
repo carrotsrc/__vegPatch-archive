@@ -33,6 +33,12 @@
 	parse("Area('foo');");
 	echo "<hr style=\"margin-bottom: 30px; border-color: #d8d8d8;\" />";
 	parse("User()<Area();");
+	parse("[entity]<Group();");
+	parse("[entity]{l}<Group('G1');");
+	echo "<hr style=\"margin-bottom: 30px; border-color: #d8d8d8;\" />";
+	parse("(User(){l}<Group('G1'))<(Area()<Area('AP'));");
+	parse("(User(){l}<Group('G1'):leader)<(Area()<Area('AP'));");
+	parse("(User(){l}<Group('G1'):leader)<(Area()<Area('AP')):admin;");
 	echo "<hr style=\"margin-bottom: 30px; border-color: #d8d8d8;\" />";
 	parse("(%User(){l}<Group('G1'))<(Area()<Area('AP'));");
 ?>
