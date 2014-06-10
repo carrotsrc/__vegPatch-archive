@@ -184,6 +184,9 @@
 				while(($tag = $xml->getNextTag()) != null) {
 					if($tag->element == "/echo")
 						break;
+					if(!isset($tag->attributes['content']))
+						continue;
+
 					$log[] = $tag->attributes['content'];
 				}
 			}
