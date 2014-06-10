@@ -382,7 +382,7 @@
 		$path = SystemConfig::relativeAppPath("library/straps");
 		if(isset($_POST['name'])) {
 			$log[] = "Loading strap file `{$_POST['name']}`...";
-			$log[] = "(".date("H:i:s Y-m-d", time('now')).")";
+			$log[] = date("H:i:s d-m-Y", time('now'));
 			if(loadStrap("$path/{$_POST['name']}", $fm, $db, $rman))
 				$out = "Loaded strap file.";
 			else
