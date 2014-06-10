@@ -350,6 +350,7 @@
 
 	function strapRootPanel($fm, $db, $rman)
 	{
+		global $log;
 		echo "<b>Root System</b><br />";
 		echo "<div class=\"form-item\" style=\"width: 170px;\">";
 		$out = null;
@@ -371,8 +372,13 @@
 			echo "<input type=\"submit\" class=\"form-button\" value=\"Strap root system\" style=\"width: 100%; font-size:large;\">";
 		echo "</form>";
 		echo "</div>";
+		echo "<div class=\"log\">";
+		echo "<pre>Log\n---\n\n";
 		if($out != null)
-			echo $out;
+			foreach($log as $l)
+				echo "$l\n";
+		echo "</pre>";
+		echo "</div>";
 	}
 
 	function strapSystemPanel($fm, $db, $rman)
