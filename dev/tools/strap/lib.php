@@ -18,16 +18,16 @@
 		public $engine = "InnoDB";
 		public $primary = "";
 		public $charset = "utf8";
-		public $fields = array();
+		public $columns = array();
 		public $indecies = null;
 	}
 
-	class s_table_field {
+	class s_table_column {
 		public $name;
 		public $type;
 		public $extra;
 	}
-	class s_table_key {
+	class s_table_index {
 		public $name;
 		public $cols = array();
 	}
@@ -36,16 +36,24 @@
 	$baselist = array();
 	$resManager = null;
 
+	global $log;
+	$log = array();
+
 
 	function loadFile($path, $fm)
 	{
+		if(!file_exists($path))
+			return null;
+
 		$f = $fm->openFile($path, 'r');
 		return $f->read();
 	}
 
-	function loadBase($name, $space, $db, &$xml)
+	function loadStrapper($name, $space, $db, &$xml)
 	{
 		global $baselist;
+		global $log;
+
 		if(isset($baselist[$space][$name]))
 			return $baselist[$space][$name];
 
@@ -53,6 +61,10 @@
 			$baselist[$space] = array();
 
 		global $resManager;
+		if(!file_exists(SystemConfig::relativeAppPath("library/straps/baseobj/$space/$name.php"))) {
+			$log[] = "Strapper $space/$name does not exist";
+			return null;
+		}
 		include_once(SystemConfig::relativeAppPath("library/straps/baseobj/$space/$name.php"));
 		$base = new $name($db, $resManager);
 		$baselist[$space][$name] = $base;
@@ -63,12 +75,18 @@
 	{
 		global $varlist;
 		global $resManager;
+		global $log;
 
 		$resManager = new ResMan($db);
 
 		$xml = new VPXML();
 
 		$fxml = loadFile($path, $fm);
+		if($fxml == null) {
+			$log[] = "! Strap file does not exist";
+			return;
+		}
+		
 		$xml->init($fxml);
 		
 		while(($tag = $xml->getNextTag()) != null) {
@@ -98,8 +116,15 @@
 					$base = $r[0][0];
 					$sql = "INSERT INTO `rescast` (`type`, `handler`, `base`) VALUES ";
 					$sql .= "('{$type['name']}','0', '{$base}');";
-					$db->sendQuery($sql);
+					if(!$db->sendQuery($sql))
+						$log[] = "! Failed to create [$base]{$type['name']}()";
+					else {
+						$log[] = "+ Created [$base]{$type['name']}()";
+						ResCast::init($db);
+					}
 				}
+				else
+					$log[] = "# [{$type['base']}]{$type['name']}() Already exists";
 			
 			}
 			else
@@ -113,15 +138,21 @@
 						$edge['type'] = $v;
 				}
 				$tid = $db->sendQuery("SELECT id FROM rescast WHERE type='{$edge['type']}'", false, false);
-				if(!$tid)
+				if(!$tid) {
+					$log[] = "! Resource type {$edge['type']} for :{$edge['name']} does not exist";
 					continue;
+				}
 				$tid = $tid[0][0];
 
 				if(!$db->sendQuery("SELECT id FROM `edgetype` WHERE label='{$edge['name']}';")) {
 					$sql = "INSERT INTO `edgetype` (`rtype`, `label`, `default`) VALUES ";
 					$sql .= "('{$tid}','{$edge['name']}', 0);";
-					$db->sendQuery($sql);
-				}
+					if(!$db->sendQuery($sql))
+						$log[] = "! Failed to create :{$edge['name']}";
+					else
+						$log[] = "+ Created {$edge['type']}():{$edge['name']}";
+				} else
+					$log[] = "# {$edge['type']}:{$edge['name']} already exists";
 			}
 			else
 			if($tag->element == 'var') {
@@ -149,6 +180,14 @@
 				addResourceBase($tag);
 			}
 			else
+			if($tag->element == "echo") {
+				while(($tag = $xml->getNextTag()) != null) {
+					if($tag->element == "/echo")
+						break;
+					$log[] = $tag->attributes['content'];
+				}
+			}
+			else
 			if($tag->element == "obj") {
 				$name = "";
 				$space = "";
@@ -159,10 +198,14 @@
 					if($a == 'space')
 						$space = $v;
 
-				$obj = loadBase($name, $space, $db, $xml);
+				$obj = loadStrapper($name, $space, $db, $xml);
+				if($obj == null)
+					continue;
+
 				$obj->process($xml);
 			}
 		}
+		$log[] = "--- finished ---";
 		return true;
 	}
 
@@ -184,25 +227,25 @@
 			if($tag->element == '/table')
 				return $table;
 
-			if($tag->element == 'field') {
-				$field = new s_table_field();
+			if($tag->element == 'column') {
+				$column = new s_table_column();
 
 				foreach($tag->attributes as $a => $v) {
 					switch($a) {
 					case 'name':
-						$field->name = $v;
+						$column->name = $v;
 					break;
 
 					case 'type':
-						$field->type = $v;
+						$column->type = $v;
 					break;
 
 					case 'extra':
-						$field->extra = $v;
+						$column->extra = $v;
 					break;
 					}
 				}
-				$table->fields[] = $field;
+				$table->columns[] = $column;
 			}
 			else
 			if($tag->element == 'primary') {
@@ -211,7 +254,7 @@
 						$table->primary = $v;
 			}
 			else
-			if($tag->element == 'key') {
+			if($tag->element == 'index') {
 				$key = loadIndecies($tag, $xml);
 				if($key == null) {
 					echo "Error in strap structure with parent: {$tag->element}<br />";
@@ -229,19 +272,19 @@
 
 	function loadIndecies($tag, &$xml)
 	{
-		$index = new s_table_key();
+		$index = new s_table_index();
 		foreach($tag->attributes as $a => $v)
 			if($a == 'name')
 				$index->name = $v;
 
 		while(($tag = $xml->getNextTag()) != null) {
-			if($tag->element == 'index') {
+			if($tag->element == 'column') {
 				foreach($tag->attributes as $a => $v)
-					if($a == 'col')
+					if($a == 'name')
 						$index->cols[] = $v;
 			}
 			else
-			if($tag->element == '/key')
+			if($tag->element == '/index')
 				return $index;
 		}
 
@@ -250,11 +293,14 @@
 
 	function strapTable($table, $db)
 	{
-		if($table->name == "")
+		global $log;
+		if($table->name == "") {
+			$log[] = "! Error creating table - No name specified";
 			return;
+		}
 		$sql = "CREATE TABLE IF NOT EXISTS `{$table->name}` (\n";
-		$sz = sizeof($table->fields)-1;
-		foreach($table->fields as $f) {
+		$sz = sizeof($table->columns)-1;
+		foreach($table->columns as $f) {
 			$sql .= "\t`{$f->name}` {$f->type} {$f->extra}";
 
 			if($sz-- > 0)
@@ -276,12 +322,12 @@
 		if($table->indecies != null) {
 			$si = sizeof($table->indecies)-1;
 			foreach($table->indecies as $i) {
-				$sql .= "\tKEY `{$i->name}` (";
+				$sql .= "\tINDEX `{$i->name}` (";
 				$sz = sizeof($i->cols)-1;
 
 				foreach($i->cols as $c) {
 					$sql .= "`$c`";
-					if($sz-- > 1)
+					if($sz-- > 0)
 						$sql .= ", ";
 				}
 				$sql .= ")\n";
@@ -292,7 +338,14 @@
 		}
 		$sql .= ") ";
 		$sql .= "ENGINE={$table->engine} DEFAULT CHARSET={$table->charset};";
-		return $db->sendQuery($sql);
+
+		if(!$db->sendQuery($sql)) {
+			$log[] = "Error creating table `{$table->name}`";
+			$log[] = "\n$sql\n";
+			return;
+		}
+		$log[] = "+ Created table `{$table->name}`";
+		return;
 	}
 
 	function strapRootPanel($fm, $db, $rman)
@@ -325,10 +378,13 @@
 	function strapSystemPanel($fm, $db, $rman)
 	{
 		$out = null;
+		global $log;
 		$path = SystemConfig::relativeAppPath("library/straps");
 		if(isset($_POST['name'])) {
+			$log[] = "Loading strap file `{$_POST['name']}`...";
+			$log[] = "(".date("H:i:s Y-m-d", time('now')).")";
 			if(loadStrap("$path/{$_POST['name']}", $fm, $db, $rman))
-				$out = "Loaded Successfully!";
+				$out = "Loaded strap file.";
 			else
 				$out = "Error on load!";
 		}
@@ -348,8 +404,13 @@
 		echo "</form>";
 			
 		echo "</div>";
+		echo "<div class=\"log\">";
+		echo "<pre>Log\n---\n\n";
 		if($out != null)
-			echo $out;
+			foreach($log as $l)
+				echo "$l\n";
+		echo "</pre>";
+		echo "</div>";
 	}
 
 	function setVariable($name, $value)
@@ -362,6 +423,7 @@
 			unset($varlist[$name]);
 		else
 			$varlist[$name] = $value;
+
 	}
 
 	function processVariable($name)
@@ -398,6 +460,7 @@
 
 	function addResource($tag)
 	{
+		global $log;
 		$label = "";
 		$type = "";
 		$ref = 0;
@@ -415,16 +478,25 @@
 			if($a == 'ref')
 				$ref = $v;
 			else
-			if($a == 'out')
+			if($a == 'rout')
 				$out = $v;
 
 		if($ref[0] == "{")
 			$ref = processVariable($ref);
 
-		if(!($res = $resManager->queryAssoc("$type('$label');")))
+		if(!($res = $resManager->queryAssoc("$type('$label');"))) {
 			$id = $resManager->addResource($type, $ref, $label);
-		else 
+			if(!$id) {
+				$log[] = "! Failed to create resource $type('$label') =&gt; $ref";
+				return;
+			}
+
+			$log[] = "+ Added resource $type('$label') =&gt; $ref";
+		}
+		else  {
 			$id = intval($res[0][0]);
+			$log[] = "< Retrieved $type('$label') =&gt; $ref";
+		}
 
 		if($out != null)
 			$varlist[$out] = $id;
@@ -434,6 +506,7 @@
 	{
 		global $resManager;
 		global $varlist;
+		global $log;
 		$parent = "";
 		$child = "";
 		$out = null;
@@ -457,8 +530,22 @@
 
 		if($child[0] == "{")
 			$child = processVariable($child);
+		if($parent == null || $parent == 0 || $parent == "") {
+			$log[] = "! Parent unspecified $child &lt; $parent :$edge";
+			return;
+		}
+
+		if($child == null || $child == 0 || $child == "") {
+			$log[] = "! Child unspecified $parent &gt; $child :$edge";
+			return;
+		}
 
 		$id = $resManager->createRelationship($parent, $child, $resManager->getEdge($edge));
+		if(!$id)
+			$log[] = "! Failed to create relationship between $parent > $child :$edge";
+		else
+			$log[] = "+ Created relationship between $parent > $child :$edge";
+
 		if($out != null)
 			$varlist[$out] = $id;
 	}
@@ -467,6 +554,8 @@
 	{
 		global $resManager;
 		global $varlist;
+		global $log;
+
 		$label = null;
 		$out = null;
 		foreach($tag->attributes as $a => $v)
@@ -481,11 +570,12 @@
 
 
 		$id = $resManager->addResourceBase($label);
+		if(!$id)
+			$log[] = "! Failed to create base [$label]";
+		else
+			$log[] = "+ Created base [$label]";
+
 		if($out != null)
 			$varlist[$out] = $id;
-	}
-
-	function modreg($tag, &$xml)
-	{
 	}
 ?>
