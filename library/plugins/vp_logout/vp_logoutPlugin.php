@@ -12,11 +12,23 @@
 			$this->instance = $instance;
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
 			Session::destroy();
-			HttpHeader::redirect("?loc=web");
-			return $params;
+			$redir = $this->getConfig("redir");
+
+			if($redir == null)
+				$redir = "?loc=web";
+			else
+				$redir = "?loc=$redir";
+
+			HttpHeader::redirect($redir);
+			return $signal;
+		}
+
+		public function getConfigList()
+		{
+			return array("redir");
 		}
 
 	}
