@@ -15,6 +15,7 @@
 	include(SystemConfig::relativeAppPath("system/dbacc.php"));
 	include(SystemConfig::relativeAppPath("system/structure/module/modman.php"));
 	include(SystemConfig::relativeAppPath("system/managers.php"));
+	include(SystemConfig::relativeAppPath("system/libload.php"));
 	include('lib.php');
 	$fm = Koda::getFileManager();
 
@@ -87,7 +88,10 @@
 		}
 		else
 		if(isset($_POST['op']) && $_POST['op'] == 11) {
-			addInstance($_POST['cid'], $_POST['label'], $_POST['ref'], $db, $rman);
+			$instparam = null;
+			if(isset($_POST['params']) && $_POST['params'] != "")
+				$instparam = $_POST['params'];
+			addInstance($_POST['cid'], $_POST['label'], $_POST['ref'], $db, $rman, $instparam);
 			unset($_POST['op']);
 			unset($_POST['ref']);
 			unset($_POST['label']);

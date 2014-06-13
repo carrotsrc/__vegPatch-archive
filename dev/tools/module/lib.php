@@ -131,10 +131,20 @@
 		$db->sendQuery($sql);
 	}
 
-	function addInstance($cid, $label, $ref, $db, $rman)
+	function addInstance($cid, $label, $ref, $db, $rman, $params = null)
 	{
 		$cmpt = ModMan::getComponent($cid, 0, $db);
-		$nref = $cmpt->createInstance();
+
+		if($params != null) {
+			$atoms = explode(";", $params);
+			$params = array();
+			foreach($atoms as $a) {
+				$na = explode("=", $a);
+				if(sizeof($na) > 1)
+					$params[$na[0]] = $na[1];
+			}
+		}
+		$nref = $cmpt->createInstance($params);
 		if($nref != 0)
 			$ref = $nref;
 

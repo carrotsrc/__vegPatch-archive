@@ -145,6 +145,10 @@
 					echo "</div>";
 
 					echo "<div class=\"form-item\">";
+						echo "<font class=\"font-small\"><b>Instance Parameters</b><br /></font>";
+						echo "<input name=\"params\" type=\"text\" class=\"form-text\" style=\"margin-top: 0px;\" autocomplete=off/>";
+					echo "</div>";
+					echo "<div class=\"form-item\">";
 						echo "<font class=\"font-small\"><b>Ref</b><br /></font>";
 						echo "<input name=\"ref\" type=\"text\" class=\"form-text\" style=\"margin-top: 0px; width: 35px;\" />";
 						echo "<input name=\"op\" type=\"hidden\" value=\"11\"/>";
