@@ -17,7 +17,7 @@
 			$this->instance = $instance;
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
 			if(!isset($_GET['loc'])) {
 				if(!isset($_GET['cpl'])) {
@@ -33,20 +33,20 @@
 						$_GET['loc'] = "home";
 				}
 				else
-					return $this->getCmptLocation($params);
+					return $this->getCmptLocation($signal);
 			}
 
-			return $this->getIndexLocation($params);
+			return $this->getIndexLocation($signal);
 		}
 
-		private function getIndexLocation(&$params)
+		private function getIndexLocation(&$signal)
 		{
 	
 			$location = $_GET['loc'];
 			$layout = 0;
 
 			$atoms = explode('/', $location);
-			$params['area'] = $atoms[0];
+			$signal['area'] = $atoms[0];
 			if(sizeof($atoms) > 1 && $atoms[1] != "")
 				$layout = $atoms[1];
 			else {
@@ -59,7 +59,7 @@
 
 					$atoms = explode("/", $epage);
 
-					$params['area'] = $atoms[0];
+					$signal['area'] = $atoms[0];
 					$layout = Managers::ResourceManager()->queryAssoc("Layout('{$atoms[1]}'){r}<Area('{$atoms[0]}');");
 					if(!$layout)
 						return false;
@@ -67,25 +67,25 @@
 				$layout = $layout[0][1];
 			}
 
-			$params['layout'] = $layout;
+			$signal['layout'] = $layout;
 
 			$sz = sizeof($atoms);
-			$params['lcr'] = array_slice($atoms, 2);
-			return $params;
+			$signal['lcr'] = array_slice($atoms, 2);
+			return $signal;
 		}
 
-		private function getCmptLocation(&$params)
+		private function getCmptLocation(&$signal)
 		{
 			$location = $_GET['cpl'];
 			$atoms = explode('/', $location);
 			if(sizeof($atoms) != 4)
 				return false;
 
-			$params['area'] = $atoms[0];
-			$params['cmpt'] = $atoms[1];
-			$params['inst'] = $atoms[2];
-			$params['jack'] = $atoms[3];
-			return $params;
+			$signal['area'] = $atoms[0];
+			$signal['cmpt'] = $atoms[1];
+			$signal['inst'] = $atoms[2];
+			$signal['jack'] = $atoms[3];
+			return $signal;
 		}
 
 		public function getConfigList()

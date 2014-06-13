@@ -22,10 +22,10 @@
 			$this->resManager = Managers::ResourceManager();
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
-			$inst = $params['inst'];
-			$cmpt = $params['cmpt'];
+			$inst = $signal['inst'];
+			$cmpt = $signal['cmpt'];
 			// find rid of component
 
 			$rid = $this->resManager->queryAssoc("CrudOps()<(Instance('$inst')<Component('$cmpt'));");
@@ -33,15 +33,15 @@
 			// check if there is a CRUD channel associated with this
 			// resource
 			if(!$rid)
-				return $params;
+				return $signal;
 
 			$rid = $rid[0][0];
 			$ref = $this->resManager->getHandlerRef($rid);
-			$this->runChannel($ref, $params);
-			return $params;
+			$this->runChannel($ref, $signal);
+			return $signal;
 		}
 
-		public function runChannel($ref, &$params)
+		public function runChannel($ref, &$signal)
 		{
 			// CRUD Op channels are the same as channels but
 			// have a different type to differentiate them
@@ -49,7 +49,7 @@
 			$channel = Managers::ChannelManager()->getChannel($ref);
 			if($channel == null)
 				return;
-			$channel->runSignal($params);
+			$channel->runSignal($signal);
 		}
 	}
 ?>

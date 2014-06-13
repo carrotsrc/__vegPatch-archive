@@ -26,32 +26,32 @@
 			return true;
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
 			$type = $panel = 0;
-			$sz = sizeof($params['lcr']);
+			$sz = sizeof($signal['lcr']);
 
 			if($sz == 1) // we have a batch request
-				$type = $params['lcr'][0];
+				$type = $signal['lcr'][0];
 			else
 			if($sz == 2) { // we have a single request 
-				$panel = $params['lcr'][0];
-				$type = $params['lcr'][1];
+				$panel = $signal['lcr'][0];
+				$type = $signal['lcr'][1];
 			}
 		
 			$cache = Session::get('acache');
 
 			if($cache == null) {
-				$params['response'] = "";
-				return $params;
+				$signal['response'] = "";
+				return $signal;
 			}
 
 			ob_start();
-			$this->loadFromCache($cache, $params['area'], $params['layout'], $type);
-			$params['response'] = ob_get_contents();
+			$this->loadFromCache($cache, $signal['area'], $signal['layout'], $type);
+			$signal['response'] = ob_get_contents();
 			ob_end_clean();
 			HttpHeader::fromType($type);
-			return $params;
+			return $signal;
 		}
 
 		private function loadFromCache($cache, $area, $layout, $type)

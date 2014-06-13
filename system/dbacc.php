@@ -6,7 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-	class DBAcc
+	abstract class DBAcc
 	{
 		protected $db;
 		
@@ -77,9 +77,6 @@
 				$sql .= ", ";
 			}
 			$sql .=" WHERE ".$where.";";
-
-			if(isset($_GET['dbm-debug']))
-				var_dump($sql);
 
 			return $this->db->sendQuery($sql);
 		}

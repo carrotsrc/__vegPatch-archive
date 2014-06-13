@@ -17,13 +17,13 @@
 			$this->instance = $instance;
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
-			if(!isset($params['area']))
+			if(!isset($signal['area']))
 				return false;
 
-			$area = $params['area'];
-			unset($params['area']);
+			$area = $signal['area'];
+			unset($signal['area']);
 
 			$layout = null;
 			$assets = null;
@@ -32,18 +32,18 @@
 			if(!get_class($area))
 				return false;
 
-			if(isset($params['layout'])) {
-				$layout = $params['layout'];
-				unset($params['layout']);
+			if(isset($signal['layout'])) {
+				$layout = $signal['layout'];
+				unset($signal['layout']);
 			}
-			if(isset($params['assets'])) {
-				$assets = $params['assets'];
-				unset($params['assets']);
+			if(isset($signal['assets'])) {
+				$assets = $signal['assets'];
+				unset($signal['assets']);
 			}
 			$layoutParams = new CBlank();
 			$layoutParams->app = new CBlank();
 
-			$layoutParams->app->title = $params['root']['title'];
+			$layoutParams->app->title = $signal['root']['title'];
 			$layoutParams->onload = "";
 			$layoutParams->assets = $assets;
 			$layoutParams->nodym = false;
@@ -52,14 +52,14 @@
 					$layoutParams->nodym = true;
 			}
 
-			if(isset($params['onload']) && is_array($params['onload'])) {
-				foreach($params['onload'] as $param) {
+			if(isset($signal['onload']) && is_array($signal['onload'])) {
+				foreach($signal['onload'] as $param) {
 					$layoutParams->onload .= $param;
 				}
 			}
 
-			if(isset($params['globvar'])) {
-				foreach($params['globvar'] as $k => $v) {
+			if(isset($signal['globvar'])) {
+				foreach($signal['globvar'] as $k => $v) {
 					unset($_GET[$k]);
 					$layout->addGlobalParam($k, $v);
 				}
@@ -68,8 +68,8 @@
 			if(($page = $this->generatePage($area, $layout, $assets, $layoutParams)) == null)
 				return false;
 
-			$params['page'] = $page;
-			return $params;
+			$signal['page'] = $page;
+			return $signal;
 		}
 
 		private function generatePage($area, $layout, $assets, $layoutParams)

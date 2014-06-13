@@ -17,22 +17,22 @@
 			$this->resourceManager = Managers::ResourceManager();
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
-			if(!isset($params['cmpt'))
+			if(!isset($signal['cmpt'))
 				return false;
 
-			$component = $params['cmpt'];
+			$component = $signal['cmpt'];
 
-			if(!isset($params['jack']))
+			if(!isset($signal['jack']))
 				return false;
 
-			$jack = $params['jack'];
+			$jack = $signal['jack'];
 			$channel = $this->jackChannel($component, $jack);
 			if($channel == null)
-				return $params;
+				return $signal;
 
-			return $this->runChannel($channel, $params);
+			return $this->runChannel($channel, $signal);
 		}
 
 		public function jackChannel($cmpt, $jack)
@@ -47,9 +47,9 @@
 			return $this->channelManager->getChannel($cid);
 		}
 
-		public function runChannel($channel, $params)
+		public function runChannel($channel, $signal)
 		{
-			return $channel->runSignal($params);
+			return $channel->runSignal($signal);
 		}
 	}
 ?>

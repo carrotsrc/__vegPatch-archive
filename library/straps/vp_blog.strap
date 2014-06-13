@@ -1,17 +1,17 @@
 <table name="vp_blog">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="title" type="varchar(64)" extra="NOT NULL" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="title" type="varchar(64)" extra="NOT NULL" />
 	<primary name="id" />
 </table>
 
 <table name="vp_blogpost">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="instance" type="int(11)" extra="NOT NULL" />
-	<field name="post_id" type="int(11)" extra="NOT NULL" />
-	<field name="title" type="varchar(255)" extra="NOT NULL" />
-	<field name="contents" type="text" extra="NOT NULL" />
-	<field name="posted" type="TIMESTAMP" extra="NOT NULL" />
-	<field name="state" type="tinyint(1)" extra="NOT NULL" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="instance" type="int(11)" extra="NOT NULL" />
+	<column name="post_id" type="int(11)" extra="NOT NULL" />
+	<column name="title" type="varchar(255)" extra="NOT NULL" />
+	<column name="contents" type="text" extra="NOT NULL" />
+	<column name="posted" type="TIMESTAMP" extra="NOT NULL" />
+	<column name="state" type="tinyint(1)" extra="NOT NULL" />
 	<primary name="id" />
 </table>
 

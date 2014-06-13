@@ -20,15 +20,15 @@
 			$this->channelManager = Managers::ChannelManager();
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
-			if(!isset($params['area']))
+			if(!isset($signal['area']))
 				return false;
 
 			$area = null;
 			$prid = null;
 			$srid = Session::get('aid');
-			$area = $params['area'];
+			$area = $signal['area'];
 			$rid = $this->resolveArea($area);
 			if($rid == null)
 				return false;
@@ -40,16 +40,16 @@
 					if($areaObj == null)
 						return false;
 
-					$params['area'] = $areaObj;
-					return $params;
+					$signal['area'] = $areaObj;
+					return $signal;
 				}*/
 			}
 			
 			while($prid != $rid) {
 				$prid = $rid;
-				if(!($params = $this->runChannel($area, $params)))
+				if(!($signal = $this->runChannel($area, $signal)))
 					return false;
-				$area = $params['area'];
+				$area = $signal['area'];
 				$rid = $this->resolveArea($area);
 			}
 
@@ -67,8 +67,8 @@
 			if($areaObj == null)
 				return false;
 
-			$params['area'] = $areaObj;
-			return $params;
+			$signal['area'] = $areaObj;
+			return $signal;
 		}
 
 		private function resolveArea($area)
@@ -91,20 +91,20 @@
 			return $rid; 
 		}
 
-		private function runChannel($ref, $params)
+		private function runChannel($ref, $signal)
 		{
 			$rq = "Channel()<Area('$ref');";
 			$r = $this->resourceManager->queryAssoc($rq);
 			if(!$r) 
-				return $params;
+				return $signal;
 
 			$cid = $r[0][0];
 			$ref = $this->resourceManager->getHandlerRef($cid);
 			$channel = $this->channelManager->getChannel($ref);
 			if($channel == null)	// There are no channel nodes
-				return $params;
+				return $signal;
 
-			return $channel->runSignal($params);
+			return $channel->runSignal($signal);
 		}
 
 	}

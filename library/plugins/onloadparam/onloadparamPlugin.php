@@ -15,15 +15,15 @@
 			$this->setInstance($instance);
 		}
 
-		public function process(&$params = null)
+		public function process(&$signal = null)
 		{
 			$onloadParams = "KitJS.addGlobalParam(\"glob\",\"hello\");\n";
-			if(isset($params['onload']))
-				if(!is_array($params['onload']))
-					$params['onload'] = array();
+			if(isset($signal['onload']))
+				if(!is_array($signal['onload']))
+					$signal['onload'] = array();
 
-			$params['onload'][]= $onloadParams;
-			return $params;
+			$signal['onload'][]= $onloadParams;
+			return $signal;
 		}
 	}
 ?>

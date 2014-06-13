@@ -34,7 +34,7 @@
 			echo "</div>\n";
 		}
 		else {
-			echo "<div class=\"form-item font-small\">Component( {$res[0][0]} )</div>";
+			echo "<div class=\"form-item font-small\">Component( {$res[0][0]} ) =&gt; {$details[0]}</div>";
 			$rq = "Instance()<Component('{$details[0]}');";
 			$res = $rman->queryAssoc($rq);
 
@@ -144,6 +144,10 @@
 						echo "<input name=\"label\" type=\"text\" class=\"form-text\" style=\"margin-top: 0px\" />";
 					echo "</div>";
 
+					echo "<div class=\"form-item\">";
+						echo "<font class=\"font-small\"><b>Instance Parameters</b><br /></font>";
+						echo "<input name=\"params\" type=\"text\" class=\"form-text\" style=\"margin-top: 0px;\" autocomplete=off/>";
+					echo "</div>";
 					echo "<div class=\"form-item\">";
 						echo "<font class=\"font-small\"><b>Ref</b><br /></font>";
 						echo "<input name=\"ref\" type=\"text\" class=\"form-text\" style=\"margin-top: 0px; width: 35px;\" />";

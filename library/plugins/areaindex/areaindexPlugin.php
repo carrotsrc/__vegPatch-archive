@@ -15,7 +15,7 @@
 			$this->setInstance($instance);
 		}
 
-		public function process(&$params = null)
+		public function process(&$signal = null)
 		{
 			$msgBox = array();
 			$result = null;
@@ -40,4 +40,3 @@
 		}
 	}
 ?>
-

@@ -12,14 +12,14 @@
 			$this->instance = $instance;
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
 			$uid = Session::get('uid');
 			if($uid == null)
 				die("Not sure you should be peeking around in here");
 
 
-			return $params;
+			return $signal;
 		}
 
 	}

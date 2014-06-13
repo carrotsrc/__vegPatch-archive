@@ -1,4 +1,3 @@
-
 <?php
 /* (C)opyright 2014, Carrotsrc.org
  *

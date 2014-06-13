@@ -9,12 +9,10 @@
 	class Channel
 	{
 		protected $pluginStack;
-		protected $open;
 		
 		public function __construct()
 		{
 			$this->pluginStack = array();
-			$this->open = true;
 		}
 		
 		public function addPlugin($plugin)
@@ -22,14 +20,14 @@
 			$this->pluginStack[] = $plugin;
 		}
 		
-		public function runSignal(&$params)
+		public function runSignal(&$signal)
 		{
 			$msgBox = array();
 			foreach($this->pluginStack as $plugin)
-				if(!($params = $plugin->process($params)))
+				if(!($signal = $plugin->process($signal)))
 					return false;
 			
-			return $params;
+			return $signal;
 		}
 	}
 

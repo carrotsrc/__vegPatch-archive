@@ -15,12 +15,12 @@
 			$this->setInstance($instance);
 		}
 
-		public function process(&$params = null)
+		public function process(&$signal = null)
 		{
-			if(!isset($params['layout']))
-				return $params;
+			if(!isset($signal['layout']))
+				return $signal;
 
-			$layout = $params['layout'];
+			$layout = $signal['layout'];
 			$header->
 		}
 	}

@@ -162,7 +162,6 @@
 			$sql = "INSERT INTO areapool ";
 			$sql .= "(name, s_id, st_id) VALUES ";
 			$sql .= "('{$_POST['label']}','{$_POST['sid']}','{$_POST['tid']}');";
-			echo $sql;
 			$db->sendQuery($sql, false, false);
 			unset($_POST['op']);
 		}
