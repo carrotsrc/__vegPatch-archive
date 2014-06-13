@@ -41,9 +41,6 @@
 			if($query == null || $query == "")
 				return false;
 
-			if($query[strlen($query)-1] != ';')
-				$query .= ';';
-
 			$result =  mysql_query($query);
 
 			if(!$result)
