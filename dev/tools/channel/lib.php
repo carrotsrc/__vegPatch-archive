@@ -87,12 +87,19 @@
 		return $res[0][0];
 	}
 
-	function registerPlugin($plugin, $rman)
+	function registerPlugin($plugin, $rman, $db)
 	{
-		if(pluginResource($plugin, $rman) !=  false)
+		if($db->sendQuery("SELECT `id` FROM `modreg` WHERE `module_name`='$plugin' AND `module_type`='2'"))
 			return;
 
-		$rman->addResource('Plugin', 0, $plugin);
+		if(!$db->sendQuery("INSERT INTO `modreg` SET `module_type`='2', `module_name`='$plugin', `space`='', `active`='1', `version`='1.2'"))
+			return;
+		$id = $db->getLastId();
+
+		if(pluginResource($plugin, $rman))
+			return;
+
+		$rman->addResource('Plugin', $id, $plugin);
 	}
 
 	function pluginInstances($rid, $rman)
@@ -111,7 +118,7 @@
 	function newInstance($cplugin, $db, $rman)
 	{
 		$label = $_POST['label'];
-		$ref = $_POST['handler_ref'];
+		$ref = $_POST['ref'];
 		$_GET['cinst'] = $ref;
 		$rid = $rman->addResource('Instance', $ref, $label);
 		if(!$rid)

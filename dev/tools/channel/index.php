@@ -31,7 +31,7 @@
 	$plugins = $fm->listDirectories(SystemConfig::relativeAppPath("library/plugins"));
 	if(isset($_GET['mode']) && $_GET['mode'] == "plugin") {
 		if(isset($_GET['op']) && $_GET['op'] == 1)
-			registerPlugin($cplugin, $rman);
+			registerPlugin($cplugin, $rman, $db);
 		else
 		if(isset($_GET['op']) && $_GET['op'] == 2)
 			newInstance($cplugin, $db, $rman);
