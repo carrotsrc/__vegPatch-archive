@@ -6,7 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-	class DBConnection
+	abstract class DBConnection
 	{
 		protected $connection;
 		
@@ -15,29 +15,10 @@
 		
 		}
 		
-		public function connect($username, $password)
-		{
-		
-		}
-		
-		public function connectAtServer($server, $username, $password)
-		{
-		
-		}
-		
-		public function selectDatabase($database)
-		{
-		
-		}
-		
-		public function sendQuery($query, $raw = true, $assoc = true)
-		{
-		
-		}
-		
-		public function getLastId()
-		{
-		
-		}		
+		abstract public function connect($username, $password);
+		abstract public function connectAtServer($server, $username, $password);
+		abstract public function selectDatabase($database);
+		abstract public function sendQuery($query, $raw = true, $assoc = true);
+		abstract public function getLastId();
 	}
 ?>
