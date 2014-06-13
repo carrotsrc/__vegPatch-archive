@@ -20,48 +20,48 @@
 			$this->channelManager = Managers::ChannelManager();
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
-			if(!isset($params['area'])) {
+			if(!isset($signal['area'])) {
 				return false;
 			}
 
 			$area = null;
 			$prid = null;
 			$srid = Session::get('aid');
-			$area = $params['area'];
+			$area = $signal['area'];
 			$rid = $this->resolveArea($area);
 			if($rid == null) {
 				KLog::error("Unable to resolve area");
 				// redirect to the error page
-				if(!$this->errorPage($params))
+				if(!$this->errorPage($signal))
 					return false;
 
 				// reresolve everything
-				$area = $params['area'];
+				$area = $signal['area'];
 				$rid = $this->resolveArea($area);
 			}
 
 			if($srid != null) {
 				if($srid == $rid) {
 					// Session is already in the area
-					if(!($params = $this->runChannel($area, $params)))
+					if(!($signal = $this->runChannel($area, $signal)))
 						return false;
 
 					$areaObj = Managers::AreaManager()->getArea($area);
 					if($areaObj == null)
 						return false;
 
-					$params['area'] = $areaObj;
-					return $params;
+					$signal['area'] = $areaObj;
+					return $signal;
 				}
 			}
 			
 			while($prid != $rid) {
 				$prid = $rid;
-				if(!($params = $this->runChannel($area, $params)))
+				if(!($signal = $this->runChannel($area, $signal)))
 					return false;
-				$area = $params['area'];
+				$area = $signal['area'];
 				$rid = $this->resolveArea($area);
 			}
 
@@ -79,9 +79,9 @@
 			if($areaObj == null)
 				return false;
 
-			$params['area'] = $areaObj;
-			$this->apCache($areaObj->getSurround(), intval($areaObj->getId()), $params);
-			return $params;
+			$signal['area'] = $areaObj;
+			$this->apCache($areaObj->getSurround(), intval($areaObj->getId()), $signal);
+			return $signal;
 		}
 
 		private function resolveArea($area)
@@ -97,29 +97,29 @@
 			return $rid; 
 		}
 
-		private function runChannel($ref, $params)
+		private function runChannel($ref, $signal)
 		{
 			$r = $this->resourceManager->queryAssoc("Channel(){r}<Area('$ref');");
 			if(!$r) 
-				return $params;
+				return $signal;
 
 			$ref = $r[0][1];
 			$channel = $this->channelManager->getChannel($ref);
 			if($channel == null)	// There are no channel nodes
-				return $params;
+				return $signal;
 
-			return $channel->runSignal($params);
+			return $channel->runSignal($signal);
 		}
 
-		private function apCache($sId, $aId, &$params)
+		private function apCache($sId, $aId, &$signal)
 		{
 			$assets = SurroundMan::getAssetPaths($sId, $this->db);
 			if($assets == null)
 				return;
-			if(!isset($params['acache']))
-				$params['acache'] = array('js' => array(), 'css' => array());
+			if(!isset($signal['acache']))
+				$signal['acache'] = array('js' => array(), 'css' => array());
 
-			$cache = &$params['acache'];
+			$cache = &$signal['acache'];
 
 			foreach($assets as $t => $list)
 				foreach($list as $p)
@@ -132,7 +132,7 @@
 			return array("e404");
 		}
 
-		private function errorPage(&$params)
+		private function errorPage(&$signal)
 		{
 			$epage = $this->getConfig("e404");
 			if($epage == null)
@@ -140,13 +140,13 @@
 
 			$atoms = explode("/", $epage);
 
-			$params['area'] = $atoms[0];
+			$signal['area'] = $atoms[0];
 			$layout = Managers::ResourceManager()->queryAssoc("Layout('{$atoms[1]}'){r}<Area('{$atoms[0]}');");
 			if(!$layout)
 				return false;
 
-			$params['layout'] = $layout[0][1];
-			return $params;
+			$signal['layout'] = $layout[0][1];
+			return $signal;
 		}
 	}
 

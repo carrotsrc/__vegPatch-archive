@@ -13,18 +13,18 @@
 			$this->resourceManager = Managers::ResourceManager();
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
-			if($params['layout'] == 'edit') {
-				$rq = "Graph()<Area('{$params['area']->getName()}');";
+			if($signal['layout'] == 'edit') {
+				$rq = "Graph()<Area('{$signal['area']->getName()}');";
 				$result = $this->resourceManager->queryAssoc($rq);
 				if($result == false)
-					$params['layout'] = null;
+					$signal['layout'] = null;
 				else
-					$params['layout'] = 2;
+					$signal['layout'] = 2;
 			}
 
-			return $params;
+			return $signal;
 		}
 	}
 ?>

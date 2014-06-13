@@ -15,12 +15,12 @@
 			$this->setInstance($instance);
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
-			if(!isset($params['islocal']))
+			if(!isset($signal['islocal']))
 				return false;
 
-			if($params['islocal'] != true)
+			if($signal['islocal'] != true)
 				return false;
 		}
 	}

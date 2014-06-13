@@ -12,12 +12,12 @@
 			$this->instance = $instance;
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
-			$area = $params['area']->getId();
-			$layout = $params['layout']->getId();
-			$inst = $params['_pnl']->getRef();
-			$cmpt = $params['_pnl']->getComponentId();
+			$area = $signal['area']->getId();
+			$layout = $signal['layout']->getId();
+			$inst = $signal['_pnl']->getRef();
+			$cmpt = $signal['_pnl']->getComponentId();
 			$nv = null;
 			if(($nv = Session::get('nva')) == null)
 				$nv = array();
@@ -35,9 +35,9 @@
 
 			$nv[$field] = array($ca, array());
 			Session::set('nvc', $nv);
-			$params['nvc'] = $field;
+			$signal['nvc'] = $field;
 
-			return $params;
+			return $signal;
 		}
 	}
 ?>

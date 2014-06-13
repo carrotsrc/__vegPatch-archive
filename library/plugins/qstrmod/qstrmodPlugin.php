@@ -12,14 +12,14 @@
 			$this->instance = $instance;
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
 			if(Session::get('nojs') == null ||
 			   Session::get('nojs') == 0)
-				return $params;
+				return $signal;
 
-			if(!isset($params['qstr']))
-				return $params;
+			if(!isset($signal['qstr']))
+				return $signal;
 		}
 	}
 ?>

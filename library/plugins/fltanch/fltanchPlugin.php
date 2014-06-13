@@ -17,13 +17,13 @@
 			$this->instance = $instance;
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
 			if(Session::get('aid') == null)
-				return $params;
+				return $signal;
 
-			$params['context'] = Session::get('aid');
-			return $params;
+			$signal['context'] = Session::get('aid');
+			return $signal;
 		}
 }
 ?>

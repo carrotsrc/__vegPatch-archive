@@ -39,7 +39,7 @@
 			return $r[0][0];
 		}
 
-		abstract public function process(&$params);
+		abstract public function process(&$signal);
 		abstract public function init($instance);
 
 		public function getConfigList()

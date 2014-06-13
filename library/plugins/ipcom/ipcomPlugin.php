@@ -18,9 +18,9 @@
 			$this->instance = $instance;
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
-			$wireframe = $params['layout'];
+			$wireframe = $signal['layout'];
 		}
 	}
 ?>

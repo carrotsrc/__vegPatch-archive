@@ -23,31 +23,31 @@
 			$this->channelManager = Managers::ChannelManager();
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
-			$wireframe = $params['layout'];
+			$wireframe = $signal['layout'];
 			if($wireframe == null)
-				return $params;
+				return $signal;
 
 			if(get_class($wireframe) != 'Wireframe')
-				return $params;
+				return $signal;
 
-			$assets = $this->setSession($wireframe->getHeader(), $params);
+			$assets = $this->setSession($wireframe->getHeader(), $signal);
 
 			if($assets->getNumAssets() > 0) {
-				if(isset($params['assets']))
-					$params['assets']->addAssetArray($assets->getAssets());
+				if(isset($signal['assets']))
+					$signal['assets']->addAssetArray($assets->getAssets());
 				else
-					$params['assets'] = $assets;
+					$signal['assets'] = $assets;
 			}
 
-			return $params;
+			return $signal;
 		}
 
-		private function setSession($header, &$params)
+		private function setSession($header, &$signal)
 		{
-			$area = $params['area']->getId();
-			$layout = $params['layout']->getId();
+			$area = $signal['area']->getId();
+			$layout = $signal['layout']->getId();
 			$assetHolder = new AssetHolder();
 			$cbuf = array('js' => array(), 'css' => array());
 			$cml = null;
@@ -69,11 +69,11 @@
 				{
 					// Not in session at all
 					$rq = "Channel()<Component('$cid');";
-					if(!$this->runChannel($rq, $panel, $params))
+					if(!$this->runChannel($rq, $panel, $signal))
 						continue;
 
 					$rq = "Channel()<(Instance('$inst')<Component('$cid'));";
-					if(!$this->runChannel($rq, $panel, $params))
+					if(!$this->runChannel($rq, $panel, $signal))
 						continue;
 
 					$this->loadedComponents[$cid][] = $ref;
@@ -82,7 +82,7 @@
 				if(isset($this->loadedComponents[$cid]) && !in_array($ref, $this->loadedComponents[$cid])){
 					// Reference not in session yet
 					$rq = "Channel()<(Instance('$inst')<Component('$cid'));";
-					if(!$this->runChannel($rq, $panel, $params))
+					if(!$this->runChannel($rq, $panel, $signal))
 						continue;
 
 					$this->loadedComponents[$cid][] = $ref;
@@ -108,7 +108,7 @@
 				}
 
 				// init panel here. Any problem?
-				$pObj->initialize($params);
+				$pObj->initialize($signal);
 				// Add panel to the session for getting assets
 				if(!isset($this->loadedComponents[$pId]))
 					$this->loadedComponents[$pId]['_load'] = 1;
@@ -131,23 +131,23 @@
 				if($key == 0 || isset($this->loadedComponents[$key]['_load']))
 					unset($this->loadedComponents[$key]);
 
-			$this->cache($cbuf, $params);
+			$this->cache($cbuf, $signal);
 			Session::set('scmpt', $this->loadedComponents);
 
 			// add the asset links to the params
-			$params['assets'] = array('js'=>array(), 'css'=>array());
-			$params['assets']['js'][] = ALinkGen::generateBatchLinkJS($area, $layout);
-			$params['assets']['css'][] = ALinkGen::generateBatchLinkCSS($area, $layout);
+			$signal['assets'] = array('js'=>array(), 'css'=>array());
+			$signal['assets']['js'][] = ALinkGen::generateBatchLinkJS($area, $layout);
+			$signal['assets']['css'][] = ALinkGen::generateBatchLinkCSS($area, $layout);
 
 			return $assetHolder;
 		}
 
-		private function cache($assets, &$params)
+		private function cache($assets, &$signal)
 		{
-			if(!isset($params['acache']))
-				$params['acache'] = array('js' => array(), 'css' => array());
+			if(!isset($signal['acache']))
+				$signal['acache'] = array('js' => array(), 'css' => array());
 
-			$cache = &$params['acache'];
+			$cache = &$signal['acache'];
 			foreach($assets as $t => $list)
 				foreach($list as $p)
 					$cache[$t][] = array($p[0], $p[1], $p[2], $p[3]['value']);
@@ -171,19 +171,19 @@
 
 		}
 
-		private function runChannel($rql, &$panel, &$params)
+		private function runChannel($rql, &$panel, &$signal)
 		{
 			$chlist = $this->resourceManager->queryAssoc($rql);
 			if(is_array($chlist)) {
 				$cid = $this->resourceManager->getHandlerRef($chlist[0][0]);
 				$channel = $this->channelManager->getChannel($cid);
-				$params['_pnl'] = &$panel;
-				if(!$channel->runSignal($params)) {
-					unset($params['_pnl']);
+				$signal['_pnl'] = &$panel;
+				if(!$channel->runSignal($signal)) {
+					unset($signal['_pnl']);
 					return false;
 				}
 
-				unset($params['_pnl']);
+				unset($signal['_pnl']);
 			}
 
 			return true;

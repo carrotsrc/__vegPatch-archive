@@ -24,7 +24,7 @@
 			$this->resManager = Managers::ResourceManager();
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
 			echo "Loaded nvgraph";
 			$pnode = null;
@@ -34,12 +34,12 @@
 			// this should be added as a global param
 			// on the panel pulled up by NVInterface
 			if(!isset($_GET['nvgrf']))
-				return $params;
+				return $signal;
 
 			$nvref = $_GET['nvgrf'];
 			$nvc = Session::get('nvc');
 			if(!isset($nvc[$nvref]))
-				return $params;
+				return $signal;
 
 			$nvc = $nvc[$nvref];
 			
@@ -47,7 +47,7 @@
 			$pnode = end($nvc[1]);
 
 			echo "pnode";
-			$rid = $params['rid'][1];
+			$rid = $signal['rid'][1];
 			echo "rid";
 			
 			$anchor = $nvc[0]&$mask;
@@ -57,22 +57,22 @@
 			echo "anchor2:";
 
 			if(!($res = $this->resManager->queryAssoc("Graph()<rid($anchor);")))
-				return $params;
+				return $signal;
 
 			$pgraph = $res[0][0];
 			echo "graph";
 
-			if($params['rid'][0] == RIO_INS) { // created a new node
+			if($signal['rid'][0] == RIO_INS) { // created a new node
 				$this->addChildNode($pnode, $rid);
 				$this->addChildNode($pgraph, $rid); // add node as child to anchored graph
 			}
 			else
-			if($params['rid'][0] == RIO_DEL) {
+			if($signal['rid'][0] == RIO_DEL) {
 				$this->removeRelationship($pnode, $rid);
 				$this->removeRelationship($pgraph, $rid);
 			}
 
-			return $params;
+			return $signal;
 		}
 
 		public function addChildNode($parent, $child)

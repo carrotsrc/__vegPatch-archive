@@ -12,15 +12,15 @@
 			$this->setInstance($instance);
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
-			$params['kuid'] = 0;
+			$signal['kuid'] = 0;
 			$uid = Session::get('kuid');
 			// get the user from the session
 			if($uid != null)
-				$params['kuid'] = $uid;
+				$signal['kuid'] = $uid;
 
-			return $params;
+			return $signal;
 		}
 	}
 ?>

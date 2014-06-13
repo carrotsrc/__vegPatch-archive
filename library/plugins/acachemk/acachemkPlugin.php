@@ -12,22 +12,22 @@
 			$this->instance = $instance;
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
 			$buf = null;
 
-			if(isset($params['acache']))
-				$buf = $params['acache'];
+			if(isset($signal['acache']))
+				$buf = $signal['acache'];
 			else
-				return $params;
+				return $signal;
 
 			$cache = Session::get('acache');
 			if($cache == null)
 				$cache = array('js' => array(), 'css' => array());
 			
 
-			if(is_array($params['arc'])) {
-				$this->rootAssets($cache, $params['arc']);
+			if(is_array($signal['arc'])) {
+				$this->rootAssets($cache, $signal['arc']);
 				Session::set('arc', 1);
 			}
 
@@ -61,7 +61,7 @@
 			}
 			Session::set('acache', $cache);
 			$cache = Session::get('acache');
-			return $params;
+			return $signal;
 		}
 
 		private function rootAssets(&$cache, $buf)

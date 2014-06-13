@@ -22,25 +22,25 @@
 			$this->channelManager = Managers::ChannelManager();
 		}
 
-		public function process(&$params)
+		public function process(&$signal)
 		{
-			if(!isset($params['inst']))
+			if(!isset($signal['inst']))
 				return false;
 
-			$instance = $params['inst'];
+			$instance = $signal['inst'];
 
-			if(!isset($params['cmpt']))
+			if(!isset($signal['cmpt']))
 				return false;
 
-			$component = $params['cmpt'];
+			$component = $signal['cmpt'];
 
-			if(!isset($params['jack']))
+			if(!isset($signal['jack']))
 				return false;
 
-			$jack = $params['jack'];
+			$jack = $signal['jack'];
 
 			$ref= $instance<<(PHP_INT_SIZE<<2);
-			$ref ^= $params['area']->getId();
+			$ref ^= $signal['area']->getId();
 
 			$scmpt = Session::get('scmpt');
 			if($scmpt == null) {
@@ -54,33 +54,33 @@
 			}
 
 
-			$params = $this->runInstanceChannel($component, $instance, $params);
-			if(!$params)
+			$signal = $this->runInstanceChannel($component, $instance, $signal);
+			if(!$signal)
 				return false;
 
 			$jint = $this->checkJackInterface($component, $instance, $jack);
 			if($jint != null) {
-				$params = $this->runInterfaceChannel($jint->getId(), $params);
-				if(!$params)
+				$signal = $this->runInterfaceChannel($jint->getId(), $signal);
+				if(!$signal)
 					return false;
 			}
 
-			return $this->runComponentSignal($params);
+			return $this->runComponentSignal($signal);
 		}
 
-		private function runInstanceChannel($cmpt, $cinst, $params)
+		private function runInstanceChannel($cmpt, $cinst, $signal)
 		{
 			$rq = "Channel()<(Instance('$cinst')<Component('$cmpt'));";
 			$res = $this->resourceManager->queryAssoc($rq);
 			if(!$res)
-				return $params;
+				return $signal;
 
 			$cid = $res[0][0];
 			$channel = $this->channelManager->getChannel($cid);
 			if($channel == null)
 				return false;
 
-			return $channel->runSignal($params);
+			return $channel->runSignal($signal);
 		}
 
 		private function checkJackInterface($component, $instance, $jack)
@@ -99,24 +99,24 @@
 			return $jint;
 		}
 
-		private function runInterfaceChannel($interface, $params)
+		private function runInterfaceChannel($interface, $signal)
 		{
 			$rq = "Channel()<Interface('$interface');";
 			$res = $this->resourceManager->queryAssoc($rq);
 			if($res == null)
-				return $params;
+				return $signal;
 
 			$cid = $res[0][0];
 			$channel = $this->channelManager->getChannel($cid);
 			if($channel == null)
 				return false;
 
-			return $channel->runSignal($params);
+			return $channel->runSignal($signal);
 		}
 
-		private function runComponentSignal($params)
+		private function runComponentSignal($signal)
 		{
-			$module = ModMan::getComponent($params['cmpt'], $params['inst'], $this->db);
+			$module = ModMan::getComponent($signal['cmpt'], $signal['inst'], $this->db);
 			if($module == null)
 				return false;
 			$module->initialize();
@@ -125,14 +125,14 @@
 			if(isset($_GET['args']))
 				$args = $_GET['args'];
 			ob_start();
-				$module->run($params['jack'], $args);
+				$module->run($signal['jack'], $args);
 			$result = ob_get_contents();
 			ob_end_clean();
 
-			$params['response'] = $result;
-			$params['rid'] = $module->getRio();
+			$signal['response'] = $result;
+			$signal['rid'] = $module->getRio();
 			
-			return $params;
+			return $signal;
 		}
 	}
 ?>
