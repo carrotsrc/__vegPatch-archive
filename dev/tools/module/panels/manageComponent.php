@@ -34,7 +34,7 @@
 			echo "</div>\n";
 		}
 		else {
-			echo "<div class=\"form-item font-small\">Component( {$res[0][0]} )</div>";
+			echo "<div class=\"form-item font-small\">Component( {$res[0][0]} ) =&gt; {$details[0]}</div>";
 			$rq = "Instance()<Component('{$details[0]}');";
 			$res = $rman->queryAssoc($rq);
 
