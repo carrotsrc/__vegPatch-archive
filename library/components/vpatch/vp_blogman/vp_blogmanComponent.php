@@ -208,7 +208,7 @@
 			$vars = $this->argVar(array(
 						'vpbb' => 'id',
 						), $args);
-			$rids = $this->resManager->queryAssoc("Instance()<Component('vp_blogview')<(Instance('{$this->instanceId}')<Component('vp_blogman'));");
+			$rids = $this->resManager->queryAssoc("(Instance()<Component('vp_blogview'))<(Instance('{$this->instanceId}')<Component('vp_blogman'));");
 			$instances = array();
 			if(!$rids)
 				return $instances;
