@@ -24,9 +24,9 @@ vegPatch Base Environment
 </table>
 
 <table name="attachments_type">
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="name" type="varchar(32)" extra="NOT NULL" />
-	<field name="exp" type="text" extra="NOT NULL" />
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="name" type="varchar(32)" extra="NOT NULL" />
+	<column name="exp" type="text" extra="NOT NULL" />
 	<primary name="id">
 </table>
 
