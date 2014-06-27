@@ -3,7 +3,7 @@ VPatch 0.3e
 Version		0.3e
 Author:		cfg csorg
 Date:		2014/04/11
-Updated:	2014/05/28
+Updated:	2014/06/27
 
 Version Notes
 =============
@@ -28,3 +28,7 @@ Version Notes
 	- Correct table terms
 	- Logging facility for feedback on operations
 	- More error handling
+-[complete] Plugin class aligns with interaction process terminology
+-[complete] Module root tool can now specify instance parameters
+-[complete] Added redirect to vp_logout widget configs
+-[complete] Attachments is now a core feature of vegPatch

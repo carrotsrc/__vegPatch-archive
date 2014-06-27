@@ -1,0 +1,154 @@
+<?php
+/* (C)opyright 2014, Carrotsrc.org
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+	define('ATT_IMG', 1);
+	define('ATT_URL', 2);
+	define('ATT_VIDEO', 2);
+	class attachmentLibrary extends DBAcc
+	{
+		private $exp;
+
+		public function __construct($database)
+		{
+			$this->db = $database;
+			$this->exp = null;
+		}
+
+		public function generateAttachment($url)
+		{
+			if(($ref = $this->checkURL($url)) != null)
+				return $ref;
+
+			$att = array();
+			$att['url'] = $url;
+			$type = $this->getType($url);
+			$att['type'] = intval($type[0]);
+			$att['title'] = "";
+			$att['name'] = $type[2];
+			return $att;
+		}
+
+		public function addAttachment($type, $title, $url)
+		{
+			$title = StrSan::mysqlSanatize($title);
+			if(!$this->arrayInsert('attachments', array( 'title' => $title,
+									'type' => $type,
+									'url' => $url)))
+				return false;
+
+			return $this->db->getLastId();
+		}
+
+		public function getAttachment($id)
+		{
+			return $this->db->sendQuery("SELECT attachments.*, attachments_type.name FROM attachments LEFT OUTER JOIN attachments_type ON attachments_type.id = attachments.type WHERE attachments.id='$id' ", false, false);
+
+		}
+
+		public function getlsAttachment($ids)
+		{
+			$sql = "SELECT attachments.*, attachments_type.name FROM attachments LEFT OUTER JOIN attachments_type ON attachments_type.id = attachments.type WHERE ";
+			$sz = sizeof($ids)-1;
+			foreach($ids as $id) {
+				$sql .= "attachments.id='$id'";
+				if($sz-- > 0)
+					$sql .= " OR ";
+			}
+			$sql .= ";";
+			return $this->db->sendQuery($sql, false, false);
+		}
+
+		public function checkURL($url)
+		{
+			$res = $this->db->sendQuery("SELECT id FROM attachments WHERE url='$url'");
+			if(!$res)
+				return null;
+
+			return $res[0][0];
+		}
+
+		public function getType($url)
+		{
+			$exp = $this->typeExpressions();
+			foreach($exp as $x) {
+				$rx = $this->generateRegEx($x[1]);
+				if(preg_match($rx, $url)) {
+					return $x;
+				}
+			}
+
+			return array(0,null, "External");
+		}
+
+		private function typeExpressions()
+		{
+			if($this->exp != null)
+				return $this->exp;
+
+			$exp = $this->db->sendQuery("SELECT id, exp, name FROM attachments_type;", false, false);
+			if(!$exp)
+				return null;
+
+			return $exp;
+		}
+
+		private function generateRegEx($str)
+		{
+			$atoms = explode(";", $str);
+			$regex = "/";
+			foreach($atoms as $k => $a)
+				if($a == "")
+					unset($atoms[$k]);
+	
+			$sz = sizeof($atoms)-1;
+			foreach($atoms as $k => $a) {
+				$a = str_replace("/", "\\/", $a);
+				$regex .= "($a)";
+				if($sz-- > 0)
+					$regex .= "|";
+			}
+
+			return $regex."/";
+		}
+
+		public function addTypeAttachment($type, $value)
+		{
+
+		}
+
+		public function handleUpload($file)
+		{
+			$ud = SystemConfig::relativeLibPath("/media/attm");
+			$base = basename($file['name']);
+			$base = explode(".", $base);
+			$type = null;
+			if(($i = sizeof($base)) > 1)
+				$type = $base[$i-1];
+
+			$uid = md5(microtime());
+			$uid = substr($uid, 0, 8);
+
+			$fn = $ud."/".$uid;
+			if($type != null)
+				$fn .= ".".$type;
+
+			while(file_exists($fn)) {
+				$uid = md5(microtime());
+				$uid = substr($uid, 0, 8);
+
+				$fn = $ud."/".$uid;
+				if($type != null)
+					$fn .= ".".$type;
+			}
+
+			if(!move_uploaded_file($file['tmp_name'], $fn))
+				return null;
+
+			return $fn;
+		}
+	}
+?>
