@@ -38,7 +38,10 @@
 
 		public function generateSelect($level, $flag)
 		{
-			echo "SELECT `rp_$level`.`id`";
+			echo "SELECT ";
+			if(!$level)
+				echo "DISTINCT ";
+			echo "`rp_$level`.`id`";
 			if($flag & qpo_parent_child) {
 				$this->generateXtra($level, $flag^qpo_parent_child);
 				echo ", `rpck`.`id` ";
