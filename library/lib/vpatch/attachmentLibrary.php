@@ -62,6 +62,31 @@
 			return $this->db->sendQuery($sql, false, false);
 		}
 
+		public function getProperties($id, $property = null)
+		{
+			$sql = "SELECT `name`, `value` FROM `attachment_props` WHERE `aid`='$id'";
+			if($property)
+				$sql .= " AND `name`='$property'";
+
+			$prop = $this->db->sendQuery($sql, false, true);
+			if(!$prop)
+				return false;
+			if($property)
+				return $prop[0]['value'];
+
+			return $prop;
+		}
+
+		public function setProperty($id, $property, $value)
+		{
+			if($this->getProperties($id, $property))
+				$this->arrayUpdate('attachment_props', array('value' => $value), "`aid`='$id' AND `name`='$property'");
+			else
+				$this->arrayInsert('attachment_props', array('value' => $value,
+										'aid'=> $id,
+										'name'=>$property));
+		}
+
 		public function checkURL($url)
 		{
 			$res = $this->db->sendQuery("SELECT id FROM attachments WHERE url='$url'");
@@ -76,7 +101,7 @@
 			$exp = $this->typeExpressions();
 			foreach($exp as $x) {
 				$rx = $this->generateRegEx($x[1]);
-				if(preg_match($rx, $url)) {
+				if(preg_match($rx, strtolower($url))) {
 					return $x;
 				}
 			}
@@ -120,6 +145,16 @@
 
 		}
 
+		public function removeAttachmentWithRef($id)
+		{
+			$this->db->sendQuery("DELETE FROM `attachments` WHERE `id`='$id';");
+		}
+
+		public function removeAttachmentWithUrl($url)
+		{
+			$this->db->sendQuery("DELETE FROM `attachments` WHERE `url`='$url';");
+		}
+
 		public function handleUpload($file)
 		{
 			$ud = SystemConfig::relativeLibPath("/media/attm");
@@ -148,7 +183,38 @@
 			if(!move_uploaded_file($file['tmp_name'], $fn))
 				return null;
 
-			return $fn;
+			return "{$uid}.{$type}";
+		}
+
+		public function handleDownload($url)
+		{
+			$ud = SystemConfig::relativeLibPath("/media/attm");
+			$base = basename($url);
+			$base = explode(".", $base);
+			$type = null;
+			if(($i = sizeof($base)) > 1)
+				$type = $base[$i-1];
+
+			$uid = md5(microtime());
+			$uid = substr($uid, 0, 8);
+
+			$fn = $ud."/".$uid;
+			if($type != null)
+				$fn .= ".".$type;
+
+
+			while(file_exists($fn)) {
+				$uid = md5(microtime());
+				$uid = substr($uid, 0, 8);
+				
+				$fn = $ud."/".$uid;
+				if($type != null)
+					$fn .= ".".$type;
+			}
+			if(!file_put_contents($fn, fopen($url, 'r')))
+				return null;
+
+			return "{$uid}.{$type}";
 		}
 	}
 ?>
