@@ -24,7 +24,7 @@
 		{
 			$msgBox = array();
 			foreach($this->pluginStack as $plugin)
-				if(!($signal = $plugin->process($signal)))
+				if(($signal = $plugin->process($signal)) === false)
 					return false;
 			
 			return $signal;
