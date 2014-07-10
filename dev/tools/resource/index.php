@@ -36,13 +36,13 @@
 ?>
 <div id="kr-layout">
 	<div class="tools">
-		<div class="tool-panel" style="width: 120px">
+		<div class="tool-panel">
 		<b>Resources</b>
 		<form method="post" action="index.php?tool=resource&mode=newres">
 			<input type="submit" value="New Resource" class="form-button"/>
 		</form>
 		</div>
-		<div class="tool-panel" style="width: 120px">
+		<div class="tool-panel">
 		<b>Types</b>
 		<form method="post" action="index.php?tool=resource&mode=newtype">
 			<input type="submit" value="New ResType" class="form-button"/>

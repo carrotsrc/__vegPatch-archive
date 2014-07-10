@@ -66,7 +66,7 @@
 					foreach($areas as $a)
 						echo "<option value=\"{$a[0]}\">{$a[2]}</option>";
 					?>
-				</select><br />
+				</select>
 				<input type="submit" value="Manage Area" class="form-button" />
 			</form>
 			</div>
@@ -82,7 +82,7 @@
 					foreach($surrounds as $s)
 						echo "<option value=\"{$s[0]}\">{$s[1]}</option>";
 					?>
-				</select><br />
+				</select>
 				<input type="submit" value="Manage Surround" class="form-button" />
 			</form>
 			</div>

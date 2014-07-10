@@ -169,7 +169,7 @@
 		<form method="get" action="index.php">
 			<input type="hidden" name="tool" value="module" />
 			<input type="hidden" name="mode" value="cmptreg" />
-			<select class="form-text form-select" style="width: 150px;" name="nspace">
+			<select class="form-text form-select" name="nspace">
 				<?php 
 					foreach($cdir as $c) {
 						if($nspace != null && $nspace == $c)
@@ -178,7 +178,7 @@
 							echo "<option value=\"{$c}\">{$c}</option>";
 					}
 				?>
-			</select><br />
+			</select>
 			<input type="submit" value="Load Space" class="form-button"/>
 		</form>
 		<?php
@@ -187,7 +187,7 @@
 		<form method="post" action="index.php?tool=module&mode=cmptreg&nspace=<?php echo $nspace; ?>">
 			<input type="submit" value="Component Registry" class="form-button"/>
 		</form>
-		<form method="post" action="index.php?tool=module&mode=cmptman&nspace=<?php echo $nspace; ?>" style="margin-top: -5px">
+		<form method="post" action="index.php?tool=module&mode=cmptman&nspace=<?php echo $nspace; ?>">
 			<select class="form-text form-select" name="cid">
 				<?php 
 					foreach($regcmpt as $c) {
@@ -197,7 +197,7 @@
 							echo "<option value=\"{$c[0]}\">{$c[1]}</option>";
 					}
 				?>
-			</select><br />
+			</select>
 			<input type="submit" value="Manage Component" class="form-button"/>
 		</form>
 		<?php
@@ -211,7 +211,7 @@
 		<b>Panels</b>
 		<form method="get" action="index.php">
 			<input type="hidden" name="tool" value="module" />
-			<select class="form-text form-select" style="width: 150px;" name="space">
+			<select class="form-text form-select" name="space">
 				<?php 
 					foreach($pspace as $c) {
 						if($cspace != null && $cspace == $c)
@@ -220,7 +220,7 @@
 							echo "<option value=\"{$c}\">{$c}</option>";
 					}
 				?>
-			</select><br />
+			</select>
 			<?php 
 			echo"<input type=\"hidden\" name=\"mode\" value=\"panelreg\" />";
 			?>
@@ -239,7 +239,7 @@
 			<input type="hidden" name="tool" value="module" />
 			<input type="hidden" name="mode" value="panelman" />
 			<input type="hidden" name="space" value="<?php echo $cspace; ?>" />
-			<select class="form-text form-select" style="width: 150px;" name="pid">
+			<select class="form-text form-select" name="pid">
 				<?php 
 					foreach($regpnl as $c) {
 						if($pid != null && $pid == $c[0])
@@ -248,7 +248,7 @@
 							echo "<option value=\"{$c[0]}\">{$c[1]}</option>";
 					}
 				?>
-			</select><br />
+			</select>
 			<input type="submit" value="Manage Panel" class="form-button" />
 		</form>
 		<?php } ?>

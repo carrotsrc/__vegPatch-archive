@@ -58,10 +58,10 @@
 		<div class="tool-panel">
 		<b>Straps</b>
 		<form method="post" action="index.php?tool=strap&mode=root">
-			<input type="submit" value="Root System" class="form-button" style="width: 120px;" />
+			<input type="submit" value="Root System" class="form-button" />
 		</form>
 		<form method="post" action="index.php?tool=strap&mode=system">
-			<input type="submit" value="Other Systems" class="form-button" style="width: 120px; margin-top: -20px;" />
+			<input type="submit" value="Other Systems" class="form-button" />
 		</form>
 		</div>
 	</div>

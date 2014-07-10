@@ -87,7 +87,8 @@ textarea {
 }
 .tool-panel {
 	color: #659A00;
-	float: left;
+	/*float: left;*/
+	display: block;
 	clear:left;
 	margin-bottom: 15px;
 
@@ -103,6 +104,7 @@ textarea {
 	background-image: url('dl-grey.png');
 	background-repeat: repeat-x;
 	margin-top: 15px;
+	overflow-x: auto;
 }
 
 .panel-box {
@@ -137,6 +139,16 @@ textarea {
 	padding-left: 3px;
 }
 
+.tools .form-select {
+	display: block;
+	width: 100%;
+	margin-bottom: 5px;
+}
+.tools b {
+	margin-bottom: 5px;
+	display: inline-block;
+}
+
 .form-button {
 	color: grey;
 	border-bottom: 0px solid #808080;
@@ -144,6 +156,12 @@ textarea {
 	background-color: #FDF8F8;
 	border: 1px solid #D8D8D8;
 	border-radius: 3px;
+}
+
+.tools .form-button {
+	display: block;
+	width: 100%;
+	margin: 0px;
 }
 
 .switch-a {

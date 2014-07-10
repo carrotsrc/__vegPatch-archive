@@ -76,7 +76,7 @@
 		<?php
 			echo "<input type=\"hidden\" name=\"tool\" value=\"layout\" />";
 		?>
-		<select name="lid" style="width: 150px" class="form-text form-select">
+		<select name="lid" class="form-text form-select">
 		<?php
 			foreach($list as $ls) {
 				if($edit == null || $edit[0] != $ls[0])
@@ -86,7 +86,7 @@
 					echo "\t<option value=\"{$ls[0]}\" selected> {$ls[1]}</option>\n";
 			}
 		?>
-		</select><br />
+		</select>
 		<input type="submit" value="Edit" class="float-r form-button"/>
 	</form>
 	</div>

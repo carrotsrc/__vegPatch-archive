@@ -38,10 +38,10 @@
 		<div class="tool-panel">
 		<b>Toolkit</b>
 		<form method="post" action="index.php?tool=root&mode=config">
-			<input type="submit" value="Root Config" class="form-button" style="width: 100px;" />
+			<input type="submit" value="Root Config" class="form-button" />
 		</form>
-		<form method="post" action="index.php?tool=root&mode=asset" style="margin-top: -20px;">
-			<input type="submit" value="Root Assets" class="form-button" style="width: 100px;" />
+		<form method="post" action="index.php?tool=root&mode=asset">
+			<input type="submit" value="Root Assets" class="form-button" />
 		</form>
 		</div>
 	</div>

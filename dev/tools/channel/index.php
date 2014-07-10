@@ -105,10 +105,10 @@
 	<div class="tools">
 		<div class="tool-panel">
 		<b>Plugins</b>
-		<form method="get" action="index.php" style="margin-top: -5px">
+		<form method="get" action="index.php" style="">
 			<input type="hidden" name="tool" value="channel"/>
 			<input type="hidden" name="mode" value="plugin"/>
-			<select class="form-text form-select" name="cplugin" style="width: 150px;">
+			<select class="form-text form-select" name="cplugin">
 				<?php 
 					foreach($plugins as $p) {
 						if($cplugin != null && $cplugin == $p)
@@ -117,20 +117,20 @@
 							echo "<option value=\"{$p}\">{$p}</option>";
 					}
 				?>
-			</select><br />
+			</select>
 			<input type="submit" value="Manage Plugin" class="form-button"/>
 		</form>
 		</div>
 
 		<div class="tool-panel">
 		<b>Channels</b>
-		<form method="post" action="index.php?tool=channel&mode=nchan" style="margin-top: -5px">
+		<form method="post" action="index.php?tool=channel&mode=nchan">
 			<input type="submit" value="New Channel" class="form-button"/>
 		</form>
-		<form method="get" action="index.php" style="margin-top: -5px">
+		<form method="get" action="index.php">
 			<input type="hidden" name="tool" value="channel"/>
 			<input type="hidden" name="mode" value="channel"/>
-			<select class="form-text form-select" name="cchan" style="width: 150px;">
+			<select class="form-text form-select" name="cchan">
 				<?php 
 					foreach($channels as $c) {
 						if($cchan != null && $cchan == $c[0])
@@ -139,7 +139,7 @@
 							echo "<option value=\"{$c[0]}\">{$c[2]}</option>";
 					}
 				?>
-			</select><br />
+			</select>
 			<input type="submit" value="Manage Channel" class="form-button"/>
 		</form>
 		</div>

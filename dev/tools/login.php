@@ -31,7 +31,7 @@
 ?>
 <html>
 	<head>
-		<title>VegPatch Root Tools</title>
+		<title>vegPatch Root Tools</title>
 		<link type="text/css" rel="stylesheet" href="template.css" />
 	</head>
 

@@ -68,10 +68,10 @@
 				<input type="submit" class="form-button" value="Create Assoc" />
 			</form>
 			<form method="post" action="index.php?tool=assoc&mode=manrel">
-				<input type="submit" style="margin-top: -20px;" class="form-button" value="Manage Assoc" />
+				<input type="submit" class="form-button" value="Manage Assoc" />
 			</form>
 			<form method="post" action="index.php?tool=assoc&mode=edge">
-				<input type="submit" style="margin-top: -8px;" class="form-button" value="Manage Edges" />
+				<input type="submit" class="form-button" value="Manage Edges" />
 			</form>
 			</div>
 		</div>
