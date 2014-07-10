@@ -49,6 +49,11 @@
 
 		}
 
+		public function getAttachmentWithUrl($url)
+		{
+			return $this->db->sendQuery("SELECT attachments.*, attachments_type.name FROM attachments LEFT OUTER JOIN attachments_type ON attachments_type.id = attachments.type WHERE attachments.url='$url' ", false, false);
+		}
+
 		public function getlsAttachment($ids)
 		{
 			$sql = "SELECT attachments.*, attachments_type.name FROM attachments LEFT OUTER JOIN attachments_type ON attachments_type.id = attachments.type WHERE ";
@@ -147,11 +152,20 @@
 
 		public function removeAttachmentWithRef($id)
 		{
+			$att = $this->getAttachment($id);
+			if(!strpos($att[0][3],"://")) {
+				$path = SystemConfig::relativeAppPath($att[0][3]);
+				unlink($path);
+			}
 			$this->db->sendQuery("DELETE FROM `attachments` WHERE `id`='$id';");
 		}
 
 		public function removeAttachmentWithUrl($url)
 		{
+			if(!strpos($url,"://")) {
+				$path = SystemConfig::relativeAppPath($url);
+				unlink($path);
+			}
 			$this->db->sendQuery("DELETE FROM `attachments` WHERE `url`='$url';");
 		}
 
