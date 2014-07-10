@@ -37,13 +37,15 @@
 
 <body>
 <div id="header">
-	<span class="ok-text-grey tx-xlarge">v<span class="ok-text-green">Patch</span></span>
+	<span class="ok-text-grey tx-xlarge">veg<span class="ok-text-green">Patch</span></span>
 
 <div id="vp-version">
 	VPatch 0.2.1
 </div>
 </div>
-
+<div class="info-tool">
+	<strong>Server:</strong> <?php echo $_SERVER['SERVER_NAME'] . " / " . $_SERVER['SERVER_ADDR']; ?> 
+</div>
 <div id="kr-layout-column">
 	<div id="kr-layout" style="margin: 15px;">
 	<form action="?action=login" method="post">

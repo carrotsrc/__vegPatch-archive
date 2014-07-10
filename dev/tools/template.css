@@ -9,7 +9,7 @@ body {
 	border-bottom: 2px solid #ADBF6B;
 	background-image: url('small_green_grad.png');
 	width: 100%;
-	margin-bottom: 50px;
+	margin-bottom: 25px;
 	height: 50px;
 	padding-top: 5px;
 	padding-left: 15px;
@@ -52,7 +52,6 @@ a {
 	min-height: 500px;
 	border-top: 1px solid #ADBF6B;
 	border-bottom: 1px solid #ADBF6B;
-
 }
 
 #kr-layout {
@@ -232,3 +231,14 @@ textarea {
 	margin-bottom: 5px;
 }
 
+.info-tool {
+	margin-left: 10px;
+	display: inline-block;
+	padding-left: 20px;
+	margin-bottom: 10px;
+	color: #808080;
+	background-color: white;
+	border: 1px solid #ADBF6B;
+	padding: 3px;
+
+}

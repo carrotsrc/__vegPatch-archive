@@ -37,27 +37,28 @@
 ?>
 <html>
 	<head>
-		<title>VegPatch Root Tools</title>
+		<title>vegPatch Root Tools</title>
 		<link type="text/css" rel="stylesheet" href="template.css" />
 	</head>
 
 <body>
 <div id="header">
 <!-- <div id="vp-title"> -->
-	<a href="index.php"><span class="ok-text-grey tx-xlarge">v<span class="ok-text-green">Patch</span></span></a>
+	<a href="index.php"><span class="ok-text-grey tx-xlarge">veg<span class="ok-text-green">Patch</span></span></a>
 <!-- </div> -->
 
 <div id="vp-version" style="margin-right: 10px;">
 	<a href="?taction=logout"><span class="ok-text-grey">Logout</span></a> 
 </div>
 </div>
-
+<div class="info-tool">
+	<strong>Server:</strong> <?php echo $_SERVER['SERVER_NAME'] . " / " . $_SERVER['SERVER_ADDR']; ?> 
+</div>
 <div id="kr-layout-column">
 			<?php 
 				define('_ROOT_TOOL', 0xff);
 				include("$rtool/index.php");
 			?>
 </div>
-
 </body>
 </html>
