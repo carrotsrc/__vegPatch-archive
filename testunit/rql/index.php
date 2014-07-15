@@ -41,6 +41,13 @@
 	parse("(User(){l}<Group('G1'):leader)<(Area()<Area('AP')):admin;");
 	echo "<hr style=\"margin-bottom: 30px; border-color: #d8d8d8;\" />";
 	parse("(%User(){l}<Group('G1'))<(Area()<Area('AP'));");
+
+	echo "<hr style=\"margin-bottom: 30px; border-color: #d8d8d8;\" />";
+
+	parse("*()<Component();");
+	parse("*(){r,l}<Component();");
+	parse("*(){r,l,t}<Graph();");
+
 	$pmua = $pmu = memory_get_peak_usage();
 
 	if($pmu > 1*pow(10,6))
