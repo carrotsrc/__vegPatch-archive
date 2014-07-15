@@ -18,11 +18,18 @@
 
 		}
 
-		static public function trial($space, $lib)
+		static public function obj($space, $lib, $param = null)
 		{
-			if(include(SystemConfig::libraryPath("lib/$space/{$lib}Library.php"))) {
-				$this->list[] = array($space, $lib);
+			if(!isset(self::$list[$space]) || !in_array($lib, self::$list[$space])){
+				if(include(SystemConfig::libraryPath("lib/$space/{$lib}Library.php"))) 
+					self::$list[$space][] = $lib;
+				else
+					return null;
 			}
+
+			$class = "{$lib}Library";
+			return new $class($param);
+
 		}
 	}
 ?>
