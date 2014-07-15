@@ -101,8 +101,11 @@
 				echo "`rb_$alias`.`label`='{$this->base}' ";
 				return;
 			}
+			if($this->type != "*")
+				echo "`rc_$alias`.`type`='{$this->type}' ";
+			else
+				echo "`rc_$alias`.`type` != 'NULL'";
 
-			echo "`rc_$alias`.`type`='{$this->type}' ";
 			if($sz == 0)
 				return;
 
@@ -145,6 +148,15 @@
 				case 'r':
 				case 'ref':
 					echo ", `$alias`.`handler_ref`";
+				break;
+
+				case 't':
+				case 'type':
+					if($flag&qpo_child)
+						echo ", `rc_p$level`.`type`";
+					else
+					if($flag&qpo_parent)
+						echo ", `rc_c$level`.`type`";
 				break;
 				}
 			}
