@@ -41,6 +41,17 @@
 	parse("(User(){l}<Group('G1'):leader)<(Area()<Area('AP')):admin;");
 	echo "<hr style=\"margin-bottom: 30px; border-color: #d8d8d8;\" />";
 	parse("(%User(){l}<Group('G1'))<(Area()<Area('AP'));");
+	$pmua = $pmu = memory_get_peak_usage();
+
+	if($pmu > 1*pow(10,6))
+		$pmu = $pmu/pow(10,6) . " MB";
+	else
+	if($pmu > 1000)
+		$pmu = $pmu/1000 . " KB";
+	else
+		$pmu .= " B";
+
+	echo "<b style=\"font-size: small;\">PMU:</b><br />$pmu<br />$pmua bytes";
 ?>
 </body>
 </html>
