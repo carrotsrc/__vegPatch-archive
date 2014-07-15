@@ -32,3 +32,5 @@ Version Notes
 -[complete] Module root tool can now specify instance parameters
 -[complete] Added redirect to vp_logout widget configs
 -[complete] Attachments is now a core feature of vegPatch
+-Implemented * wildcard in RQL again. Can now search for any type of resource
+-Implemented a 'type' extra in an RQL statement - this will recall the type of resource for when the wild card is used
