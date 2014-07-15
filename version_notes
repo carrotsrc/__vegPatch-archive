@@ -34,3 +34,4 @@ Version Notes
 -[complete] Attachments is now a core feature of vegPatch
 -Implemented * wildcard in RQL again. Can now search for any type of resource
 -Implemented a 'type' extra in an RQL statement - this will recall the type of resource for when the wild card is used
+-Implemented a LibLoad function that tracks loaded libraries and automatically generates the object for the calling object
