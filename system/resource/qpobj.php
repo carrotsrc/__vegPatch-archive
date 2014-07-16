@@ -18,6 +18,8 @@
 
 	define("qpo_parent_child", 16);
 
+	define("qpo_type", 32);
+
 	/*
 	* these two classes map out the behaviour for
 	* two different kinds of objects in a resource query:
@@ -51,6 +53,9 @@
 				$this->generateXtra($level, $flag);
 
 			echo " FROM `respool` AS `rp_$level` ";
+
+			if(!$level && ($flag&qpo_type)) 
+				echo "JOIN `rescast` AS `rc` ON `rp_$level`.`type_id` = `rc`.`id` ";
 		}
 
 		public function generateJoin($level, $flag, $ltable)
@@ -74,6 +79,7 @@
 					echo "`child_id` ";
 
 				echo "=`rp_$alias`.`id` ";
+
 			}
 
 			echo "JOIN `rescast` AS `rc_$alias` ON `rp_$alias`.`type_id`=`rc_$alias`.`id` ";
@@ -129,7 +135,7 @@
 			echo ") ";
 		}
 
-		private function generateXtra($level, $flag)
+		private function generateXtra($level, &$flag)
 		{
 			if(!isset($this->xtra[0]))
 				return;
@@ -153,10 +159,12 @@
 				case 't':
 				case 'type':
 					if($flag&qpo_child)
-						echo ", `rc_p$level`.`type`";
+						echo ", `rc`.`type`";
 					else
 					if($flag&qpo_parent)
-						echo ", `rc_c$level`.`type`";
+						echo ", `rc`.`type`";
+
+					$flag ^= qpo_type;
 				break;
 				}
 			}
