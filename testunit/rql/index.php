@@ -26,7 +26,7 @@
 
 		echo "</div>";
 	}
-
+/*
 	parse("Area();");
 	parse("Area(23);");
 	parse("Area('2');");
@@ -44,10 +44,10 @@
 
 	echo "<hr style=\"margin-bottom: 30px; border-color: #d8d8d8;\" />";
 
-	parse("*()<Component();");
+	parse("*()<Component();");*/
 	parse("*(){r,l}<Component();");
-	parse("*(){r,l,t}<Graph();");
-
+	parse("*(){r,l,t}<Component();");
+	//parse("(*(){r,l,t}<Graph('1'))<User('charlie')");
 	$pmua = $pmu = memory_get_peak_usage();
 
 	if($pmu > 1*pow(10,6))
