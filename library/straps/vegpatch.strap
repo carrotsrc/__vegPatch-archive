@@ -30,6 +30,14 @@ vegPatch Base Environment
 	<primary name="id">
 </table>
 
+<table name="attachment_props">
+	<column name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
+	<column name="aid" type="int(11)" extra="NOT NULL" />
+	<column name="name" type="varchar(16)" extra="NOT NULL" />
+	<column name="value" type="varchar(48)" extra="NOT NULL" />
+	<primary name="id">
+</table>
+
 <rbase name="attachment" />
 
 <obj name="modreg" space="vpatch">
