@@ -1,6 +1,7 @@
 <?php
 	function render_collection_list($xml)
 	{
+		echo "<h2 style=\"margin-top:0px;\">Collections</h2>";
 		$parser = new VPXML();
 		$parser->init($xml);
 		$record = "";
@@ -71,12 +72,34 @@
 				if($state == 2)
 					$j++;
 				break;
+			case 'error':
+				if($state != 1)
+					break;
+				$tag = $parser->getNextTag();
+				if($tag->name != '_text_')
+					break;
+				echo $tag->attributes['content'];
+				return;
+				
 			}
 		}
-		
+		echo "<h2 style=\"margin-top:0px;\">{$_GET['collection']}</h2>";
+		echo "<a href=\"?tool=repo\">Back</a>";
+		echo "<table>";
 		foreach($package as $p) {
-			echo "{$p['name']}<br />";
+			echo "<tr>";
+			echo "<td>";
+				echo "<a href=\"?tool=repo&collection={$_GET['collection']}&package={$p['name']}\">{$p['name']}</a><br />";
+			echo "</td>";
+			echo "<td>";
+				echo "{$p['desc']}<br />";
+			echo "</td>";
+			echo "<td>";
+				echo "{$p['updated']}<br />";
+			echo "</td>";
+			echo "</tr>";
 		}
+		echo "</table>";
 	}
 
 	function browse_collection($collection, $package, $url)
