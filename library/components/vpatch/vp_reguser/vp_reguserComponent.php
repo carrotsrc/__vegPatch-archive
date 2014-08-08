@@ -90,7 +90,7 @@
 			if(!$this->maintainReady())
 				return null;
 
-			return array("wcaa", "wcab");
+			return array("lockdom");
 		}
 
 	}
