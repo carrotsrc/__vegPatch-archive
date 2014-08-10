@@ -10,7 +10,7 @@
 	$url = "$repo/repo/$collection/$package/$archive";
 	$fn = SystemConfig::relativeAppPath("system/tmp/$archive");
 	if(file_put_contents($fn, fopen($url, 'r')) === false) {
-		header("refresh:2;url=$url");
+		header("refresh:3;url=$redir");
 		echo "Failed to pull archive from repository. Going back to repo browser";
 		exit;
 	}
@@ -21,12 +21,17 @@
 	echo "<h2>Pulling $package archive</h2>";
 	$arc = new PharData($fn);
 	echo "Extracting archive...";
-	if($arc->extractTo(SystemConfig::relativeAppPath("library"), null, true) === false) {
-		echo "Failed";
-		echo "<p><a href=\"$redir\">Go back</a>";
+	try {
+		if($arc->extractTo(SystemConfig::relativeAppPath("library"), null, true) === false) {
+			echo "Failed";
+			echo "<p><a href=\"$redir\">Go back</a>";
+		}
+	} catch(Exception $e) {
+		echo $e;
 	}
 
 	echo "OK"
 ?>
 </div>
 </div>
+
