@@ -1,3 +1,4 @@
 .vlog/*
+system/tmp/*
 .directory
 ksysconfig.php
