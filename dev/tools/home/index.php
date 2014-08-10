@@ -42,6 +42,9 @@
 			<a href="?tool=resource"><img src="resource/icon.png" /><br />Resources</a>
 			</div>
 			<div class="tool-icon">
+			<a href="?tool=repo"><img src="repo/icon.png" /><br />Repository</a>
+			</div>
+			<div class="tool-icon">
 			<a href="?tool=root"><img src="root/icon.png" /><br />Root Config</a>
 			</div>
 			<div class="tool-icon">
