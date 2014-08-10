@@ -231,7 +231,7 @@
 			echo "</td>";
 			echo "<td>";
 				if(isset($v['archive']))
-					echo "<a href=\"?tool=unpack&repo={$GLOBALS['repo']}&collection={$_GET['collection']}&package={$_GET['package']}&archive={$v['archive']}\">{$v['archive']}</a>";
+					echo "<a href=\"?tool=unpack&repo={$GLOBALS['repo']}&collection={$_GET['collection']}&package={$_GET['package']}&archive={$v['archive']}\">Install</a>";
 				else
 					echo "&nbsp;";
 
