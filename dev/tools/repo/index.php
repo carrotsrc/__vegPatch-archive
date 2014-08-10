@@ -21,6 +21,48 @@
 	$panel = ob_get_contents();
 	ob_end_clean();
 ?>
+<style>
+	a {
+		color: #7D9E05;
+	}
+
+	a:hover {
+		color: #9DBF23;
+	}
+
+	.package-versions {
+		border-width: 0px;
+		border-spacing: 0px;
+	}
+
+	.package-versions td {
+		padding: 5px;
+		color: #808080;
+	}
+
+	.package-versions .top {
+		background-color: #DFFFCF;
+	}
+
+	.package-desc {
+		font-size: 18px;
+	}
+
+	.collection-list {
+		font-size: 18px;
+	}
+
+	.package-list {
+		font-size: 18px;
+	}
+
+	.package-list td {
+		font-size: 18px;
+		color: #808080;
+		padding: 5px;
+	}
+
+</style>
 <div id="kr-layout">
 	<div class="tools">
 		<div class="tool-panel">
