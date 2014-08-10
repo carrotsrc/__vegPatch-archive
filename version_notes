@@ -3,13 +3,12 @@ VPatch 0.3e
 Version		0.3e
 Author:		cfg csorg
 Date:		2014/04/11
-Updated:	2014/06/27
+Updated:	2014/08/10
 
 Version Notes
 =============
 
 -Custom session handler. Record data as bin blobs behind db authentication instead of in the dodge /tmp files
--online merging of modules held on separate server into running platform via strap files
 -start dynamic UILib based off KTSet
 -User input on strap files... not sure how this might work but worth a go
 
@@ -35,3 +34,5 @@ Version Notes
 -Implemented * wildcard in RQL again. Can now search for any type of resource
 -Implemented a 'type' extra in an RQL statement - this will recall the type of resource for when the wild card is used
 -Implemented a LibLoad function that tracks loaded libraries and automatically generates the object for the calling object
+-[complete] online merging of modules held on separate server into running platform
+-Implemented a Xebec Repository browser
