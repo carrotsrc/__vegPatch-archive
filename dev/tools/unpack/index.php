@@ -21,7 +21,12 @@
 	echo "<h2>Pulling $package archive</h2>";
 	$arc = new PharData($fn);
 	echo "Extracting archive...";
-	$arc->extractTo(SystemConfig->relativeAppPath("library/");
+	if($arc->extractTo(SystemConfig::relativeAppPath("library"), null, true) === false) {
+		echo "Failed";
+		echo "<p><a href=\"$redir\">Go back</a>";
+	}
+
+	echo "OK"
 ?>
 </div>
 </div>
