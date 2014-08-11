@@ -7,8 +7,9 @@
  */
 
 	include_once("imodarg.php");
-	include_once("panel/panel.php");
-	include_once("component/component.php");
+	include_once("panel.php");
+	include_once("component.php");
+	include_once("plugin.php");
 	/*
 	*	ModMan
 	*
@@ -19,7 +20,7 @@
 	class ModMan
 	{
 		private static $id = 0;
-		
+
 		static function getPanel($panel, $db = null)
 		{
 			$cid = null;
@@ -132,6 +133,26 @@
 			$obj->setDatabase($db);
 			self::$id++;
 			return $obj;
+		}
+
+		static function getPlugin($plugin, $instance, $db = null)
+		{
+			$label = null;
+			
+			$sql = "SELECT `modreg`.`module_name` FROM `modreg` WHERE `modreg`.`id`='$id';";
+			$result = $this->db->sendQuery($sql);
+			if(!$result)
+				return false;
+			$label = $result[0]['module_name'];
+
+			$plPath = SystemConfig::appRootPath("library/plugins/".$label."/".$label."Plugin.php");
+			include_once($plPath);
+
+			$plClass = $label."Plugin";
+			$plugin = new $plClass($db, $id);
+			
+			$plugin->init($instance);
+			return $plugin;
 		}
 
 		static function getInterface($id, $jack = null, $db = null)

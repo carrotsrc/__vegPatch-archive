@@ -7,45 +7,31 @@
  */
 	require_once("channel.php");
 
-
-	class ChanMan
+	function core_get_channel($id, $db)
 	{
-		private $db = null;
-		
-		public function __construct($db)
-		{
-			$this->db = $db;
-		}
+		if($db == null)
+			return false;
 
-		public function getChannel($cID)
-		{
-			$lDb = $this->db;
-			
-			if($lDb == null)
-				return false;
+		$sql = "SELECT `channelnodes`.`pid`, `channelnodes`.`inst` FROM `channelnodes` ";
+		$sql .= "LEFT JOIN `channelpool` on `channelnodes`.`channel` = `channelpool`.`id` ";
+		$sql .= "WHERE `channelpool`.`id`='$cID' ";
+		$sql .= "ORDER BY `channelnodes`.`seq`;";
+		$result = $db->sendQuery($sql);
+		if(!$result)
+			return null;
 
-			$sql = "SELECT `channelnodes`.`pid`, `channelnodes`.`inst` FROM `channelnodes` ";
-			$sql .= "LEFT JOIN `channelpool` on `channelnodes`.`channel` = `channelpool`.`id` ";
-			$sql .= "WHERE `channelpool`.`id`='$cID' ";
-			$sql .= "ORDER BY `channelnodes`.`seq`;";
-			$result = $this->db->sendQuery($sql, false, true);
-			if(!$result)
+		$channel = new Channel();
+		$size = sizeof($result);
+		foreach($result as $pldata)
+		{
+
+			$plugin = ModMangetPlugin($pldata['pid'], $pldata['inst']);
+			if(!$plugin)
 				return null;
 
-			$channel = new Channel();
-			$size = sizeof($result);
-			foreach($result as $pldata)
-			{
-
-				$plugin = Managers::PluginManager()->getPlugin($pldata['pid'], $pldata['inst']);
-				if(!$plugin)
-					return null;
-
-				$channel->addPlugin($plugin);
-			}
-
-			return $channel;
+			$channel->addPlugin($plugin);
 		}
 
+		return $channel;
 	}
 ?>
