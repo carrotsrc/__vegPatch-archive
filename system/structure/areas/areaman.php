@@ -5,7 +5,53 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-	include_once("area.php");
+
+	class Area
+	{
+		private $aId;
+		private $aHolder;
+		private $surroundId;
+		private $templateId;
+		private $areaName;
+		
+		public function __construct($id, $name, $surround, $template)
+		{
+			$this->aId = intval($id);
+			$this->areaName = $name;
+			$this->surroundId = $surround;
+			$this->templateId = $template;
+		}
+		
+		public function getSurround()
+		{
+			return $this->surroundId;
+		}
+		
+		public function getName()
+		{
+			return $this->areaName;
+		}
+		
+		public function getTemplate()
+		{
+			return $this->templateId;
+		}
+		
+		public function setAssetHolder($holder)
+		{
+			$this->aHolder = $holder;
+		}
+		
+		public function getAssetHolder()
+		{
+			return $this->aHolder;
+		}
+
+		public function getId()
+		{
+			return $this->aId;
+		}
+	}
 
 	function core_get_area($area, $db)
 	{
@@ -19,10 +65,7 @@
 			$result = $db->sendQuery($query);
 			if(!$result)
 				return null;
-				
-			if(mysql_num_rows($result) == 0)
-				return null;
-				
+			$result = $result[0];
 			return new Area($result['id'], $result['name'], $result['s_id'], $result['st_id']);
 	}
 ?>
