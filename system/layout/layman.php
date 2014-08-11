@@ -18,17 +18,17 @@
 			if($this->db == null)
 				return null;
 
-			$sql = "SELECT name, cml FROM layoutpool WHERE id = '$id';";
-			$result = $this->db->sendQuery($sql, false, false);
+			$sql = "SELECT `name`, `cml` FROM `layoutpool` WHERE `id`='$id';";
+			$result = $this->db->sendQuery($sql);
 
 			if(!$result)
 				return null;
 
-			if(!isset($result[0][1]))
+			if(!isset($result[0]['name']))
 				return null;
 
 			$wgen = new WireframeGenerator();
-			$wireframe = $wgen->processCML($result[0][1]);
+			$wireframe = $wgen->processCML($result[0]['cml']);
 			return $wireframe;
 		}
 	}

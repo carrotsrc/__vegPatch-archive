@@ -17,7 +17,6 @@
 
 			$this->setInstance($instance);
 			$this->resourceManager = Managers::ResourceManager();
-			$this->channelManager = Managers::ChannelManager();
 		}
 
 		public function process(&$signal)
@@ -48,7 +47,7 @@
 					if(!($signal = $this->runChannel($area, $signal)))
 						return false;
 
-					$areaObj = Managers::AreaManager()->getArea($area);
+					$areaObj = core_get_area($area, $this->db);
 					if($areaObj == null)
 						return false;
 
@@ -92,7 +91,7 @@
 			if(!($res = $this->resourceManager->queryAssoc($rq)))
 				return null;
 
-			$rid = $res[0][0];
+			$rid = $res[0]['id'];
 
 			return $rid; 
 		}

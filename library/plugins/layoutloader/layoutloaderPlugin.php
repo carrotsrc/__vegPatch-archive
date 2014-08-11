@@ -36,7 +36,7 @@
 
 				}
 				else
-					$signal['layout'] = $id[0][1];
+					$signal['layout'] = $id[0]['ref'];
 			}
 
 			$wireframe = Managers::LayoutManager()->loadLayout($signal['layout']);
@@ -69,7 +69,7 @@
 			if(!$layout)
 				return false;
 
-			$signal['layout'] = $layout[0][1]; // just temporarily attach the error layout to the area
+			$signal['layout'] = $layout[0]['ref']; // just temporarily attach the error layout to the area
 			return $signal;
 		}
 	}
