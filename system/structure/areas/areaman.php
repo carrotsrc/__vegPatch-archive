@@ -6,38 +6,23 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 	include_once("area.php");
-	
-	class AreaMan
+
+	function core_get_area($area, $db)
 	{
-		private $db = null;
-
-		public function __construct($dbconnection)
-		{
-			$this->db = $dbconnection;
-		}
-
-		public function getArea($area)
-		{
 			$query = null;
 
 			if(is_numeric($area))
-				$query = "SELECT * FROM areapool WHERE id='$area';";
+				$query = "SELECT * FROM `areapool` WHERE id='$area';";
 			else
-				$query = "SELECT * FROM areapool WHERE name='$area';";
+				$query = "SELECT * FROM `areapool` WHERE name='$area';";
 
-			$result = $this->db->sendQuery($query);
+			$result = $db->sendQuery($query);
 			if(!$result)
 				return null;
 				
 			if(mysql_num_rows($result) == 0)
 				return null;
 				
-			return $this->generateArea(mysql_fetch_assoc($result));
-		}
-
-		private function generateArea($assoc)
-		{
-			return new Area($assoc['id'], $assoc['name'], $assoc['s_id'], $assoc['st_id']);
-		}
+			return new Area($result['id'], $result['name'], $result['s_id'], $result['st_id']);
 	}
 ?>

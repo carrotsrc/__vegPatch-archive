@@ -21,22 +21,6 @@
 			$this->db = null;
 		}
 
-
-		protected function arrayToString($a)
-		{
-			$str = "";
-			// get ref cols
-			foreach($a as $row) {
-				if(is_array($row))
-					foreach($row as $col)
-						$str .= $col.",";
-				else
-					$str .= $row;
-				$str .= "\n";
-			}
-			return $str;
-		}
-
 		protected function arrayInsert($table, $vals)
 		{
 			$sz = sizeof($vals);
@@ -44,7 +28,7 @@
 			$sv = " VALUES (";
 			foreach($vals as $k => $v) {
 				$sql .="`$k`";
-				$v =  mysql_real_escape_string($v);
+				$v =  string_prepare_mysql($v);
 				$sv .= "'$v'";
 				if($sz-- == 1)
 					continue;
@@ -69,6 +53,8 @@
 					$sz--;
 					continue;
 				}
+
+				$v = string_prepare_mysql($v);
 
 				$sql .="`$k`='$v'";
 				if($sz-- == 1)
