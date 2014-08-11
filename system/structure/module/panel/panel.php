@@ -331,11 +331,6 @@
 			return $str;
 		}
 
-		public function previewTemplate()
-		{
-			return $this->moduleName;
-		}
-
 		public function setLoadVars($vars)
 		{
 			$split = explode(";", $vars);
@@ -345,11 +340,6 @@
 				$pair = explode(":", $p);
 				$this->ploadVars[$pair[0]] = trim($pair[1]);
 			}
-		}
-
-		public function lockContent($flag)
-		{
-
 		}
 	}
 ?>
