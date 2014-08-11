@@ -141,7 +141,7 @@
 				$id = $this->id;
 				$cmpt = $this->componentId;
 				$inst = $this->instanceId;
-				$onload .= "KitJS.CommonInterface.register($id, $cmpt, $inst, {$this->commonGroup}, '{$this->jsCommon}');\n";
+				$onload .= "VPLib.CommonInterface.register({$this->id}, {$this->componentId}, {$this->instanceId}, {$this->commonGroup}, '{$this->jsCommon}');\n";
 			}
 			
 			if(sizeof($this->onloadScripts) > 0)
