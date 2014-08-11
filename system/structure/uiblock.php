@@ -8,7 +8,7 @@
 	require("assetholder.php");
 	require("templateholder.php");
 	
-	abstract class SchemaBlock implements IAsset, ITemplate
+	abstract class UIBlock implements IAsset, ITemplate
 	{
 		protected $aHolder;
 		protected $tHolder;

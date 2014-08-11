@@ -33,7 +33,7 @@
 	require($appRootPath."system/log.php");
 	require($appRootPath."system/managers.php");
 	require($appRootPath."system/appconfig.php");
-	require($appRootPath."system/plugin/chanman.php");
+	require($appRootPath."system/channel/chanman.php");
 	require($appRootPath."system/resource/resman.php");
 
 	// global helpers
@@ -78,8 +78,8 @@
 	{
 		include($appRootPath."system/libload.php");
 		include($appRootPath."system/cblank.php");
-		include($appRootPath."system/structure/blocks/schemablock.php");
-		include($appRootPath."system/structure/areas/areaman.php");
+		include($appRootPath."system/structure/uiblock.php");
+		include($appRootPath."system/area/areaman.php");
 		include($appRootPath."system/helpers/qstringmodifier.php");
 		include($appRootPath."system/helpers/strsan.php");
 		StrSan::init();
@@ -92,14 +92,14 @@
 		//	If we don't have modules
 		if(!($flag&KS_MOD) && !($flag&KS_SURROUND_ONLY))
 		{
-			include($appRootPath."system/structure/blocks/templateholder.php");
-			include($appRootPath."system/structure/blocks/assetholder.php");
+			include($appRootPath."system/structure/templateholder.php");
+			include($appRootPath."system/structure/assetholder.php");
 		}
 	}
-	include($appRootPath."system/structure/areas/surroundman.php");
+	include($appRootPath."system/area/surroundman.php");
 
 	if($flag&KS_ASSETS && !($flag&KS_MOD))
-		include($appRootPath."system/structure/blocks/assetholder.php");
+		include($appRootPath."system/structure/assetholder.php");
 
 
 	//	Only required if app is loading a page

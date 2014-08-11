@@ -12,7 +12,7 @@
 	define('PNL_CM_DELETE', 4);
 	define('PNL_CM_TERM', 5);
 
-	abstract class Panel extends SchemaBlock implements IModArg
+	abstract class Panel extends UIBlock implements IModArg
 	{
 		/* TODO
 		*  These property names
