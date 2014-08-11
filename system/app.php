@@ -102,9 +102,6 @@
 		include($appRootPath."system/structure/blocks/assetholder.php");
 
 
-	if($flag&KS_PLUGIN)
-	{
-	}		
 	//	Only required if app is loading a page
 	if($flag&KS_IS_PAGE)
 	{
@@ -252,6 +249,9 @@
 				KLog::error("_on_page_request channel failure");
 				return false;
 			}
+			if(!isset($this->params['page']))
+				return null;
+
 			$this->page = $this->params['page'];
 
 			// Add the app config
@@ -312,7 +312,7 @@
 
 		private function runChannel($hook)
 		{
-			$chRid = $this->resourceManager->queryAssoc("Channel{r}('$hook');");
+			$chRid = $this->resourceManager->queryAssoc("Channel('$hook'){r};");
 			if(!$chRid)
 				return false;
 

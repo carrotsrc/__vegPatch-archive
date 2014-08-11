@@ -21,7 +21,6 @@
 		{
 			if(!isset($signal['area']))
 				return false;
-
 			$area = $signal['area'];
 			unset($signal['area']);
 
