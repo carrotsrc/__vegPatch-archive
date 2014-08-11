@@ -135,7 +135,7 @@
 				<select name="tid" class="form-text form-select">
 				<?php
 				foreach($templates as $t)
-					echo "<option value=\"{$t['id']}\">{$t['value']}</option>";
+					echo "<option value=\"{$t['t_id']}\">{$t['value']}</option>";
 				?>
 				</select>
 				<input type="hidden" name="sid" value="<?php echo $_POST['sid']; ?>" />
