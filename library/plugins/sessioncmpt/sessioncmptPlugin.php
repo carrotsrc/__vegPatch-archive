@@ -9,7 +9,6 @@
 	{
 		private $loadedComponents;
 		private $resourceManager;
-		private $channelManager;
 
 		public function init($instance)
 		{
@@ -20,7 +19,6 @@
 				$this->loadedComponents = array();
 
 			$this->resourceManager = Managers::ResourceManager();
-			$this->channelManager = Managers::ChannelManager();
 		}
 
 		public function process(&$signal)
@@ -176,7 +174,7 @@
 			$chlist = $this->resourceManager->queryAssoc($rql);
 			if(is_array($chlist)) {
 				$cid = $this->resourceManager->getHandlerRef($chlist[0][0]);
-				$channel = $this->channelManager->getChannel($cid);
+				$channel = core_get_channel($cid, $this->db);
 				$signal['_pnl'] = &$panel;
 				if(!$channel->runSignal($signal)) {
 					unset($signal['_pnl']);

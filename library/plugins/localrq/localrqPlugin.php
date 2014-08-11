@@ -16,13 +16,11 @@
 	class localrqPlugin extends Plugin
 	{
 		private $resourceManager = null;
-		private $channelManager;
 		private $modules;
 		public function init($instance)
 		{
 			$this->instance = $instance;
 			$this->resourceManager = Managers::ResourceManager();
-			$this->channelManager = Managers::ChannelManager();
 			$this->modules = array();
 		}
 
@@ -83,8 +81,8 @@
 			if(!$res)
 				return $signal;
 
-			$cid = $res[0][0];
-			$channel = $this->channelManager->getChannel($cid);
+			$cid = $res[0]['id'];
+			$channel = core_get_channel($cid, $this->db);
 			if($channel == null)
 				return false;
 
@@ -98,8 +96,8 @@
 			if($res == null)
 				return $signal;
 
-			$cid = $res[0][0];
-			$channel = $this->channelManager->getChannel($cid);
+			$cid = $res[0]['id'];
+			$channel = core_get_channel($cid, $this->db);
 			if($channel == null)
 				return false;
 
@@ -109,19 +107,15 @@
 
 		private function checkJackInterface($rq)
 		{
-			$rql = "Interface()<Instance('{$rq['inst']}')&Component('{$rq['cmpt']}');";
+			$rql = "Interface(){r}<Instance('{$rq['inst']}')&Component('{$rq['cmpt']}');";
 
 			$res = $this->resourceManager->queryAssoc($rql);
 
 			if(!$res)
 				return null;
 
-			$jid = array();
-
-			foreach($res as $intr)
-				$jid[] = $this->resourceManager->getHandlerRef($intr[0]);
 			
-			$jint = ModMan::getInterface($jid, $rq['jack'], $this->db);
+			$jint = ModMan::getInterface($res['ref'], $rq['jack'], $this->db);
 			return $jint;
 		}
 
@@ -150,12 +144,10 @@
 
 		private function runCrudOps($cmpt, $inst, &$signal)
 		{
-			$ridc = $this->resourceManager->queryAssoc("CrudOps()<(Instance('$inst')<Component('$cmpt'));");
+			$ridc = $this->resourceManager->queryAssoc("CrudOps(){r}<(Instance('$inst')<Component('$cmpt'));");
 			if(!$ridc)
 				return;
-
-			$ref = $this->resourceManager->getHandlerRef($ridc[0][0]);
-			$channel = $this->channelManager->getChannel($ref);
+			$channel = core_get_channel($ridc['ref'], $this->db);
 			$channel->runSignal($signal);
 		}
 	}
