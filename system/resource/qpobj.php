@@ -153,7 +153,7 @@
 
 				case 'r':
 				case 'ref':
-					echo ", `$alias`.`handler_ref`";
+					echo ", `$alias`.`handler_ref` AS `ref`";
 				break;
 
 				case 't':

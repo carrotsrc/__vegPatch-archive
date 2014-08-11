@@ -47,21 +47,12 @@
 		}
 		public static function init($db)
 		{
-			$result = $db->sendQuery("SELECT * FROM rescast;");
+			$r = $db->sendQuery("SELECT * FROM rescast;");
 			
-			if(!$result)
+			if(!$r)
 				return false;
 			
-			$tArray = array();
-			while(($row = mysql_fetch_assoc($result)))
-			{
-				$tArray[] = array('id' => $row['id'],
-								  'type'=> $row['type'],
-								  'handler'=>$row['handler'],
-								  'base'=> $row['base']);
-			}
-			
-			self::$rescast = $tArray;
+			self::$rescast = $r;
 			
 			return true;
 		}
