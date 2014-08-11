@@ -25,7 +25,7 @@
 		$det = $db->sendQuery("SELECT name FROM areapool WHERE id='$aid'");
 		if(!$det)
 			return;
-		$rman->addResource('Area', $aid, $det[0][0]);
+		$rman->addResource('Area', $aid, $det[0]['name']);
 	}
 
 	function areaManagerPanel($db, $rman)
@@ -71,58 +71,25 @@
 
 	function newAreaPanel($db)
 	{
-		echo "<b>New Area</b><br >";
-		echo "<div clas=\"form-item\">";
-		if(isset($_POST['op']) && $_POST['op'] == 2) {
-			$sql = "INSERT INTO areapool ";
-			$sql .= "(name, s_id, st_id) VALUES ";
-			$sql .= "('{$_POST['label']}','{$_POST['sid']}','{$_POST['tid']}');";
-			$db->sendQuery($sql, false, false);
-			unset($_POST['op']);
+		$templates = $surrounds = null;
+		if(isset($_POST['op'])){
+			if($_POST['op'] == 1)
+				$templates = $db->sendQuery("SELECT t_id, value FROM surtemplate WHERE s_id='{$_POST['sid']}';", false, false);
+			else
+			if($_POST['op'] == 2) {
+				$sql = "INSERT INTO areapool ";
+				$sql .= "(name, s_id, st_id) VALUES ";
+				$sql .= "('{$_POST['label']}','{$_POST['sid']}','{$_POST['tid']}');";
+				$db->sendQuery($sql, false, false);
+				unset($_POST['op']);
+			}
 		}
-		$surrounds = $db->sendQuery("SELECT id, name FROM surpool;", false, false);
+		
+		$surrounds = $db->sendQuery("SELECT id, name FROM surpool;");
 		if(!$surrounds)
 			return;
 
-		echo "<form method=\"post\" action=\"index.php?tool=area&mode=newarea\">";
-		if(!isset($_POST['op'])) { 
-		?>
-			<input name="label" class="form-text" /><br />
-			<select name="sid" class="form-text form-select">
-			<?php
-			foreach($surrounds as $s)
-					echo "<option value=\"{$s[0]}\">{$s[1]}</option>";
-			?>
-			</select>
-			<input type="hidden" name="op" value="1" />
-			<input type="submit" value="Next" class="form-button"/>
-			
-		<?php
-		}
-		else {
-			$templates = $db->sendQuery("SELECT t_id, value FROM surtemplate WHERE s_id='{$_POST['sid']}';", false, false);
-			$slabel = "";
-			foreach($surrounds as $s)
-				if($s[0] == $_POST['sid'])
-					$slabel = $s[1];
-		?>
-			<input type="hidden" name="op" value="2" />
-			<input type="hidden" name="label" value="<?php echo $_POST['label'] ?>" />
-			<input type="hidden" name="sid" value="<?php echo $_POST['sid'] ?>" />
-			<input type="text" class="form-text form-disabled" value="<?php echo $_POST['label']; ?>" disabled/><br />
-			<input type="text" class="form-text form-disabled" value="<?php echo $slabel; ?>" disabled/><br />
-			<select name="tid" class="form-text form-select">
-			<?php
-			foreach($templates as $t)
-				echo "<option value=\"{$t[0]}\">{$t[1]}</option>";
-			?>
-			</select>
-			<input type="submit" value="Add" class="form-button"/>
-		<?php
-		}
-		echo "</form>";
-		echo "</div>";
-		
+		include('panels/newArea.php');
 	}
 
 	function manageSurround($db, $fm)
