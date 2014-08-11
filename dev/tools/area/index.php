@@ -11,46 +11,31 @@
 
 	include(SystemConfig::relativeAppPath("system/resource/resman.php"));
 	include("lib.php");
-	
-	$fm = Koda::getFileManager();
 	$rman = new ResMan($db);
 	$panel = "";
-
+	ob_start();
 	if(isset($_GET['mode']) && $_GET['mode'] == "manarea") {
-		ob_start();
 		areaManagerPanel($db, $rman);
-		$panel = ob_get_contents();
-		ob_end_clean();
 	}
 	else
 	if(isset($_GET['mode']) && $_GET['mode'] == "newarea") {
-		ob_start();
 		newAreaPanel($db);
-		$panel = ob_get_contents();
-		ob_end_clean();
 	}
 	else
 	if(isset($_GET['mode']) && $_GET['mode'] == "mansur") {
-		ob_start();
 		manageSurround($db, $fm);
-		$panel = ob_get_contents();
-		ob_end_clean();
 	}
 	else
 	if(isset($_GET['mode']) && $_GET['mode'] == "regsur") {
-		ob_start();
 		surroundRegister($db, $fm);
-		$panel = ob_get_contents();
-		ob_end_clean();
 	}
 	else {
-		ob_start();
 		stats($db, $rman);
-		$panel = ob_get_contents();
-		ob_end_clean();
 	}
-	$areas = $db->sendQuery("SELECT * FROM areapool;", false, false);
-	$surrounds = $db->sendQuery("SELECT * FROM surpool;", false, false);
+	$panel = ob_get_contents();
+	ob_end_clean();
+	$areas = $db->sendQuery("SELECT * FROM areapool;");
+	$surrounds = $db->sendQuery("SELECT * FROM surpool;");
 	$mlist = $fm->listDirectories("../");
 ?>
 	<div id="kr-layout">
@@ -64,7 +49,7 @@
 				<select name="aid" class="form-text form-select">
 					<?php
 					foreach($areas as $a)
-						echo "<option value=\"{$a[0]}\">{$a[2]}</option>";
+						echo "<option value=\"{$a['id']}\">{$a['name']}</option>";
 					?>
 				</select>
 				<input type="submit" value="Manage Area" class="form-button" />

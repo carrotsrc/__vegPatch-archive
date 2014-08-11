@@ -10,6 +10,9 @@
 			die("Setup Problem: Cannot locate SystemConfig.");
 	
 	include(SystemConfig::relativeAppPath("system/helpers/session.php"));
+	include(SystemConfig::relativeAppPath("system/file/filemanager.php"));
+	include(SystemConfig::relativeAppPath("system/db/db.php"));
+
 	Session::start();
 	if(isset($_GET['taction']))
 		if($_GET['taction'] == "logout")
@@ -24,14 +27,13 @@
 		HttpHeader::redirect("login.php");
 	}
 
-	include(SystemConfig::relativeAppPath("system/koda/koda.php"));
-	$db = Koda::getDatabaseConnection('mysql');
+	$db = core_create_db('mysql');
 
 	$db->connect(SystemConfig::$dbcUsername, SystemConfig::$dbcPassword);
 	$db->selectDatabase(SystemConfig::$dbcDatabase);
 	
 	$rtool = "home";
-	$fm = Koda::getFileManager();
+	$fm = new FileManager();
 	if(isset($_GET['tool']))
 		$rtool = $_GET['tool'];
 ?>

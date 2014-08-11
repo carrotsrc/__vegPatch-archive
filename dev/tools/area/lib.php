@@ -50,20 +50,20 @@
 				$sql .= "name='{$_POST['label']}', ";
 				$sql .= "s_id='{$_POST['sid']}', ";
 				$sql .= "st_id='{$_POST['tid']}' ";
-				$sql .= "WHERE id='{$_POST['aid']}';";
+				$sql .= "WHERE id='{$_POST['aid']}'";
 
-				$db->sendQuery($sql, false, false);
+				$db->sendQuery($sql);
 
 			}
 		}
 
 		$res = $rman->queryAssoc("Area('$aid');");
 
-		$det = $db->sendQuery("SELECT * FROM areapool WHERE id='$aid';", false, false);
+		$det = $db->sendQuery("SELECT * FROM areapool WHERE id='$aid'");
 		$det = $det[0];
 		echo "<b>Area Manager</b><br />";
 		echo "<div class=\"form-item\">";
-		echo "<b>{$det[2]}</b> ($aid)";
+		echo "<b>{$det['name']}</b> ($aid)";
 		echo "</div>";
 		if(!$res) {
 			?>
@@ -77,13 +77,13 @@
 		}
 
 		echo "<div class=\"form-item font-small\">";
-		echo "Area( {$res[0][0]} )";
+		echo "Area( {$res[0]['id']} )";
 		echo "</div>";
-		$td = surroundData($det[3], $det[4], $db);
+		$td = surroundData($det['s_id'], $det['st_id'], $db);
 		if(!$td)
 			return;
 
-		echo "{$td[0]} / {$td[1]}";
+		echo "{$td['name']} / {$td['value']}";
 		if(!$editMode) {
 		?>
 
@@ -96,7 +96,7 @@
 			return;
 		}
 		if($editMode) {
-			$surrounds = $db->sendQuery("SELECT id, name FROM surpool;", false, false);
+			$surrounds = $db->sendQuery("SELECT id, name FROM surpool");
 			if(!$surrounds)
 				return;
 		?>
@@ -105,15 +105,15 @@
 			<?php
 			if($_POST['op'] == 2)  {
 			?>
-				<input name="label" class="form-text" value="<?php echo $det[2]; ?>" /><br />
+				<input name="label" class="form-text" value="<?php echo $det['name']; ?>" /><br />
 			
 				<select name="sid" class="form-text form-select">
 				<?php
 				foreach($surrounds as $s)
-					if($s[0] == $det[3])
-						echo "<option value=\"{$s[0]}\" selected>{$s[1]}</option>";
+					if($s['id'] == $det['s_id'])
+						echo "<option value=\"{$s['id']}\" selected>{$s['name']}</option>";
 					else
-						echo "<option value=\"{$s[0]}\">{$s[1]}</option>";
+						echo "<option value=\"{$s['id']}\">{$s['name']}</option>";
 				?>
 				</select>
 				<input type="hidden" name="op" value="3" />
@@ -125,8 +125,8 @@
 				$templates = $db->sendQuery("SELECT t_id, value FROM surtemplate WHERE s_id='{$_POST['sid']}';", false, false);
 				$slabel = "";
 				foreach($surrounds as $s)
-					if($s[0] == $_POST['sid'])
-						$slabel = $s[1];
+					if($s['id'] == $_POST['sid'])
+						$slabel = $s['name'];
 			?>
 				<input class="form-text form-disabled" value="<?php echo $_POST['label']; ?>" disabled/><br />
 				<input type="hidden" name="label" value="<?php echo $_POST['label']; ?>" />
@@ -135,7 +135,7 @@
 				<select name="tid" class="form-text form-select">
 				<?php
 				foreach($templates as $t)
-					echo "<option value=\"{$t[0]}\">{$t[1]}</option>";
+					echo "<option value=\"{$t['id']}\">{$t['value']}</option>";
 				?>
 				</select>
 				<input type="hidden" name="sid" value="<?php echo $_POST['sid']; ?>" />

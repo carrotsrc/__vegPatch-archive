@@ -11,7 +11,6 @@
 
 	include(SystemConfig::relativeAppPath("system/resource/resman.php"));
 	
-	$fm = Koda::getFileManager();
 	$rman = new ResMan($db);
 	$panel = "";
 

@@ -167,8 +167,7 @@
 		private function getConfiguration()
 		{
 			$config = array();
-			$query = "SELECT * FROM rootconfig;";
-			$r = $this->appDB->sendQuery($query);
+			$r = $this->appDB->sendQuery("SELECT * FROM rootconfig;");
 			
 			if(!$r)
 				die("Major malfunction: root configuration error");
