@@ -11,32 +11,22 @@
 		public static function readTemplate($sId, $tId, $db)
 		{
 			//	Get surround path
-			$query = "SELECT name FROM surpool WHERE id='$sId';";
-			$result = $db->sendQuery($query);
+			$result = $db->sendQuery("SELECT name FROM surpool WHERE id='$sId';");
 			
 			if(!$result)
 				return null;
 			
-			if(mysql_num_rows($result) == 0)
-				return null;
-			
-			$row = mysql_fetch_assoc($result);
+			$row = $result[0];
 			$path = SystemConfig::appRootPath("library/surrounds/".$row['name']."/");
 			
 			
 			//	Get surround template
-			$query = "SELECT value FROM surtemplate WHERE s_id='$sId' AND t_id='$tId';";
-			$result = $db->sendQuery($query);
+			$result = $db->sendQuery("SELECT value FROM surtemplate WHERE s_id='$sId' AND t_id='$tId';");
 			
 			if(!$result)
 				return null;
 			
-			if(mysql_num_rows($result) == 0)
-				return null;
-		
-		
-			$row = mysql_fetch_assoc($result);
-			$path .= $row['value'];
+			$path .= $result[0]['value'];
 			
 			$template = new TemplateHolder();
 			$template->readTemplate($path);
@@ -45,37 +35,15 @@
 		
 		public static function includeTemplate($sId, $tId, $vars, $db)
 		{
-
 			//	Get surround path
-			$query = "SELECT name FROM surpool WHERE id='$sId';";
-			$result = $db->sendQuery($query);
-			
+			$result = $db->sendQuery("SELECT `surpool`.`name`, `surtemplate`.`value` FROM surpool JOIN `surtemplate` ON `surpool`.`id` = `surtemplate`.`s_id` WHERE `surpool`.`id`='$sId' AND `surtemplate`.`t_id`='$tId';");
 			if(!$result)
 				return null;
-			
-			if(mysql_num_rows($result) == 0)
-				return null;
-			
-			$row = mysql_fetch_assoc($result);
+
+			$row = $result[0];
 			$path = SystemConfig::appRootPath("library/surrounds/".$row['name']."/");
 			
-			/*
-			*  TODO
-			*  Include $vars as a class like the templates
-			*  for panels
-			*/
-			//	Get surround template
-			$query = "SELECT value FROM surtemplate WHERE s_id='$sId' AND t_id='$tId';";
-			$result = $db->sendQuery($query);
 			
-			if(!$result)
-				return null;
-			
-			if(mysql_num_rows($result) == 0)
-				return null;
-		
-		
-			$row = mysql_fetch_assoc($result);
 			$path .= $row['value'];
 			
 			$template = new TemplateHolder();
@@ -132,16 +100,11 @@
 			if(!$result)
 				return null;
 				
-			if(mysql_num_rows($result) == 0)
-				return null;
-				
 			$assetHolder = new AssetHolder();
 			
-			while(($row = mysql_fetch_assoc($result)) != false)
-			{
+			foreach($result as $row)
 				$assetHolder->addAsset($row['type'], $row['value'], $row['name'], 3, $sId);
-			}
-				
+
 			return $assetHolder;
 		}
 
@@ -150,7 +113,7 @@
 			$query = "SELECT surpool.name, surasset.value, surasset.type FROM surasset ";
 			$query .= "JOIN surpool ON surasset.s_id=surpool.id ";
 			$query .= "WHERE surpool.id='$sId';";
-			$result = $db->sendQuery($query, false, false);
+			$result = $db->sendQuery($query);
 
 			if(!$result)
 				return null;
@@ -158,8 +121,8 @@
 			$paths = array('js' => array(), 'css' => array());
 
 			foreach($result as $row) {
-				$path = "surrounds/{$row[0]}/{$row[1]}";
-				$paths[$row[2]][] = $path;
+				$path = "surrounds/{$row['name']}/{$row['value']}";
+				$paths[$row['type']][] = $path;
 			}
 
 			return $paths;

@@ -74,7 +74,7 @@
 			}
 
 
-			$areaObj = Managers::AreaManager()->getArea($area);
+			$areaObj = core_get_area($area, $this->db);
 			if($areaObj == null)
 				return false;
 

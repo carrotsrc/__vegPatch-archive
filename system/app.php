@@ -173,8 +173,9 @@
 			if(!$r)
 				die("Major malfunction: root configuration error");
 
-			foreach($r as $key => $value)
+			foreach($r[0] as $key => $value)
 				$config[$key] = $value;
+
 
 			$config['approot'] = SystemConfig::appRootPath();
 			$this->appConfig = new AppConfig($config);
@@ -237,7 +238,7 @@
 				$result = $this->appDB->sendQuery("SELECT type, value FROM rootasset;", false, false);
 				$arc = array('js' => array(), 'css' => array());
 				foreach($result as $r)
-					$arc[$r[0]][] = $r[1];
+					$arc[$r['type']][] = $r['value'];
 			}
 
 			$this->params['arc'] = $arc;
