@@ -39,7 +39,7 @@
 					$signal['layout'] = $id[0]['ref'];
 			}
 
-			$wireframe = Managers::LayoutManager()->loadLayout($signal['layout']);
+			$wireframe = core_load_layout($signal['layout'], $this->db);
 			if($wireframe == null) {
 				KLog::error("Failed to load wireframe");
 				return false;

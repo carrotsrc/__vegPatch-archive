@@ -99,7 +99,6 @@
 	include($appRootPath."system/structure/areas/surroundman.php");
 
 	if($flag&KS_ASSETS && !($flag&KS_MOD))
-	
 		include($appRootPath."system/structure/blocks/assetholder.php");
 
 
@@ -221,10 +220,6 @@
 
 			if(!($flag&KS_IS_PAGE))
 				return true;
-
-
-			$this->layoutManager = new LayMan($this->appDB);
-			Managers::setLayoutManager($this->layoutManager);
 
 			return true;
 		}
