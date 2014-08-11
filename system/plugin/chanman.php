@@ -37,7 +37,7 @@
 
 		$sql = "SELECT `channelnodes`.`pid`, `channelnodes`.`inst` FROM `channelnodes` ";
 		$sql .= "LEFT JOIN `channelpool` on `channelnodes`.`channel` = `channelpool`.`id` ";
-		$sql .= "WHERE `channelpool`.`id`='$cID' ";
+		$sql .= "WHERE `channelpool`.`id`='$id' ";
 		$sql .= "ORDER BY `channelnodes`.`seq`;";
 		$result = $db->sendQuery($sql);
 		if(!$result)

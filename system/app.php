@@ -78,7 +78,7 @@
 		include($appRootPath."system/libload.php");
 		include($appRootPath."system/cblank.php");
 		include($appRootPath."system/structure/blocks/schemablock.php");
-		include($appRootPath."system/structure/module/modman.php");
+		include($appRootPath."system/module/modman.php");
 		include($appRootPath."system/structure/areas/areaman.php");
 		include($appRootPath."system/helpers/qstringmodifier.php");
 		include($appRootPath."system/helpers/strsan.php");
@@ -295,12 +295,6 @@
 		{
 			$this->resourceManager = new ResMan($this->appDB);
 			Managers::setResourceManager($this->resourceManager);
-
-			$this->channelManager = new ChanMan($this->appDB);
-			Managers::setChannelManager($this->channelManager);
-
-			$this->pluginManager = new PluginMan($this->appDB);
-			Managers::setPluginManager($this->pluginManager);
 		}
 
 		private function runChannel($hook)
@@ -310,7 +304,7 @@
 				return false;
 
 			$id = $chRid[0]['ref'];
-			$channel = $this->channelManager->getChannel($id);
+			$channel = core_get_channel($id, $this->appDB);
 			if($channel == null) {
 				echo "Failed to run channel";
 				return false;

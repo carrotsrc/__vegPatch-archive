@@ -139,8 +139,8 @@
 		{
 			$label = null;
 			
-			$sql = "SELECT `modreg`.`module_name` FROM `modreg` WHERE `modreg`.`id`='$id';";
-			$result = $this->db->sendQuery($sql);
+			$sql = "SELECT `modreg`.`module_name` FROM `modreg` WHERE `modreg`.`id`='$plugin';";
+			$result = $db->sendQuery($sql);
 			if(!$result)
 				return false;
 			$label = $result[0]['module_name'];
@@ -149,7 +149,7 @@
 			include_once($plPath);
 
 			$plClass = $label."Plugin";
-			$plugin = new $plClass($db, $id);
+			$plugin = new $plClass($db, $plugin);
 			
 			$plugin->init($instance);
 			return $plugin;
