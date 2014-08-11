@@ -27,7 +27,7 @@
 	$appRootPath = SystemConfig::appRootPath();
 	define('KLOG_PATH', $appRootPath.".vlog/vplog");
 
-	require($appRootPath."system/koda/koda.php");
+	require($appRootPath."system/db/db.php");
 	require($appRootPath."system/dbacc.php");
 	require($appRootPath."system/log.php");
 	require($appRootPath."system/managers.php");
@@ -152,14 +152,15 @@
 			$this->params = array();
 		}
 		
-		private function dbcConnect()
+		private function initDatabase()
 		{
+			$this->appDB = core_create_db('mysql');
 			if(!$this->appDB->connect(SystemConfig::$dbcUsername, SystemConfig::$dbcPassword))
 				return false;
-				
+
 			if(!$this->appDB->selectDatabase(SystemConfig::$dbcDatabase))
 				return false;
-				
+
 			return true;
 		}
 		
@@ -167,15 +168,12 @@
 		{
 			$config = array();
 			$query = "SELECT * FROM rootconfig;";
-			$result = $this->appDB->sendQuery($query);
+			$r = $this->appDB->sendQuery($query);
 			
-			if(!$result)
+			if(!$r)
 				die("Major malfunction: root configuration error");
 
-			$row = mysql_fetch_assoc($result);
-			
-
-			foreach($row as $key => $value)
+			foreach($r as $key => $value)
 				$config[$key] = $value;
 
 			$config['approot'] = SystemConfig::appRootPath();
@@ -191,9 +189,8 @@
 		{
 			$flag = SystemConfig::$KS_FLAG;
 
-			$this->appDB = Koda::getDatabaseConnection('mysql');
 
-			if(!$this->dbcConnect()) {
+			if(!$this->initDatabase()) {
 				echo "Database error<br />";
 				return false;
 			}
@@ -296,10 +293,6 @@
 
 		private function initManagers($flag)
 		{
-			if($flag&KS_MOD && !($flag&KS_ASSETS)) {
-				$this->areaManager = new AreaMan($this->appDB);
-				Managers::setAreaManager($this->areaManager);
-			}
 			$this->resourceManager = new ResMan($this->appDB);
 			Managers::setResourceManager($this->resourceManager);
 
@@ -316,7 +309,7 @@
 			if(!$chRid)
 				return false;
 
-			$id = $chRid[0][1];
+			$id = $chRid[0]['ref'];
 			$channel = $this->channelManager->getChannel($id);
 			if($channel == null) {
 				echo "Failed to run channel";
