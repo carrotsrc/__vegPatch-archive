@@ -5,7 +5,30 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-	require_once("channel.php");
+	class Channel
+	{
+		protected $pluginStack;
+		
+		public function __construct()
+		{
+			$this->pluginStack = array();
+		}
+		
+		public function addPlugin($plugin)
+		{
+			$this->pluginStack[] = $plugin;
+		}
+		
+		public function runSignal(&$signal)
+		{
+			$msgBox = array();
+			foreach($this->pluginStack as $plugin)
+				if(($signal = $plugin->process($signal)) === false)
+					return false;
+			
+			return $signal;
+		}
+	}
 
 	function core_get_channel($id, $db)
 	{
@@ -25,7 +48,7 @@
 		foreach($result as $pldata)
 		{
 
-			$plugin = ModMangetPlugin($pldata['pid'], $pldata['inst']);
+			$plugin = ModMan::getPlugin($pldata['pid'], $pldata['inst'], $db);
 			if(!$plugin)
 				return null;
 
