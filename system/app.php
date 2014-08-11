@@ -28,6 +28,7 @@
 	define('KLOG_PATH', $appRootPath.".vlog/vplog");
 
 	require($appRootPath."system/db/db.php");
+	require($appRootPath."system/file/filemanager.php");
 	require($appRootPath."system/dbacc.php");
 	require($appRootPath."system/log.php");
 	require($appRootPath."system/managers.php");
@@ -78,12 +79,12 @@
 		include($appRootPath."system/libload.php");
 		include($appRootPath."system/cblank.php");
 		include($appRootPath."system/structure/blocks/schemablock.php");
-		include($appRootPath."system/module/modman.php");
 		include($appRootPath."system/structure/areas/areaman.php");
 		include($appRootPath."system/helpers/qstringmodifier.php");
 		include($appRootPath."system/helpers/strsan.php");
 		StrSan::init();
 	}
+	include($appRootPath."system/module/modman.php");
 
 	//	If we are needing to access surrounds
 	if($flag&KS_SURROUND)

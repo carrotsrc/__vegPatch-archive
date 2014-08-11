@@ -18,7 +18,7 @@
 				return false;
 
 			$this->setInstance($instance);
-			$this->fm = Koda::getFileManager();
+			$this->fm = new FileManager();
 
 
 			$this->width = floor((PHP_INT_SIZE<<3)/3);

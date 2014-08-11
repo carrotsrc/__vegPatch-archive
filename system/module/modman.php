@@ -5,10 +5,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
 	include_once("imodarg.php");
-	include_once("panel.php");
-	include_once("component.php");
+	if($flag&KS_MOD) {
+		include_once("panel.php");
+		include_once("component.php");
+	}
 	include_once("plugin.php");
 	/*
 	*	ModMan

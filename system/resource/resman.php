@@ -128,12 +128,12 @@
 		public function getHandlerRef($rid)
 		{
 			$sql = "SELECT handler_ref FROM respool WHERE id='$rid'";
-			$result = $this->db->sendQuery($sql, false, false);
+			$result = $this->db->sendQuery($sql);
 
 			if(!$result)
 				return false;
 
-			return $result[0][0];
+			return $result[0]['handler_ref'];
 				
 		}
 
