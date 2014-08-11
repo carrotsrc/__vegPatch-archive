@@ -27,18 +27,18 @@
 	$appRootPath = SystemConfig::appRootPath();
 	define('KLOG_PATH', $appRootPath.".vlog/vplog");
 
-	require_once($appRootPath."system/koda/koda.php");
-	require_once($appRootPath."system/dbacc.php");
-	require_once($appRootPath."system/log.php");
-	require_once($appRootPath."system/managers.php");
-	require_once($appRootPath."system/appconfig.php");
-	require_once($appRootPath."system/plugin/chanman.php");
-	require_once($appRootPath."system/resource/resman.php");
+	require($appRootPath."system/koda/koda.php");
+	require($appRootPath."system/dbacc.php");
+	require($appRootPath."system/log.php");
+	require($appRootPath."system/managers.php");
+	require($appRootPath."system/appconfig.php");
+	require($appRootPath."system/plugin/chanman.php");
+	require($appRootPath."system/resource/resman.php");
 
 	// global helpers
-	include_once($appRootPath."system/helpers/session.php");
-	include_once($appRootPath."system/helpers/httpheader.php");
-	include_once($appRootPath."system/helpers/klog.php");
+	include($appRootPath."system/helpers/session.php");
+	include($appRootPath."system/helpers/httpheader.php");
+	include($appRootPath."system/helpers/klog.php");
 
 
 	Session::start();
@@ -72,23 +72,16 @@
 		Session::set('track', array($script, $_GET));
 	}
 
-	//	We are using users (requires sessions)
-	if($flag&KS_USER)
-	{
-		include_once($appRootPath."system/user/userman.php");
-		include_once($appRootPath."system/user/roleman.php");
-	}
-
 	//	If we are needing to access modules
 	if($flag&KS_MOD)
 	{
-		include_once($appRootPath."system/libload.php");
-		include_once($appRootPath."system/cblank.php");
-		include_once($appRootPath."system/structure/blocks/schemablock.php");
-		include_once($appRootPath."system/structure/module/modman.php");
-		include_once($appRootPath."system/structure/areas/areaman.php");
-		include_once($appRootPath."system/helpers/qstringmodifier.php");
-		include_once($appRootPath."system/helpers/strsan.php");
+		include($appRootPath."system/libload.php");
+		include($appRootPath."system/cblank.php");
+		include($appRootPath."system/structure/blocks/schemablock.php");
+		include($appRootPath."system/structure/module/modman.php");
+		include($appRootPath."system/structure/areas/areaman.php");
+		include($appRootPath."system/helpers/qstringmodifier.php");
+		include($appRootPath."system/helpers/strsan.php");
 		StrSan::init();
 	}
 
@@ -98,16 +91,15 @@
 		//	If we don't have modules
 		if(!($flag&KS_MOD) && !($flag&KS_SURROUND_ONLY))
 		{
-			include_once($appRootPath."system/structure/blocks/templateholder.php");
-			include_once($appRootPath."system/structure/blocks/assetholder.php");
+			include($appRootPath."system/structure/blocks/templateholder.php");
+			include($appRootPath."system/structure/blocks/assetholder.php");
 		}
-			
 	}
-	include_once($appRootPath."system/structure/areas/surroundman.php");
+	include($appRootPath."system/structure/areas/surroundman.php");
 
 	if($flag&KS_ASSETS && !($flag&KS_MOD))
 	
-		include_once($appRootPath."system/structure/blocks/assetholder.php");
+		include($appRootPath."system/structure/blocks/assetholder.php");
 
 
 	if($flag&KS_PLUGIN)
@@ -116,19 +108,14 @@
 	//	Only required if app is loading a page
 	if($flag&KS_IS_PAGE)
 	{
-		include_once($appRootPath."system/helpers/kxml.php");
-		include_once($appRootPath."system/helpers/vpxml.php");
-		include_once($appRootPath."system/layout/layman.php");
-		include_once($appRootPath."system/structure/page.php");
-		include_once($appRootPath."system/helpers/alinkgen.php");
+		include($appRootPath."system/helpers/vpxml.php");
+		include($appRootPath."system/layout/layman.php");
+		include($appRootPath."system/structure/page.php");
+		include($appRootPath."system/helpers/alinkgen.php");
 	}
 
 	if($flag&KS_DEBUG_MICRO)
-	{
-		include_once($appRootPath."system/debugmicro.php");
-		if(isset($_GET['dbmsu']))
-			Session::set('uid', $_GET['dbmsu']);
-	}
+		include($appRootPath."system/debugmicro.php");
 
 	/*
 	* END INITIALIZATION TREE
@@ -325,11 +312,11 @@
 
 		private function runChannel($hook)
 		{
-			$chRid = $this->resourceManager->queryAssoc("Channel('$hook');");
+			$chRid = $this->resourceManager->queryAssoc("Channel{r}('$hook');");
 			if(!$chRid)
 				return false;
 
-			$id = $this->resourceManager->getHandlerRef($chRid[0][0]);
+			$id = $chRid[0][1];
 			$channel = $this->channelManager->getChannel($id);
 			if($channel == null) {
 				echo "Failed to run channel";
