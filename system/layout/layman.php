@@ -5,12 +5,56 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-	include("container.php");
-	include("nodecon.php");
-	include("panelrep.php");
-	include("leafcon.php");
-	include("staticcon.php");
 	include("wireframe.php");
+
+	class NContainer
+	{
+		public $type;
+		public $attribute;
+		public $content;
+		public function generateHTML($index, $path)
+		{
+			echo "<div class=\"vpc-{$this->type}\" ";
+			if(isset($this->attribute['style']))
+				echo "style=\"{$this->attribute['style']}\"";
+			echo ">\n";
+			if(is_array($this->content)) {
+				foreach($this->content as $c)
+					$c->generateHTML($index, $path);
+			} else
+				$this->content->generateHTML();
+			echo "\n</div>\n";
+		}
+	}
+
+	class SContainer extends NContainer
+	{
+		public function generateHTML($index, $path)
+		{
+			foreach($this->content as $tag) {
+				switch($tag->name) {
+				case "_text_":
+					echo $tag->attributes['content'];
+					break;
+				case "_comment_":
+					break;
+
+				default: 
+					echo "<".$tag->name;
+					if(($sz = sizeof($tag->attributes)) > 0) {
+						$sz--;
+						foreach($tag->attributes as $k => $v) {
+							echo " $k=\"$v\"";
+						}
+					}
+					echo ">";
+					break;
+
+				}
+			}
+		}
+
+	}
 
 	function core_process_wireframe($cml)
 	{
@@ -38,30 +82,44 @@
 
 					continue;
 				}
-				$cStack[$slen]->setContent($tag);
+				$cStack[$slen]->content[] = $tag;
 				continue;
 			}
 
-			if($tag->name == "_text_")
+			if($tag->name == "_text_") {
 				continue;
-			else
-			if($tag->name == "node" || $tag->name == "leaf")
+			} else
+			if($tag->name == "static") {
+				$container = new SContainer();
+				$container->type =  2;
+				$container->content = array();
+				$cStack[] = $container;
+				$slen++;
+			} else 
+			if($tag->name[0] == "/")
 			{
-				$pRep = null;
-				if($tag->name == "node")
-				{
-					$container = new NodeCon();
-					$container->content = array();
-					foreach($tag->attributes as $p => $v)
-						$container->addAttribute($p, $v);
-				}
+				$popped = $cStack[$slen];
+				array_pop($cStack);
+				$slen--;
+
+				if($slen >= 0)
+					$cStack[$slen]->content[] = $popped;
 				else
+					$cRoot[] = ($popped);
+			} else {
+				$pRep = null;
 				if($tag->name == "leaf")
 				{
-					$container = new LeafCon();
+					$container = new NContainer();
 					$container->content = NULL;
 					$pRep = new PanelRep();
 					$pRep->setGroup(0);
+				} else {
+					$container = new NContainer();
+					$container->content = array();
+					if($container->type = $tag->name)
+						foreach($tag->attributes as $p => $v)
+							$container->attribute[$p] = $v;
 				}
 
 				foreach($tag->attributes as $p => $v)
@@ -93,7 +151,7 @@
 
 					case "style":
 						if($pRep == null)
-							$container->addAttribute('style', $v);
+							$container->attribute['style'] = $v;
 						else
 							$pRep->setStyle($v);
 					break;
@@ -104,12 +162,7 @@
 					}
 				}
 
-				if($tag->name == "node") {
-					$cStack[] = $container;
-					$slen++;
-				}
-				else
-				if($tag->name == "leaf")
+				if($tag->name == 'leaf')
 				{
 					if($pRep != null) {
 						$header[] = $pRep;
@@ -119,32 +172,16 @@
 					$cStack[$slen]->content[] = $container;
 					$pRep = null;
 				}
+				else {
+					$cStack[] = $container;
+					$slen++;
+				}
 		
-			}
-			else
-			if($tag->name == "static") {
-				$container = new StaticCon();
-				$container->type =  2;
-				$container->content = array();
-				$cStack[] = $container;
-				$slen++;
-			}
-			else
-			if($tag->name == "/node")
-			{
-				$popped = $cStack[$slen];
-				array_pop($cStack);
-				$slen--;
-
-				if($slen >= 0)
-					$cStack[$slen]->content[] = $popped;
-				else
-					$cRoot[] = ($popped);
 			}
 
 		}
-		return new Wireframe($header, $cRoot);
 
+		return new Wireframe($header, $cRoot);
 	}
 
 	function core_load_layout($id, $db)
