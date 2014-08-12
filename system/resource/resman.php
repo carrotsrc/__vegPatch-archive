@@ -44,10 +44,7 @@
 			if(!$result)
 				return null;
 			
-			if(!mysql_num_rows($result))
-				return null;
-			 	
-			$row = mysql_fetch_assoc($result);
+			$row = $result[0];
 			return $row['handler'];
 		}
 
@@ -91,10 +88,7 @@
 			if(!$result)
 				return null;
 
-			if(!mysql_num_rows($result))
-				return null;
-
-			$row = mysql_fetch_assoc($result);
+			$row = $result[0];
 			$type = $row['type_id'];
 			$label = $row['label'];
 			$hid = $row['handler_ref'];
