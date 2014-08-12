@@ -32,10 +32,10 @@
 
 			ob_start();
 			$index = 0;
-			echo "<div class=\"layout\">";
+			echo "<div class=\"layout\">\n";
 			foreach($this->root as $index => $item)
 				$item->generateHTML($index, $index);
-			echo "</div>";
+			echo "\n</div>";
 			$html = ob_get_contents();
 			ob_end_clean();
 			return $html;
