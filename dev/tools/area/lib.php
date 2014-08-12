@@ -104,9 +104,9 @@
 		if(isset($_GET['sid']))
 			$sid = $_GET['sid'];
 
-		$det = $db->sendQuery("SELECT * FROM surpool WHERE id='{$sid}';", false, false); 
-		$sid = $det[0][0];
-		$sname = $det[0][1];
+		$det = $db->sendQuery("SELECT * FROM surpool WHERE id='{$sid}';"); 
+		$sid = $det[0]['id'];
+		$sname = $det[0]['name'];
 		$sdir = SystemConfig::relativeAppPath("library/surrounds/$sname");
 		$aflist = getAssetFiles($sdir, "", $fm);
 	
@@ -115,7 +115,7 @@
 			$tname = $_GET['name'];
 			if(!$db->sendQuery("SELECT id FROM surtemplate WHERE s_id='$sid' AND value='$tname';",false, false)) {
 				$mid = $db->sendQuery("SELECT t_id FROM surtemplate WHERE s_id='$sid' ORDER BY t_id DESC LIMIT 1;", false, false);
-				$mid = intVal($mid[0][0]);
+				$mid = intVal($mid[0]['t_id']);
 				$mid++;
 				$db->sendQuery("INSERT INTO surtemplate (s_id, t_id, value) VALUES ('$sid', '$mid','$tname');", false, false);
 			}
@@ -124,8 +124,8 @@
 		if(isset($_GET['op']) && $_GET['op'] == 2) {
 			$addTemplate = true;
 			$tid = $_GET['tid'];
-			if($db->sendQuery("SELECT id FROM surtemplate WHERE s_id='$sid' AND t_id='$tid';",false, false))
-				$db->sendQuery("DELETE FROM surtemplate WHERE s_id='$sid' AND t_id='$tid';", false, false);
+			if($db->sendQuery("SELECT id FROM surtemplate WHERE s_id='$sid' AND t_id='$tid';"))
+				$db->sendQuery("DELETE FROM surtemplate WHERE s_id='$sid' AND t_id='$tid';");
 
 		}
 		else
@@ -148,130 +148,22 @@
 		}
 
 
-		$alist = $db->sendQuery("SELECT type, name, value, id FROM surasset WHERE s_id='$sid';", false, false);
+		$alist = $db->sendQuery("SELECT type, name, value, id FROM surasset WHERE s_id='$sid';");
 		if(!$alist)
 			$alist = array();
 
 		$tflist = $fm->listFiles($sdir);
-		$tlist = $db->sendQuery("SELECT t_id, value FROM surtemplate WHERE s_id='$sid';", false, false);
+		$tlist = $db->sendQuery("SELECT t_id, value FROM surtemplate WHERE s_id='$sid';");
 		if(!$tlist)
 			$tlist = array();
 
-		echo "<b>Manage Surround</b><br />";
-		echo "<div class=\"form-item\">";
-		echo "<b>$sname</b> ($sid)";
 
-		echo "<div class=\"form-item font-small\">";
-		echo "<br /><b>Templates</b><br />";
-		echo "<div class=\"panel-box form-item\">";
-			echo "<table>";
-			foreach($tflist as $t) {
-				$id = "-";
-
-				foreach($tlist as $td)
-					if($t == $td[1])
-						$id = $td[0];
-
-				$a = explode('.', $t);
-				$type = end($a);
-				if($type != "php" && $type != "htm")
-					continue;
-
-				echo "<tr>";
-					echo"<td>";
-					if($id == "-")
-						echo "<a class=\"switch-a\" href=\"index.php?tool=area&mode=mansur&op=1&name=$t&sid=$sid\">$t</a>";
-					else
-						echo $t;
-					echo"</td>";
-					echo"<td>$id</td>";
-					echo "<td>";
-						if($id != "-")
-							echo "<a class=\"switch-a\" style=\"color: red;\" href=\"index.php?tool=area&mode=mansur&op=2&tid=$id&sid=$sid\">X</a>";
-						else
-							echo " ";
-					echo "</td>";
-				echo "</tr>";
-			}
-			echo "</table>";
-
-		echo "</div>";
-		echo "</div>";
-
-		echo "<div class=\"form-item font-small\">";
-		echo "<br /><b>Assets</b><br />";
-		echo "<div class=\"panel-box form-item\">";
-			echo "<table>";
-			foreach($aflist as $a) {
-				$loaded = false;
-				$id = 0;
-
-				foreach($alist as $ad)
-					if($a[0] == $ad[2]) {
-						$loaded = true;
-						$id = $ad[3];
-					}
-
-				echo "<tr>";
-					echo"<td>";
-					if(!$loaded)
-						echo "<a class=\"switch-a\" href=\"index.php?tool=area&mode=mansur&op=3&name={$a[0]}&sid=$sid\">{$a[2]}</a>";
-					else
-						echo $a[2];
-					echo"</td>";
-					echo"<td class=\"font-small\">({$a[0]})</td>";
-					echo "<td>";
-						if($loaded)
-							echo "<a class=\"switch-a\" style=\"color: red;\" href=\"index.php?tool=area&mode=mansur&op=4&id=$id&sid=$sid\">X</a>";
-						else
-							echo " ";
-					echo "</td>";
-				echo "</tr>";
-			}
-			echo "</table>";
-
-		echo "</div>";
-		echo "</div>";
-		echo "</div>";
+		include('panels/manageSurround.php');
 	}
 
 	function surroundRegister($db, $fm)
 	{
-		echo "<b>Surround Register</b><br />";
-		$sdir = SystemConfig::relativeAppPath("library/surrounds");
-		$flist = $fm->listDirectories($sdir);
-
-		if(isset($_GET['op']) && $_GET['op'] == 1) {
-			$surround = $_GET['sur'];
-			if(!$db->sendQuery("SELECT id FROM surpool WHERE name='$surround';", false, false)) {
-				echo "Adding surround";
-				$db->sendQuery("INSERT INTO surpool (name) VALUES ('$surround');", false, false);
-			}
-		}
-
-		$dlist = $db->sendQuery("SELECT * FROM surpool", false, false);
-		if(!$dlist)
-			$dlist = array();
-		echo "<div class=\"form-item\">";
-			echo "<ul>";
-			echo "<table>";
-			foreach($flist as $f) {
-				$loaded = false;
-				foreach($dlist as $d)
-					if($f == $d[1])
-						$loaded = true;
-				echo "<tr>";
-				if($loaded)
-					echo "<td><li class=\"li-active\"><font style=\"color:grey\">$f</font></li></td>";
-				else
-					echo "<td><li class=\"li-inactive\"><a href=\"index.php?tool=area&mode=regsur&op=1&sur=$f\" class=\"switch-a\">$f</a></li></td>";
-				echo "</trd>";
-
-			}
-			echo "</table>";
-			echo "</ul>";
-		echo "</div>";
-		
+		include('panels/surroundRegister.php');
 	}
 
 	function stats($db, $rman)

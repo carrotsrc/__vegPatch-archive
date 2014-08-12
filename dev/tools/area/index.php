@@ -65,7 +65,7 @@
 				<select name="sid" class="form-text form-select">
 					<?php
 					foreach($surrounds as $s)
-						echo "<option value=\"{$s[0]}\">{$s[1]}</option>";
+						echo "<option value=\"{$s['id']}\">{$s['name']}</option>";
 					?>
 				</select>
 				<input type="submit" value="Manage Surround" class="form-button" />
