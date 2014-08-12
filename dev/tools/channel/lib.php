@@ -424,8 +424,8 @@
 		$channel = getChannel($cid, $db);
 		if(!$channel)
 			return;
-
-		$rman->addResource($type, $cid, $channel[3]);
+		
+		$rman->addResource($type, $cid, $channel['label']);
 	}
 
 	function stats($db, $rman)
