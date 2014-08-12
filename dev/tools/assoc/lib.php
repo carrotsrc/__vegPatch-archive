@@ -54,7 +54,7 @@
 			if($pr != null || $pr != false) {
 				echo "<table>";
 				foreach($pr as $r) {
-					$res = $rman->getResourceFromId($r[0]);
+					$res = $rman->getResourceFromId($r['id']);
 					echo "<tr>";
 						echo "<td>";
 						echo "<input type=\"checkbox\" name=\"p-{$res['id']}\">";
@@ -83,7 +83,7 @@
 			if($cr != null || $cr != false) {
 				echo "<table>";
 				foreach($cr as $r) {
-					$res = $rman->getResourceFromId($r[0]);
+					$res = $rman->getResourceFromId($r['id']);
 					echo "<tr>";
 						echo "<td>";
 						echo "<input type=\"checkbox\" name=\"c-{$res['id']}\">";
@@ -110,8 +110,8 @@
 		echo "<select class=\"form-text form-select float-l\" name=\"edge\">";
 			echo "<option value=\"0\">Normal Edge</option>";
 			foreach($etype as $edge) {
-				$t = ResCast::cast($edge[1]);
-				echo "<option value=\"{$edge[0]}\">{$t['type']}(): {$edge[2]}</option>";
+				$t = ResCast::cast($edge['rtype']);
+				echo "<option value=\"{$edge['id']}\">{$t['type']}(): {$edge['label']}</option>";
 			}
 		echo "</select>";
 		echo "<input type=\"submit\" style=\"margin-left: 6px;\" class=\"form-button float-r\" value=\"Create Relationship\">";
@@ -237,7 +237,7 @@
 		$det = null;
 		if(isset($_GET['op']) && $_GET['op'] == 2) {
 			$mod = $_GET['id'];
-			$det = $db->sendQuery("SELECT * FROM edgetype WHERE id='$mod';", false, false);
+			$det = $db->sendQuery("SELECT * FROM edgetype WHERE id='$mod';");
 			$det = $det[0];
 		}
 		else
@@ -249,16 +249,16 @@
 			modifyEdge($_POST['id'], $_POST['type'], $_POST['label'], $db);
 		}
 
-		$edges = $db->sendQuery("SELECT * FROM edgetype;", false, false);
+		$edges = $db->sendQuery("SELECT * FROM edgetype;");
 		echo "<b>Edge Manager</b>";
 		echo "<div class=\"panel-box form-item\" style=\"height: auto;\">";
 			echo "<table>";
 			foreach($edges as $e) {
 				echo "<tr>";
 				echo "<td>";
-				$o = ResCast::cast($e[1]);
+				$o = ResCast::cast($e['rtype']);
 
-				echo "<a class=\"switch-a\" href=\"index.php?tool=assoc&mode=edge&op=2&id={$e[0]}\">{$e[2]}</a>";
+				echo "<a class=\"switch-a\" href=\"index.php?tool=assoc&mode=edge&op=2&id={$e['id']}\">{$e['label']}</a>";
 				echo "</td>";
 
 				echo "<td>";
@@ -279,7 +279,7 @@
 		echo "<b>Type</b><br />";
 		echo "<select name=\"type\" class=\"form-text form-select\" style=\"margin-top: 0px;\">";
 			foreach($types as $t) {
-				if($det != null && $t['id'] == $det[1])
+				if($det != null && $t['id'] == $det['id'])
 					echo "<option value=\"{$t['id']}\" selected>{$t['type']}</option>";
 				else
 					echo "<option value=\"{$t['id']}\">{$t['type']}</option>";
@@ -292,7 +292,7 @@
 		if($det == null)
 			echo "<input name=\"label\" value=\"\" type=\"text\" class=\"form-text\" style=\"margin-top: 0px;\" autocomplete=\"off\">";
 		else
-			echo "<input name=\"label\" type=\"text\" class=\"form-text\" style=\"margin-top: 0px;\" autocomplete=\"off\" value=\"{$det[2]}\">";
+			echo "<input name=\"label\" type=\"text\" class=\"form-text\" style=\"margin-top: 0px;\" autocomplete=\"off\" value=\"{$det['label']}\">";
 
 		if(!$mod)
 			echo "<input type=\"hidden\" name=\"op\" value=\"1\">";
