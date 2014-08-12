@@ -95,8 +95,8 @@
 			echo "<td>";
 			echo "<input class=\"form-text\" type=\"text\" name=\"$c\" max-width=\"8\" value=\"";
 			foreach($cfg as $v) {
-				if($v[1] == $c) {
-					echo $v[2];
+				if($v['config'] == $c) {
+					echo $v['value'];
 				}
 			}
 			echo "\" />";

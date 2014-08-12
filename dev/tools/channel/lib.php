@@ -26,8 +26,8 @@
 			foreach($configs as $k => $v) {
 				if($v == "") {
 					foreach($vals as $r) {
-						if($r[1] == $k) {
-							$q[] = $r[0];
+						if($r['config'] == $k) {
+							$q[] = $r['id'];
 							unset($configs[$k]);
 						}
 					}
@@ -52,10 +52,9 @@
 			$q = array();
 			foreach($configs as $k => $v) {
 				foreach($vals as $r)
-					if($r[1] == $k)
-						$q[] = $r[1];
+					if($r['config'] == $k)
+						$q[] = $r['config'];
 			}
-
 			if(($sz = sizeof($q)) > 0) {
 				foreach($q as $id) {
 					$sql = "UPDATE `widget_cfgreg` SET ";
@@ -165,7 +164,7 @@
 				return null;
 		}
 
-		return $rid[0][0];
+		return $rid[0]['id'];
 	}
 
 	function channelPlugins($cid, $db)
@@ -194,7 +193,7 @@
 		if(!$res)
 			return null;
 
-		return $res[0][1];
+		return $res[0]['label'];
 	}
 
 	function manageChannel($cid, $db, $rman, $pls)
@@ -203,11 +202,12 @@
 		$rid = channelResource($cid, $rman);
 		$plugins = channelPlugins($cid, $db);
 		$cplugin = null;
+
 		if(isset($_GET['cplugin']))
 			$cplugin = $_GET['cplugin'];
 		echo "<b>Channel Manager</b><br /><br />";
 
-		echo "<b>{$channel[2]}</b> ({$channel[0]})";
+		echo "<b>{$channel['label']}</b> ({$channel['id']})";
 		if($rid == null) {
 			echo "<form name=\"reg-channel\">\n";
 				echo "<input type=\"hidden\" name=\"tool\" value=\"channel\" />\n";
@@ -228,24 +228,24 @@
 				echo "<table>\n";
 				$sz = sizeof($plugins)-1;
 				foreach($plugins as $k => $p) {
-					$pa = getPluginActual($p[3], $rman);
+					$pa = getPluginActual($p['pid'], $rman);
 					$k++;
 					echo "<tr>";
-					echo "<td><b>{$pa[1]}</b></td>";
-					echo "<td style=\"\">".getPluginLabel($p[3], $p[4], $rman)."</td>";
-					echo "<td>=&gt; <a href=\"index.php?tool=channel&mode=channel\" class=\"switch-a\">{$p[2]}</a></td>";
-					echo "<td class=\"font-small\">({$p[3]})</td>";
+					echo "<td><b>{$pa['label']}</b></td>";
+					echo "<td style=\"\">".getPluginLabel($p['pid'], $p['inst'], $rman)."</td>";
+					echo "<td>=&gt; <a href=\"index.php?tool=channel&mode=channel\" class=\"switch-a\">{$p['seq']}</a></td>";
+					echo "<td class=\"font-small\">({$p['pid']})</td>";
 					if($k > 1)
-						echo "<td><a href=\"index.php?tool=channel&mode=channel&cchan=$cid&op=5&nid={$p[0]}\" class=\"switch-a\">&uarr;</a></td>";
+						echo "<td><a href=\"index.php?tool=channel&mode=channel&cchan=$cid&op=5&nid={$p['id']}\" class=\"switch-a\">&uarr;</a></td>";
 					else
 						echo "<td>&nbsp</td>";
 
 					if($k <= $sz)
-						echo "<td><a href=\"index.php?tool=channel&mode=channel&cchan=$cid&op=6&nid={$p[0]}\" class=\"switch-a\">&darr;</a></td>";
+						echo "<td><a href=\"index.php?tool=channel&mode=channel&cchan=$cid&op=6&nid={$p['id']}\" class=\"switch-a\">&darr;</a></td>";
 					else
 						echo "<td>&nbsp</td>";
 
-					echo "<td><a style=\"color: red;\" href=\"index.php?tool=channel&mode=channel&cchan=$cid&op=7&nid={$p[0]}\" class=\"switch-a\">X</a></td>";
+					echo "<td><a style=\"color: red;\" href=\"index.php?tool=channel&mode=channel&cchan=$cid&op=7&nid={$p['id']}\" class=\"switch-a\">X</a></td>";
 					echo "</tr>";
 				}
 				echo "</table>";
@@ -305,7 +305,7 @@
 		if(!$cseq)
 			$cseq = 0;
 		else
-			$cseq = $cseq[0][0];
+			$cseq = $cseq[0]['seq'];
 
 		$cseq++;
 		$res = $rman->getResourceFromId($rid);
@@ -315,7 +315,7 @@
 		$sql .= "VALUES (";
 		$sql .= "\"$channel\", ";
 		$sql .= "\"$cseq\", ";
-		$sql .= "\"{$plg[0][1]}\", ";
+		$sql .= "\"{$plg[0]['ref']}\", ";
 		$sql .= "\"{$res['handler']}\");";
 		
 		$db->sendQuery($sql);
@@ -331,7 +331,7 @@
 		$pass = false;
 		foreach($plugins as $p)
 		{
-			if($p[0] == $id) {
+			if($p['id'] == $id) {
 				$pass = true;
 				continue;
 			}
@@ -343,10 +343,9 @@
 		$db->sendQuery("DELETE FROM channelnodes WHERE id='$id';");
 		if(sizeof($nlist) == 0)
 			return;
-
 		foreach($nlist as &$p) {
-			$nseq = intval($p[3])-1;
-			$db->sendQuery("UPDATE channelnodes SET seq='$nseq' WHERE id='{$p[0]}';", false, false);
+			$nseq = intval($p['seq'])-1;
+			$db->sendQuery("UPDATE channelnodes SET seq='$nseq' WHERE id='{$p['id']}';", false, false);
 		}
 
 	}
@@ -357,7 +356,7 @@
 		$cseq = $db->sendQuery("SELECT seq FROM channelnodes WHERE id=\"$nid\";", false, false);
 		if(!$cseq)
 			return;
-		$cseq = intval($cseq[0][0]);
+		$cseq = intval($cseq[0]['seq']);
 
 		if($cseq == 1)
 			return;
@@ -378,7 +377,7 @@
 		if(!$cseq)
 			return;
 
-		$cseq = intval($cseq[0][0]);
+		$cseq = intval($cseq[0]['seq']);
 
 		if($cseq == $seqmax)
 			return;
