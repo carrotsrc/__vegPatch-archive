@@ -10,7 +10,7 @@
 		$sql = "SELECT `widget_cfgreg`.`id`, `widget_cfgreg`.`config`, `widget_cfgreg`.`value` FROM `widget_cfgreg` JOIN `rescast` ON `widget_cfgreg`.`type` = `rescast`.`id` ";
 		$sql .= "WHERE `rescast`.`type`='Plugin' AND `widget_cfgreg`.`inst`='{$ref}' ";
 		$sql .= "AND `widget_cfgreg`.`cid`='{$cid}'";
-		$r = $db->sendQuery($sql, false, false);
+		$r = $db->sendQuery($sql);
 		if(!$r)
 			return null;
 
@@ -84,7 +84,7 @@
 		if(!$res)
 			return null;
 
-		return $res[0][0];
+		return $res[0]['id'];
 	}
 
 	function registerPlugin($plugin, $rman, $db)
@@ -110,7 +110,7 @@
 			return null;
 
 		foreach($ls as &$r)
-			$r = $rman->getResourceFromId($r[0]);
+			$r = $rman->getResourceFromId($r['id']);
 
 		return $ls;
 	}

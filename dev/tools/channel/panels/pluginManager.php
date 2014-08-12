@@ -53,8 +53,8 @@
 	echo "</div>";
 
 	if(isset($_GET['op']) && ($_GET['op'] == 3 || $_GET['op'] == 4) && $sel != null) {
-		include(SystemConfig::relativeAppPath("system/plugin/pluginman.php"));
-		$pluginman = new PluginMan($db);
+		$flag = 0;
+		include('../../system/module/modman.php');
 		echo "<hr />";
 		echo "Edit Instance<br />";
 		echo "<form name=\"ninst\" method=\"post\" class=\"font-small form-item\" action=\"index.php?tool=channel&id={$_GET['id']}&mode=plugin&cplugin=$plugin&op=4&cinst={$_GET['cinst']}\">";
@@ -68,7 +68,7 @@
 		echo "</div>";
 
 		$res = $rman->getResourceFromId($rid);
-		$plugin = $pluginman->getPlugin($res['handler'], $_GET['cinst']);
+		$plugin = ModMan::getPlugin($res['handler'], $_GET['cinst'], $db);
 		if($plugin == null) {
 			echo "</div>";
 			return;

@@ -14,7 +14,6 @@
 	include(SystemConfig::relativeAppPath("system/managers.php"));
 	include("lib.php");
 
-	$fm = Koda::getFileManager();
 	$dbm = new DebugMicro();
 
 	$rman = new ResMan($db);
@@ -133,10 +132,10 @@
 			<select class="form-text form-select" name="cchan">
 				<?php 
 					foreach($channels as $c) {
-						if($cchan != null && $cchan == $c[0])
-							echo "<option value=\"{$c[0]}\" selected>{$c[2]}</option>";
+						if($cchan != null && $cchan == $c['id'])
+							echo "<option value=\"{$c['id']}\" selected>{$c['label']}</option>";
 						else
-							echo "<option value=\"{$c[0]}\">{$c[2]}</option>";
+							echo "<option value=\"{$c['id']}\">{$c['label']}</option>";
 					}
 				?>
 			</select>
