@@ -24,7 +24,7 @@
 			$db->sendQuery($sql);
 		}
 		echo "<b>Root Configuration</b>";
-		$config = $db->sendQuery("SELECT * FROM rootconfig;", false, true);
+		$config = $db->sendQuery("SELECT * FROM rootconfig;");
 		if(!$config) {
 			$config = array(
 				"title" => "",
@@ -58,7 +58,7 @@
 	{
 		if(isset($_GET['op']) && $_GET['op'] == 1) {
 			$path = $_GET['name'];
-			if(!$db->sendQuery("SELECT id FROM rootasset WHERE value='$path';",false, false)) {
+			if(!$db->sendQuery("SELECT id FROM rootasset WHERE value='$path';")) {
 				$a = explode("/", $path);
 				$name = end($a);
 				$type = explode(".", $name);
@@ -74,15 +74,16 @@
 			$db->sendQuery("DELETE FROM rootasset WHERE id='{$_GET['id']}';", false, false);
 		}
 
-		$gpath = $db->sendQuery("SELECT globalasset FROM rootconfig", false, false);
-		$gpath = $gpath[0][0];
+		$gpath = $db->sendQuery("SELECT globalasset FROM rootconfig");
+		$gpath = $gpath[0]['globalasset'];
 		$path = SystemConfig::relativeAppPath("library/{$gpath}");
 		$aflist = getAssetFiles($path, "", $fm);
 		if($aflist == null)
 			$aflist = array();
-		$alist = $db->sendQuery("SELECT * FROM rootasset;", false, false);
-		if($alist == false)
+		$alist = $db->sendQuery("SELECT * FROM rootasset;");
+		if(!$alist)
 			$alist = array();
+
 
 		echo "<b>Root Assets</b><br />";
 		echo "<div class=\"form-item\">";
@@ -96,9 +97,9 @@
 					$id = 0;
 					
 					foreach($alist as $a) {
-						if($a[3] == $f[0]) {
+						if($a['value'] == $f[0]) {
 							$loaded = true;
-							$id = $a[0];
+							$id = $a['id'];
 						}
 					}
 
@@ -121,16 +122,16 @@
 					$exists = false;
 
 					foreach($aflist as $f) {
-						if($f[0] == $a[3])
+						if($f[0] == $a['value'])
 							$exists = true;
 					}
 
 					if($exists)
 						continue;
 
-					$id = $a[0];
+					$id = $a['id'];
 					echo "<tr>";
-					echo "<td>{$a[2]}</td>";
+					echo "<td>{$a['name']}</td>";
 					echo "<td>???</td>";
 					echo "<td>";
 					echo "<a href=\"index.php?tool=root&mode=asset&op=2&id=$id\" class=\"switch-a\" style=\"color:red;\">X</a>";
