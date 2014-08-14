@@ -30,8 +30,8 @@
 					if($res != null || $res != false) {
 						echo "<table>";
 						foreach($res as $r) {
-							$rid = $r[0];
-							$rp = $rman->getResourceFromId($r[0]);
+							$rid = $r['id'];
+							$rp = $rman->getResourceFromId($r['id']);
 							$tp = ResCast::cast($rp['type']);
 							echo "<tr>";
 								echo "<td>";
