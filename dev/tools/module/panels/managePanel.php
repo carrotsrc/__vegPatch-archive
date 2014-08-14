@@ -1,6 +1,6 @@
 <?php
 		echo "<b>Panel Manager</b><br /><br />";
-		$details = $db->sendQuery("SELECT * FROM modreg WHERE id='$id'", false, false);
+		$details = $db->sendQuery("SELECT * FROM modreg WHERE id='$id'");
 		if(!$details) {
 			echo "No details";
 			return;
@@ -12,7 +12,7 @@
 		echo "</div>";
 
 		echo "<div class=\"form-item\">";
-			echo "<b>{$details[2]}</b> ({$details[0]})";
+			echo "<b>{$details['module_name']}</b> ({$details['id']})";
 		echo "</div>";
 
 		$res = $rman->queryAssoc("Panel('$id');");
@@ -24,7 +24,7 @@
 				echo "<input name=\"op\" type=\"hidden\" value=\"1\"/>";
 				echo "<input name=\"space\" type=\"hidden\" value=\"$space\"/>";
 				echo "<input name=\"pid\" type=\"hidden\" value=\"$id\"/>";
-				echo "<input name=\"name\" type=\"hidden\" value=\"{$details[2]}\"/>";
+				echo "<input name=\"name\" type=\"hidden\" value=\"{$details['module_name']}\"/>";
 				echo "<input type=\"submit\" class=\"form-button\" value=\"Register Resource\">";
 			echo "</form>";
 			echo "</div>";
@@ -32,6 +32,6 @@
 		}
 
 		echo "<div class=\"form-item font-small\">";
-			echo "Panel( {$res[0][0]} ) =&gt; $id";
+			echo "Panel( {$res[0]['id']} ) =&gt; $id";
 		echo "</div>";
 ?>

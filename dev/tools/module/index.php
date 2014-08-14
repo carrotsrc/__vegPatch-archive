@@ -240,10 +240,10 @@
 			<select class="form-text form-select" name="pid">
 				<?php 
 					foreach($regpnl as $c) {
-						if($pid != null && $pid == $c[0])
-							echo "<option value=\"{$c[0]}\" selected>{$c[1]}</option>";
+						if($pid != null && $pid == $c['id'])
+							echo "<option value=\"{$c['id']}\" selected>{$c['module_name']}</option>";
 						else
-							echo "<option value=\"{$c[0]}\">{$c[1]}</option>";
+							echo "<option value=\"{$c['id']}\">{$c['module_name']}</option>";
 					}
 				?>
 			</select>

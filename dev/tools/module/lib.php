@@ -166,7 +166,7 @@
 	function panelReg($dir, $space, $db) 
 	{
 		$sql = "SELECT id, module_name FROM modreg WHERE module_type='1' AND space='$space'";
-		$reg = $db->sendQuery($sql, false, false);
+		$reg = $db->sendQuery($sql);
 		if(!$reg)
 			$reg = array();
 
@@ -176,11 +176,11 @@
 		foreach($dir as $p) {
 			$loaded = false;
 			foreach($reg as $ld) {
-				if($p == $ld[1])
+				if($p == $ld['module_name'])
 					$loaded = $ld;
 			}
 			if($loaded !== false)
-				$lduld[] = array($loaded[0], $loaded[1], 1);
+				$lduld[] = array($loaded['id'], $loaded['module_name'], 1);
 			else
 				$lduld[] = array(0, $p, 0);
 		}
@@ -214,7 +214,7 @@
 
 	function registerPanel($name, $space, $db)
 	{
-		if($db->sendQuery("SELECT id FROM modreg WHERE module_name='$name';", false, false) != false)
+		if(($db->sendQuery("SELECT id FROM modreg WHERE module_name='$name';")))
 			return;
 
 		$sql = "INSERT INTO modreg ";
