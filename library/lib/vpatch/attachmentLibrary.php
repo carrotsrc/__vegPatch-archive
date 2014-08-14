@@ -45,13 +45,13 @@
 
 		public function getAttachment($id)
 		{
-			return $this->db->sendQuery("SELECT attachments.*, attachments_type.name FROM attachments LEFT OUTER JOIN attachments_type ON attachments_type.id = attachments.type WHERE attachments.id='$id' ", false, false);
+			return $this->db->sendQuery("SELECT attachments.*, attachments_type.name FROM attachments LEFT OUTER JOIN attachments_type ON attachments_type.id = attachments.type WHERE attachments.id='$id' ");
 
 		}
 
 		public function getAttachmentWithUrl($url)
 		{
-			return $this->db->sendQuery("SELECT attachments.*, attachments_type.name FROM attachments LEFT OUTER JOIN attachments_type ON attachments_type.id = attachments.type WHERE attachments.url='$url' ", false, false);
+			return $this->db->sendQuery("SELECT attachments.*, attachments_type.name FROM attachments LEFT OUTER JOIN attachments_type ON attachments_type.id = attachments.type WHERE attachments.url='$url' ");
 		}
 
 		public function getlsAttachment($ids)
@@ -64,7 +64,7 @@
 					$sql .= " OR ";
 			}
 			$sql .= ";";
-			return $this->db->sendQuery($sql, false, false);
+			return $this->db->sendQuery($sql);
 		}
 
 		public function getProperties($id, $property = null)
@@ -73,7 +73,7 @@
 			if($property)
 				$sql .= " AND `name`='$property'";
 
-			$prop = $this->db->sendQuery($sql, false, true);
+			$prop = $this->db->sendQuery($sql);
 			if(!$prop)
 				return false;
 			if($property)
@@ -119,7 +119,7 @@
 			if($this->exp != null)
 				return $this->exp;
 
-			$exp = $this->db->sendQuery("SELECT id, exp, name FROM attachments_type;", false, false);
+			$exp = $this->db->sendQuery("SELECT id, exp, name FROM attachments_type;");
 			if(!$exp)
 				return null;
 
@@ -154,7 +154,7 @@
 		{
 			$att = $this->getAttachment($id);
 			if(!strpos($att[0][3],"://")) {
-				$path = SystemConfig::relativeAppPath($att[0][3]);
+				$path = SystemConfig::relativeAppPath($att[0]['url']);
 				unlink($path);
 			}
 			$this->db->sendQuery("DELETE FROM `attachments` WHERE `id`='$id';");
