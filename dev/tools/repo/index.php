@@ -14,7 +14,6 @@
 	$repo = "http://repo.localhost";
 	include(SystemConfig::relativeAppPath("system/helpers/vpxml.php"));
 	include("lib.php");
-	$fm = Koda::getFileManager($repo);
 
 	ob_start();
 	browse_repo($repo);

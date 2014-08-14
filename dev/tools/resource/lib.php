@@ -35,7 +35,7 @@
 
 	function newTypePanel($db, $rman)
 	{
-		$bases = $db->sendQuery("SELECT id, label FROM resbase ORDER BY id;", false, false);
+		$bases = $db->sendQuery("SELECT id, label FROM resbase ORDER BY id;");
 		if(isset($_POST['op']) && $_POST['op'] == 1) {
 			$base = $_POST['base'];
 			$type = $_POST['label'];
@@ -52,7 +52,7 @@
 			echo "<form method=\"post\" action=\"index.php?tool=resource&mode=newtype\">";
 				echo "<select name=\"base\" class=\"form-text form-select\">";
 					foreach($bases as $b)
-						echo "<option value=\"{$b[0]}\">{$b[1]}</option>";
+						echo "<option value=\"{$b['id']}\">{$b['label']}</option>";
 				echo "</select>";
 				echo " ( '<input class=\"form-text\" type=\"text\" name=\"label\" />' )";
 				echo " =&gt; <input class=\"form-text\" style=\"width: 30px\" type=\"text\" name=\"ref\" /><br />";

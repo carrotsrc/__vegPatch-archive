@@ -11,8 +11,6 @@
 	include(SystemConfig::relativeAppPath("system/resource/resman.php"));
 	include("lib.php");
 
-	$fm = Koda::getFileManager();
-
 	$rman = new ResMan($db);
 	if(isset($_GET['mode']) && $_GET['mode'] == "newres") {
 		ob_start();
