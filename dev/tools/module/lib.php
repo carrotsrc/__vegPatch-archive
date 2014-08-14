@@ -84,7 +84,7 @@
 			echo "Failed to load registry";
 			return;
 		}
-		echo $_GET['nspace']."/<br />";
+		echo $_GET['ncollection']."/<br />";
 		echo "<table>";
 		echo "<ul>";
 		foreach($data as $cmpt) {
@@ -95,7 +95,7 @@
 				echo "<li style=\"color: grey;\">";
 			
 			if($cmpt[2] == 0)
-				echo "<a class=\"switch-a\" href=\"index.php?tool=module&mode=cmptreg&op=1&id={$cmpt[1]}&nspace={$_GET['nspace']}\" style=\"color: grey;\">{$cmpt[1]}</a>";
+				echo "<a class=\"switch-a\" href=\"index.php?tool=module&mode=cmptreg&op=1&id={$cmpt[1]}&ncollection={$_GET['ncollection']}\" style=\"color: grey;\">{$cmpt[1]}</a>";
 			else {
 				echo "<font style=\"color: grey;\">{$cmpt[1]}</font></td>";
 				echo "<td style=\"padding-left: 10px; font-size: x-small;\"><font style=\"color: grey;\">{$cmpt[0]}</font>";
@@ -116,7 +116,7 @@
 		$sql = "INSERT INTO modreg ";
 		$sql .= "(module_type, module_name, space, active, version) ";
 		$sql .= "VALUES ";
-		$sql .= "(0, '$name', '{$_GET['nspace']}', 1, '1.0')";
+		$sql .= "(0, '$name', '{$_GET['ncollection']}', 1, '1.0')";
 		$db->sendQuery($sql);
 	}
 
@@ -163,9 +163,9 @@
 		$rman->addResource('Component', $id, $name);
 	}
 
-	function panelReg($dir, $space, $db) 
+	function panelReg($dir, $collection, $db) 
 	{
-		$sql = "SELECT id, module_name FROM modreg WHERE module_type='1' AND space='$space'";
+		$sql = "SELECT id, module_name FROM modreg WHERE module_type='1' AND space='$collection'";
 		$reg = $db->sendQuery($sql);
 		if(!$reg)
 			$reg = array();
@@ -187,7 +187,7 @@
 
 		echo "<b>Panel Registry</b><br />";
 		echo "<div class=\"form-item\">";
-			echo "$space/";
+			echo "$collection/";
 			echo "<table>";
 			echo "<ul>";
 			foreach($lduld as $cmpt) {
@@ -198,7 +198,7 @@
 					echo "<li style=\"color: grey;\">";
 				
 				if($cmpt[2] == 0)
-					echo "<a class=\"switch-a\" href=\"index.php?tool=module&mode=panelreg&space=$space&op=1&id={$cmpt[1]}\" style=\"color: grey;\">{$cmpt[1]}</a>";
+					echo "<a class=\"switch-a\" href=\"index.php?tool=module&mode=panelreg&collection=$collection&op=1&id={$cmpt[1]}\" style=\"color: grey;\">{$cmpt[1]}</a>";
 				else {
 					echo "<font style=\"color: grey;\">{$cmpt[1]}</font></td>";
 					echo "<td style=\"padding-left: 10px; font-size: x-small;\"><font style=\"color: grey;\">{$cmpt[0]}</font>";
@@ -212,7 +212,7 @@
 		echo "</div>";
 	}
 
-	function registerPanel($name, $space, $db)
+	function registerPanel($name, $collection, $db)
 	{
 		if(($db->sendQuery("SELECT id FROM modreg WHERE module_name='$name';")))
 			return;
@@ -220,7 +220,7 @@
 		$sql = "INSERT INTO modreg ";
 		$sql .= "(module_type, module_name, space, active, version) ";
 		$sql .= "VALUES ";
-		$sql .= "(1, \"$name\", \"$space\", 1, \"1.0\")";
+		$sql .= "(1, \"$name\", \"$collection\", 1, \"1.0\")";
 		$db->sendQuery($sql);
 	}
 
@@ -232,7 +232,7 @@
 		$rman->addResource('Panel', $id, $name);
 	}
 
-	function managePanel($id, $space, $db, $rman)
+	function managePanel($id, $collection, $db, $rman)
 	{
 		include("panels/managePanel.php");
 	}

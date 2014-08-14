@@ -28,28 +28,28 @@
 	$cid = null;
 
 
-	$pspace = $fm->listDirectories(SystemConfig::relativeAppPath("library/panel"));
+	$pcollection = $fm->listDirectories(SystemConfig::relativeAppPath("library/panel"));
 	$cdir = $fm->listDirectories(SystemConfig::relativeAppPath("library/components"));
-	$cspace = null;
-	$nspace = null;
+	$ccollection = null;
+	$ncollection = null;
 	$regpnl = null;
 	$pid = null;
-	if(isset($_GET['space']))
-		$cspace = $_GET['space'];
+	if(isset($_GET['collection']))
+		$ccollection = $_GET['collection'];
 
-	if(isset($_GET['nspace']))
-		$nspace = $_GET['nspace'];
+	if(isset($_GET['ncollection']))
+		$ncollection = $_GET['ncollection'];
 
 	// organise component registry
-	if(isset($_GET['mode']) && $_GET['mode'] == 'cmptreg' && $nspace != null) {
+	if(isset($_GET['mode']) && $_GET['mode'] == 'cmptreg' && $ncollection != null) {
 
 		if(isset($_GET['op']) && $_GET['op'] == 1)
 			registerComponent($_GET['id'], $db);
 
-		$mlib = SystemConfig::relativeAppPath("library/components/$nspace");
+		$mlib = SystemConfig::relativeAppPath("library/components/$ncollection");
 		$dirs = $fm->listDirectories($mlib);
 
-		$sql = "SELECT id, module_name FROM modreg WHERE module_type='0' AND space='$nspace';";
+		$sql = "SELECT id, module_name FROM modreg WHERE module_type='0' AND space='$ncollection';";
 		$regcmpt = $db->sendQuery($sql);
 		if($regcmpt != false) {
 
@@ -119,11 +119,11 @@
 	if(isset($_GET['mode']) && $_GET['mode'] == 'panelreg') {
 
 		if(isset($_GET['op']) && $_GET['op'] == 1) {
-			registerPanel($_GET['id'], $cspace, $db);
+			registerPanel($_GET['id'], $ccollection, $db);
 		}
-		$contents = $fm->listDirectories(SystemConfig::relativeAppPath("library/panel/$cspace"));
+		$contents = $fm->listDirectories(SystemConfig::relativeAppPath("library/panel/$ccollection"));
 		ob_start();
-		panelReg($contents, $cspace, $db, $rman);
+		panelReg($contents, $ccollection, $db, $rman);
 		$panel = ob_get_contents();
 		ob_end_clean();
 	}
@@ -135,7 +135,7 @@
 			registerPanelResource($pid, $_GET['name'], $rman);
 		}
 		ob_start();
-		managePanel($pid, $cspace, $db, $rman);
+		managePanel($pid, $ccollection, $db, $rman);
 		$panel = ob_get_contents();
 		ob_end_clean();
 	}
@@ -147,8 +147,8 @@
 		ob_end_clean();
 	}
 
-	if($nspace != null) {
-		$sql = "SELECT id, module_name FROM modreg WHERE module_type='0' AND space='$nspace';";
+	if($ncollection != null) {
+		$sql = "SELECT id, module_name FROM modreg WHERE module_type='0' AND space='$ncollection';";
 		$regcmpt = $db->sendQuery($sql, false, false);
 		if(!$regcmpt)
 			$regcmpt = array();
@@ -156,8 +156,8 @@
 	else
 		$regcmp = array();
 
-	if($cspace != null)
-		$regpnl = $db->sendQuery("SELECT id, module_name FROM modreg WHERE module_type='1' AND space='$cspace';", false, false);
+	if($ccollection != null)
+		$regpnl = $db->sendQuery("SELECT id, module_name FROM modreg WHERE module_type='1' AND space='$ccollection';", false, false);
 ?>
 <div id="kr-layout">
 	<div class="tools">
@@ -167,25 +167,25 @@
 		<form method="get" action="index.php">
 			<input type="hidden" name="tool" value="module" />
 			<input type="hidden" name="mode" value="cmptreg" />
-			<select class="form-text form-select" name="nspace">
+			<select class="form-text form-select" name="ncollection">
 				<?php 
 					foreach($cdir as $c) {
-						if($nspace != null && $nspace == $c)
+						if($ncollection != null && $ncollection == $c)
 							echo "<option value=\"{$c}\" selected>{$c}</option>";
 						else
 							echo "<option value=\"{$c}\">{$c}</option>";
 					}
 				?>
 			</select>
-			<input type="submit" value="Load Space" class="form-button"/>
+			<input type="submit" value="Load Collection" class="form-button"/>
 		</form>
 		<?php
-			if($nspace != null) {
+			if($ncollection != null) {
 		?>
-		<form method="post" action="index.php?tool=module&mode=cmptreg&nspace=<?php echo $nspace; ?>">
+		<form method="post" action="index.php?tool=module&mode=cmptreg&ncollection=<?php echo $ncollection; ?>">
 			<input type="submit" value="Component Registry" class="form-button"/>
 		</form>
-		<form method="post" action="index.php?tool=module&mode=cmptman&nspace=<?php echo $nspace; ?>">
+		<form method="post" action="index.php?tool=module&mode=cmptman&ncollection=<?php echo $ncollection; ?>">
 			<select class="form-text form-select" name="cid">
 				<?php 
 					foreach($regcmpt as $c) {
@@ -209,10 +209,10 @@
 		<b>Panels</b>
 		<form method="get" action="index.php">
 			<input type="hidden" name="tool" value="module" />
-			<select class="form-text form-select" name="space">
+			<select class="form-text form-select" name="collection">
 				<?php 
-					foreach($pspace as $c) {
-						if($cspace != null && $cspace == $c)
+					foreach($pcollection as $c) {
+						if($ccollection != null && $ccollection == $c)
 							echo "<option value=\"{$c}\" selected>{$c}</option>";
 						else
 							echo "<option value=\"{$c}\">{$c}</option>";
@@ -222,21 +222,21 @@
 			<?php 
 			echo"<input type=\"hidden\" name=\"mode\" value=\"panelreg\" />";
 			?>
-			<input type="submit" value="Load Space" class="form-button"/>
+			<input type="submit" value="Load Collection" class="form-button"/>
 		</form>
 
-		<?php if($cspace != null) { ?>
+		<?php if($ccollection != null) { ?>
 		<form method="get" action="index.php">
 			<input type="hidden" name="tool" value="module" />
 			<input type="hidden" name="mode" value="panelreg" />
-			<input type="hidden" name="space" value="<?php echo $cspace; ?>" />
+			<input type="hidden" name="collection" value="<?php echo $ccollection; ?>" />
 			<input type="submit" value="Panel Registry" class="form-button" />
 		</form>
 
 		<form method="get" action="index.php">
 			<input type="hidden" name="tool" value="module" />
 			<input type="hidden" name="mode" value="panelman" />
-			<input type="hidden" name="space" value="<?php echo $cspace; ?>" />
+			<input type="hidden" name="collection" value="<?php echo $ccollection; ?>" />
 			<select class="form-text form-select" name="pid">
 				<?php 
 					foreach($regpnl as $c) {

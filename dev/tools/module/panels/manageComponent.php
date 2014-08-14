@@ -13,7 +13,7 @@
 			setWidgetConfig($type, $cid, $inst, $_POST, $db);
 		}
 		echo "<b>Component Manager</b><br /><br />";
-		$details = $db->sendQuery("SELECT * FROM modreg WHERE id='$id' && space='{$_GET['nspace']}';", false, false);
+		$details = $db->sendQuery("SELECT * FROM modreg WHERE id='$id' && space='{$_GET['ncollection']}';", false, false);
 		if(!$details) {
 			echo "No Details";
 			return;
@@ -26,7 +26,7 @@
 		$res = $rman->queryAssoc($rq);
 		if(!$res) {
 			echo "<div class=\"form-item\">\n";
-			echo "<form method=\"post\" action=\"index.php?tool=module&mode=cmptman&nspace={$_GET['nspace']}\">";
+			echo "<form method=\"post\" action=\"index.php?tool=module&mode=cmptman&ncollection={$_GET['ncollection']}\">";
 				echo "<input name=\"cid\" type=\"hidden\" value=\"$id\" class=\"form-button\"/>\n";
 				echo "<input name=\"name\" type=\"hidden\" value=\"{$details['module_name']}\" class=\"form-button\"/>\n";
 				echo "<input name=\"op\" type=\"hidden\" value=\"13\" class=\"form-button\"/>\n";
@@ -47,7 +47,7 @@
 				foreach($res as $r) {
 					// // // //$c = $rman->getResourceFromId($r[0]);
 					echo "<tr>";
-					echo "<td style=\"text-align: right;\"><a href=\"index.php?tool=module&mode=cmptman&op=12&id={$r['id']}&cid={$id}&nspace={$_GET['nspace']}\" class=\"switch-a\">{$r['label']}</a></td>";
+					echo "<td style=\"text-align: right;\"><a href=\"index.php?tool=module&mode=cmptman&op=12&id={$r['id']}&cid={$id}&ncollection={$_GET['ncollection']}\" class=\"switch-a\">{$r['label']}</a></td>";
 					echo "<td>=&gt; {$r['ref']}</td>";
 					echo "<td class=\"font-small\">({$r['id']})</td>";
 					echo "</tr>";
@@ -69,7 +69,7 @@
 
 				echo "<div class=\"form-item\" style=\"\">";
 					echo "Edit Instance<br />";
-					echo "<form method=\"post\" action=\"index.php?tool=module&mode=cmptman&nspace={$_GET['nspace']}\">";
+					echo "<form method=\"post\" action=\"index.php?tool=module&mode=cmptman&ncollection={$_GET['ncollection']}\">";
 
 					echo "<div class=\"form-item\">";
 						echo "<font class=\"font-small\"><b>Label</b><br /></font>";
@@ -83,7 +83,7 @@
 						echo "<input name=\"cid\" type=\"hidden\" value=\"$id\" />";
 						echo "<input name=\"id\" type=\"hidden\" value=\"{$sel['id']}\" />";
 						echo "<input name=\"submit\" type=\"submit\"  value=\"Modify\" style=\"margin-top: 0px; margin-left: 15px;\" class=\"form-button\" />";
-						echo "<a href=\"index.php?tool=module&mode=cmptman&cid={$id}&nspace={$_GET['nspace']}\" class=\"switch-a\" style=\"margin-left: 15px\">cancel</a>";
+						echo "<a href=\"index.php?tool=module&mode=cmptman&cid={$id}&ncollection={$_GET['ncollection']}\" class=\"switch-a\" style=\"margin-left: 15px\">cancel</a>";
 					echo "</div>";
 
 					echo "</form>";
@@ -138,7 +138,7 @@
 			else {
 				echo "<div class=\"form-item\">";
 					echo "New Instance<br />";
-					echo "<form method=\"post\" action=\"index.php?tool=module&mode=cmptman&nspace={$_GET['nspace']}\">";
+					echo "<form method=\"post\" action=\"index.php?tool=module&mode=cmptman&ncollection={$_GET['ncollection']}\">";
 
 					echo "<div class=\"form-item\">";
 						echo "<font class=\"font-small\"><b>Label</b><br /></font>";
