@@ -18,24 +18,25 @@
 			echo "No Details";
 			return;
 		}
-		$details = $details[0];
-		echo "<b>{$details[2]}</b> ({$details[0]})<br />";
 
-		$rq = "Component('{$details[0]}');";
+		$details = $details[0];
+		echo "<b>{$details['module_name']}</b> ({$details['id']})<br />";
+
+		$rq = "Component('{$details['id']}');";
 		$res = $rman->queryAssoc($rq);
 		if(!$res) {
 			echo "<div class=\"form-item\">\n";
 			echo "<form method=\"post\" action=\"index.php?tool=module&mode=cmptman&nspace={$_GET['nspace']}\">";
 				echo "<input name=\"cid\" type=\"hidden\" value=\"$id\" class=\"form-button\"/>\n";
-				echo "<input name=\"name\" type=\"hidden\" value=\"{$details[2]}\" class=\"form-button\"/>\n";
+				echo "<input name=\"name\" type=\"hidden\" value=\"{$details['module_name']}\" class=\"form-button\"/>\n";
 				echo "<input name=\"op\" type=\"hidden\" value=\"13\" class=\"form-button\"/>\n";
 				echo "<input type=\"submit\" value=\"Register Resource\" class=\"form-button\"/>\n";
 			echo "</form>";
 			echo "</div>\n";
 		}
 		else {
-			echo "<div class=\"form-item font-small\">Component( {$res[0][0]} ) =&gt; {$details[0]}</div>";
-			$rq = "Instance()<Component('{$details[0]}');";
+			echo "<div class=\"form-item font-small\">Component( {$res[0]['id']} ) =&gt; {$details['id']}</div>";
+			$rq = "Instance(){r,l}<Component('{$details['id']}');";
 			$res = $rman->queryAssoc($rq);
 
 			echo "<div class=\"form-item\">";
@@ -44,11 +45,11 @@
 			if($res != false) {
 				echo "<table>\n";
 				foreach($res as $r) {
-					$c = $rman->getResourceFromId($r[0]);
+					// // // //$c = $rman->getResourceFromId($r[0]);
 					echo "<tr>";
-					echo "<td style=\"text-align: right;\"><a href=\"index.php?tool=module&mode=cmptman&op=12&id={$c['id']}&cid={$id}&nspace={$_GET['nspace']}\" class=\"switch-a\">{$c['label']}</a></td>";
-					echo "<td>=&gt; {$c['handler']}</td>";
-					echo "<td class=\"font-small\">({$c['id']})</td>";
+					echo "<td style=\"text-align: right;\"><a href=\"index.php?tool=module&mode=cmptman&op=12&id={$r['id']}&cid={$id}&nspace={$_GET['nspace']}\" class=\"switch-a\">{$r['label']}</a></td>";
+					echo "<td>=&gt; {$r['ref']}</td>";
+					echo "<td class=\"font-small\">({$r['id']})</td>";
 					echo "</tr>";
 				}
 				echo "</table>";
@@ -62,8 +63,8 @@
 			if(isset($_GET['op']) && $_GET['op'] == 12) {
 				$sel = null;
 				foreach($res as $r)
-					if($r[0] == $_GET['id'])
-						$sel = $rman->getResourceFromId($r[0]);
+					if($r['id'] == $_GET['id'])
+						$sel = $rman->getResourceFromId($r['id']);
 
 
 				echo "<div class=\"form-item\" style=\"\">";
@@ -89,7 +90,7 @@
 				echo "</div>";
 				echo "</div>";
 
-				$cmpt = ModMan::getComponent($details[0], 0, $db);
+				$cmpt = ModMan::getComponent($details['id'], 0, $db);
 				if($cmpt == null) {
 					echo "</div>";
 					return;
@@ -101,7 +102,7 @@
 					return;
 				}
 
-				$cfg = loadWidgetConfig($details[0], $sel['handler'], $db);
+				$cfg = loadWidgetConfig($details['id'], $sel['handler'], $db);
 				if($cfg == null)
 					$cfg = array();
 				echo "<br /><br /><br /><div class=\"form-item\" style=\"float: left; margin-left: 10px; color: #808080;\">";
@@ -124,7 +125,7 @@
 					echo "</tr>";
 				}
 				echo "</table>";
-				echo "<input type=\"hidden\" name=\"cid\" value=\"{$details[0]}\" />";
+				echo "<input type=\"hidden\" name=\"cid\" value=\"{$details['id']}\" />";
 				echo "<input type=\"hidden\" name=\"inst\" value=\"{$sel['handler']}\" />";
 				echo "<input name=\"wcfg\" type=\"hidden\" value=\"1\" />";
 				echo "<input type=\"submit\" value=\"Update Configs\" class=\"form-button\" />";

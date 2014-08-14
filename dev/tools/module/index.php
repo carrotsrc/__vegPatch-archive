@@ -9,15 +9,14 @@
 	if(!defined('_ROOT_TOOL'))
 		die("Not logged in");
 
-	
+	$flag = KS_MOD;
 	include(SystemConfig::relativeAppPath("system/resource/resman.php"));
-	include(SystemConfig::relativeAppPath("system/structure/blocks/schemablock.php"));
+	include(SystemConfig::relativeAppPath("system/structure/uiblock.php"));
 	include(SystemConfig::relativeAppPath("system/dbacc.php"));
-	include(SystemConfig::relativeAppPath("system/structure/module/modman.php"));
+	include(SystemConfig::relativeAppPath("system/module/modman.php"));
 	include(SystemConfig::relativeAppPath("system/managers.php"));
 	include(SystemConfig::relativeAppPath("system/libload.php"));
 	include('lib.php');
-	$fm = Koda::getFileManager();
 
 	$rman = new ResMan($db);
 	Managers::setResourceManager($rman);
@@ -51,8 +50,7 @@
 		$dirs = $fm->listDirectories($mlib);
 
 		$sql = "SELECT id, module_name FROM modreg WHERE module_type='0' AND space='$nspace';";
-		$regcmpt = $db->sendQuery($sql, false, false);
-
+		$regcmpt = $db->sendQuery($sql);
 		if($regcmpt != false) {
 
 			$lduld = array();
@@ -60,11 +58,11 @@
 			foreach($dirs as $cmpt) {
 				$loaded = false;
 				foreach($regcmpt as $ld) {
-					if($cmpt == $ld[1])
+					if($cmpt == $ld['module_name'])
 						$loaded = $ld;
 				}
 				if($loaded !== false)
-					$lduld[] = array($loaded[0], $loaded[1], 1);
+					$lduld[] = array($loaded['id'], $loaded['module_name'], 1);
 				else
 					$lduld[] = array(0, $cmpt, 0);
 			}
@@ -191,10 +189,10 @@
 			<select class="form-text form-select" name="cid">
 				<?php 
 					foreach($regcmpt as $c) {
-						if($cid != null && $cid == $c[0])
-							echo "<option value=\"{$c[0]}\" selected>{$c[1]}</option>";
+						if($cid != null && $cid == $c['id'])
+							echo "<option value=\"{$c['id']}\" selected>{$c['module_name']}</option>";
 						else
-							echo "<option value=\"{$c[0]}\">{$c[1]}</option>";
+							echo "<option value=\"{$c['id']}\">{$c['module_name']}</option>";
 					}
 				?>
 			</select>

@@ -10,7 +10,7 @@
 		$sql = "SELECT `widget_cfgreg`.`id`, `widget_cfgreg`.`config`, `widget_cfgreg`.`value` FROM `widget_cfgreg` JOIN `rescast` ON `widget_cfgreg`.`type` = `rescast`.`id` ";
 		$sql .= "WHERE `rescast`.`type`='Component' AND `widget_cfgreg`.`inst`='{$ref}' ";
 		$sql .= "AND `widget_cfgreg`.`cid`='{$cid}'";
-		$r = $db->sendQuery($sql, false, false);
+		$r = $db->sendQuery($sql);
 		if(!$r)
 			return null;
 
@@ -149,7 +149,7 @@
 			$ref = $nref;
 
 		$crid = $rman->queryAssoc("Component('$cid');");
-		$crid = $crid[0][0];
+		$crid = $crid[0]['id'];
 
 		$rid = $rman->addResource('Instance', $ref, $label);
 		if(!$rid)
