@@ -9,6 +9,7 @@
 	$redir = "index.php?tool=repo&collection=$collection&package=$package";
 	$url = "$repo/repo/$collection/$package/$archive";
 	$fn = SystemConfig::relativeAppPath("system/tmp/$archive");
+	$emsg = null;
 	ob_start();
 	echo "Pulling $package archive...";
 	if(file_put_contents($fn, fopen($url, 'r')) === false) {
@@ -25,15 +26,18 @@
 				$success = false;
 		} catch(Exception $e) {
 			$success = false;
+			$emsg = $e;
 		}
-		header("refresh:5;url=$redir");
 		if($success) {
+			header("refresh:5;url=$redir");
 			echo "OK";
 			echo "<p><h3 style=\"color: #7D9E05;\">Success</h3>Successfully unpacked archive <strong>$archive</strong> into library/<br />Redirecting to repository browser in 5 seconds<br /><a href=\"$redir\">Or click here</a></p>";
 		}
 		else {
+			header("refresh:10;url=$redir");
 			echo "Failed";
-			echo "<p><h3 style=\"color: red;\">Error</h3>An error occurred extracting <strong>$archive</strong> into library/<br />Redirecting to repository browser in 5 seconds<br /><a href=\"$redir\">Or click here</a></p>";
+			echo "<p><h3 style=\"color: red;\">Error</h3>An error occurred extracting <strong>$archive</strong> into library/";
+			echo "<div><tt>$emsg</tt></div><Redirecting to repository browser in 10 seconds<br /><a href=\"$redir\">Or click here</a></p>";
 		}
 
 		unlink($fn);
