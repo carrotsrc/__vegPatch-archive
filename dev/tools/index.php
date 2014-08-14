@@ -41,6 +41,8 @@
 	<head>
 		<title>vegPatch Root Tools</title>
 		<link type="text/css" rel="stylesheet" href="template.css" />
+		<script type="text/javascript" src="vplib.js"></script>
+		<script type="text/javascript" src="json2.js"></script>
 	</head>
 
 <body>

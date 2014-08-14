@@ -1,5 +1,5 @@
 <?php
-	include_once("system/koda/koda.php");
+	include_once("system/file/filemanager.php");
 	global $config;
 
 	$config = array(
