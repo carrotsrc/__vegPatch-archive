@@ -96,8 +96,19 @@
 	toggle_form = function (flag) {
 		var e = document.getElementById("instance-select");
 		e.disabled = flag;
+
+		if(!flag)
+			e.style.backgroundColor = 'white';
+		else
+			e.style.backgroundColor = '#DFDFDF';
+		
 		e = document.getElementById("add-button");
 		e.disabled = flag;
+
+		if(!flag)
+			e.style.color = '#808080';
+		else
+			e.style.color = '#DFDFDF';
 	}
 
 	request_panels =  function () {
