@@ -1,6 +1,0 @@
-<table>
-	<field name="id" type="int(11)" extra="NOT NULL AUTO_INCREMENT" />
-	<field name="title" type="varchar(128)" extra="NOT NULL" />
-	<field name="content" type="text" extra="NOT NULL" />
-	<primary name="id">
-</table>
