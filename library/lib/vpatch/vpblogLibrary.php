@@ -1,5 +1,5 @@
 <?php
-/* Copyright 2014, Charlie Fyvie-Gauld (Carrotsrg.org)
+/* (C)opyright 2014, Carrotsrc.org
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -92,9 +92,9 @@
 			return $this->db->sendQuery($sql, false, false);
 		}
 
-		public function createBlog($title)
+		public function createBlog($title, $parser)
 		{
-			if(!$this->arrayInsert('vp_blog', array('title' => $title)))
+			if(!$this->arrayInsert('vp_blog', array('title' => $title, 'parser' => $parser)))
 				return false;
 
 			return $this->db->getLastId();
@@ -102,7 +102,7 @@
 
 		public function getBlogDetails($id)
 		{
-			return $this->db->sendQuery("SELECT id, title FROM vp_blog WHERE id='$id';", false, false);
+			return $this->db->sendQuery("SELECT id, title, parser FROM vp_blog WHERE id='$id';", false, false);
 		}
 	}
 ?>

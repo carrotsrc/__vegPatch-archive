@@ -4,8 +4,8 @@
 	<module type="panel" name="vp_blogman_ui" space="vpatch" />
 
 	<module type="panel" name="vp_blogview_ui" space="vpatch" />
-	<moudle type="panel" name="vp_blogsingle_ui" space="vpatch" />
+	<module type="panel" name="vp_blogsingle_ui" space="vpatch" />
 </obj>
 
-<resource type="Instance" ref="1" label="sysc_blogman" out="ridi" />
+<resource type="Instance" ref="1" label="sysc_blogman" rout="ridi" />
 <relationship parent="{ridb}" child="{ridi}" />

@@ -224,7 +224,7 @@
 			if(!$id)
 				return 0;
 
-			return $id[0][0];
+			return $id[0]['id'];
 		}
 
 		public function getEdgesOfType($type)

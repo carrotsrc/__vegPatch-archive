@@ -33,17 +33,17 @@
 			if(isset($tag->attributes['rout']))
 				$rout = $tag->attributes['rout'];
 
-			if(($id = $this->db->sendQuery("SELECT id FROM areapool WHERE name='$name';", false, false))) {
-				$id = $id[0][0];
+			if(($id = $this->db->sendQuery("SELECT id FROM areapool WHERE name='$name';"))) {
+				$id = $id[0]['id'];
 				$log[] = "< Retrieved Area('$name') => $id";
 
 				if($out != null)
-					setVariable($out, $id[0][0]);
+					setVariable($out, $id);
 
 				if($rout != null) {
 					$rid = $this->resManager->queryAssoc("Area('$id');");
 					if($rid)
-						setVariable($rout, $rid[0][0]);
+						setVariable($rout, $rid[0]['id']);
 				}
 				return;
 			}

@@ -6,10 +6,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 	//include(SystemConfig::relativeAppPath("system/helpers/xml.php"));
+	$flag = KS_MOD;
 	include(SystemConfig::relativeAppPath("system/helpers/vpxml.php"));
 	include(SystemConfig::relativeAppPath("system/dbacc.php"));
-	include(SystemConfig::relativeAppPath("system/structure/blocks/schemablock.php"));
-	include(SystemConfig::relativeAppPath("system/structure/module/modman.php"));
+	include(SystemConfig::relativeAppPath("system/structure/uiblock.php"));
+	include(SystemConfig::relativeAppPath("system/module/modman.php"));
 	include(SystemConfig::relativeAppPath("library/straps/baseobj/strapbase.php"));
 	include(SystemConfig::relativeAppPath("system/libload.php"));
 	class s_table 
@@ -110,10 +111,10 @@
 				}
 				if(!($res = $db->sendQuery("SELECT id FROM `rescast` WHERE `type`='{$type['name']}';"))) {
 					$sql = "SELECT `id` FROM `resbase` WHERE `label`='{$type['base']}';";
-					$r = $db->sendQuery($sql, false, false);
+					$r = $db->sendQuery($sql);
 					if(!$r)
 						continue;
-					$base = $r[0][0];
+					$base = $r[0]['id'];
 					$sql = "INSERT INTO `rescast` (`type`, `handler`, `base`) VALUES ";
 					$sql .= "('{$type['name']}','0', '{$base}');";
 					if(!$db->sendQuery($sql))
@@ -137,12 +138,12 @@
 					if($a == 'type')
 						$edge['type'] = $v;
 				}
-				$tid = $db->sendQuery("SELECT id FROM rescast WHERE type='{$edge['type']}'", false, false);
+				$tid = $db->sendQuery("SELECT id FROM rescast WHERE type='{$edge['type']}'");
 				if(!$tid) {
 					$log[] = "! Resource type {$edge['type']} for :{$edge['name']} does not exist";
 					continue;
 				}
-				$tid = $tid[0][0];
+				$tid = $tid[0]['id'];
 
 				if(!$db->sendQuery("SELECT id FROM `edgetype` WHERE label='{$edge['name']}';")) {
 					$sql = "INSERT INTO `edgetype` (`rtype`, `label`, `default`) VALUES ";
@@ -544,7 +545,7 @@
 			$log[] = "+ Added resource $type('$label') =&gt; $ref";
 		}
 		else  {
-			$id = intval($res[0][0]);
+			$id = intval($res[0]['id']);
 			$log[] = "< Retrieved $type('$label') =&gt; $ref";
 		}
 

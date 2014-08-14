@@ -26,9 +26,9 @@
 <?php
 	include(SystemConfig::relativeAppPath("system/resource/resman.php"));
 	include(SystemConfig::relativeAppPath("system/managers.php"));
+	include(SystemConfig::relativeAppPath("system/helpers/strings.php"));
 	include("lib.php");
 
-	$fm = Koda::getFileManager();
 	$panel = "";
 
 	$rman = new ResMan($db);

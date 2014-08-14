@@ -64,7 +64,7 @@
 			}
 
 			$sql = "SELECT id FROM modreg WHERE module_name='$name' AND module_type='$type' AND space='$space';";
-			$id = $this->db->sendQuery($sql, false, false);
+			$id = $this->db->sendQuery($sql);
 			$rid = null;
 
 			if(!$id) {
@@ -84,7 +84,7 @@
 				}
 			}
 			else {
-				$id = $id[0][0];
+				$id = $id[0]['id'];
 
 				$rtype = "Component";
 				if($type == 1)
@@ -94,7 +94,7 @@
 					$rtype = "Plugin";
 
 				$res = $this->resManager->queryAssoc("$rtype('$id');");
-				$rid = $res[0][0];
+				$rid = $res[0]['id'];
 				$log[] = "< Retrieved $space / $rtype('$name') => $id";
 			}
 
@@ -166,7 +166,7 @@
 				$log[] = "! No registered resource for Component('$id')";
 				return null;
 			}
-			$ridc = $ridc[0][0];
+			$ridc = $ridc[0]['id'];
 
 			$this->resManager->createRelationship($ridc, $ridi);
 			$log[] = "+ Created Realtionship between $ridc < $ridi :0";
