@@ -6,6 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 	include("wireframe.php");
+	include("panelrep.php");
 
 	class NContainer
 	{
@@ -21,8 +22,9 @@
 			if(is_array($this->content)) {
 				foreach($this->content as $c)
 					$c->generateHTML($index, $path);
-			} else
-				$this->content->generateHTML();
+			} else {
+				echo $this->content->generateHTML();
+			}
 			echo "\n</div>\n";
 		}
 	}
