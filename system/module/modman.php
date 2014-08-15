@@ -34,10 +34,7 @@
 				if(!$result)
 					return null;
 				
-				if(mysql_num_rows($result) == 0)
-					return null;
-
-				$row = mysql_fetch_assoc($result);
+				$row = $result[0];
 				if($row['active'] == 0)
 					return null;
 
@@ -52,10 +49,7 @@
 				if(!$result)
 					return null;
 				
-				if(mysql_num_rows($result) == 0)
-					return null;
-
-				$row = mysql_fetch_assoc($result);
+				$row = $result[0];
 				
 				if($row['active'] == 0)
 					return null;
@@ -63,7 +57,7 @@
 				$cid = $row['id'];
 				$space = $row['space'];
 			}
-			
+
 			//	Get absolute path from SystemConfig
 			$inc = SystemConfig::libraryPath() . "panel/$space/$panel/{$panel}Panel.php";
 			$absolute =  "panel/$space/$panel/";
