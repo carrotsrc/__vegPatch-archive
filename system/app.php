@@ -82,6 +82,7 @@
 		include($appRootPath."system/area/areaman.php");
 		include($appRootPath."system/helpers/qstringmodifier.php");
 		include($appRootPath."system/helpers/strsan.php");
+		include($appRootPath."system/helpers/strings.php");
 		StrSan::init();
 	}
 	include($appRootPath."system/module/modman.php");
