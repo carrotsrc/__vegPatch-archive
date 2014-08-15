@@ -225,6 +225,7 @@ Generating resource types...</echo>
 <rtype name="Instance" base="abstract" />
 <rtype name="Type" base="space" />
 <rtype name="Graph" base="space" />
+<rtype name="Group" base="space" />
 
 <rtype name="Crud" base="abstract" />
 <rtype name="CrudOps" base="abstract" />
