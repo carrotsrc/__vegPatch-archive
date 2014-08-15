@@ -162,7 +162,7 @@
 			if(!$r)
 				return null;
 
-			return $r[0][0];
+			return $r[0]['value'];
 		}
 		
 		public function getConfigList()

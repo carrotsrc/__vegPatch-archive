@@ -36,7 +36,7 @@
 			if(!$r)
 				return null;
 
-			return $r[0][0];
+			return $r[0]['value'];
 		}
 
 		abstract public function process(&$signal);
