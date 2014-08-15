@@ -26,8 +26,8 @@
 			foreach($configs as $k => $v) {
 				if($v == "") {
 					foreach($vals as $r) {
-						if($r[1] == $k) {
-							$q[] = $r[0];
+						if($r['config'] == $k) {
+							$q[] = $r['id'];
 							unset($configs[$k]);
 						}
 					}
@@ -52,8 +52,8 @@
 			$q = array();
 			foreach($configs as $k => $v) {
 				foreach($vals as $r)
-					if($r[1] == $k)
-						$q[] = $r[1];
+					if($r['config'] == $k)
+						$q[] = $r['config'];
 			}
 
 			if(($sz = sizeof($q)) > 0) {
