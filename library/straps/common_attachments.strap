@@ -1,0 +1,33 @@
+<rtype name="External" base="attachment" />
+<rtype name="Img" base="attachment" />
+<rtype name="Vid" base="attachment" />
+<rtype name="Doc" base="attachment" />
+<rtype name="YouTube" base="attachment" />
+<rtype name="Pres" base="attachment" />
+
+<obj name="db" space="vpatch">
+	<insert table="attachments_type">
+		<col name="name" value="Img" />
+		<col name="exp" value="\\\\.jpeg;\\\\.jpg;\\\\.png;" />
+	</insert>
+
+	<insert table="attachments_type">
+		<col name="name" value="Vid" />
+		<col name="exp" value="\\\\.mov;\\\\.mpeg;\\\\.mpg;" />
+	</insert>
+
+	<insert table="attachments_type">
+		<col name="name" value="Doc" />
+		<col name="exp" value="\\\\.pdf;\\\\.doc;" />
+	</insert>
+
+	<insert table="attachments_type">
+		<col name="name" value="YouTube" />
+		<col name="exp" value="youtube\\\\.com/watch;" />
+	</insert>
+
+	<insert table="attachments_type">
+		<col name="name" value="Pres" />
+		<col name="exp" value="\\\\.ppt;\\\\.pptx;\\\\.odp;" />
+	</insert>
+</obj>
