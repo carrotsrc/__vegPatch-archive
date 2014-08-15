@@ -64,7 +64,7 @@
 					if(!$layout)
 						return false;
 				}
-				$layout = $layout[0][1];
+				$layout = $layout[0]['ref'];
 			}
 
 			$signal['layout'] = $layout;

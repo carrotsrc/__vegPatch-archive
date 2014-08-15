@@ -12,14 +12,12 @@
 	class cmptintPlugin extends Plugin
 	{
 		private $resourceManager = null;
-		private $channelManager = null;
 		private $moduleManager = null;
 
 		public function init($instance)
 		{
 			$this->instance = $instance;
 			$this->resourceManager = Managers::ResourceManager();
-			$this->channelManager = Managers::ChannelManager();
 		}
 
 		public function process(&$signal)
@@ -76,7 +74,7 @@
 				return $signal;
 
 			$cid = $res[0][0];
-			$channel = $this->channelManager->getChannel($cid);
+			$channel = core_get_channel($cid, $this->db);
 			if($channel == null)
 				return false;
 
@@ -107,7 +105,7 @@
 				return $signal;
 
 			$cid = $res[0][0];
-			$channel = $this->channelManager->getChannel($cid);
+			$channel = core_get_channel($cid, $this->db);
 			if($channel == null)
 				return false;
 
