@@ -98,14 +98,14 @@
 			if(!$res)
 				return null;
 
-			return $res[0][0];
+			return $res[0]['id'];
 		}
 
 		public function getType($url)
 		{
 			$exp = $this->typeExpressions();
 			foreach($exp as $x) {
-				$rx = $this->generateRegEx($x[1]);
+				$rx = $this->generateRegEx($x['exp']);
 				if(preg_match($rx, strtolower($url))) {
 					return $x;
 				}
@@ -153,7 +153,7 @@
 		public function removeAttachmentWithRef($id)
 		{
 			$att = $this->getAttachment($id);
-			if(!strpos($att[0][3],"://")) {
+			if(!strpos($att[0]['url'],"://")) {
 				$path = SystemConfig::relativeAppPath($att[0]['url']);
 				unlink($path);
 			}
