@@ -233,8 +233,9 @@
 			if($arc == null) {
 				$result = $this->appDB->sendQuery("SELECT type, value FROM rootasset;", false, false);
 				$arc = array('js' => array(), 'css' => array());
-				foreach($result as $r)
-					$arc[$r['type']][] = $r['value'];
+				if($result)
+					foreach($result as $r)
+						$arc[$r['type']][] = $r['value'];
 			}
 
 			$this->params['arc'] = $arc;

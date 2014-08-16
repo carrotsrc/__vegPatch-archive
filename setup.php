@@ -1,5 +1,6 @@
 <?php
 	include_once("system/file/filemanager.php");
+	include_once("system/db/db.php");
 	global $config;
 
 	$config = array(
@@ -21,7 +22,7 @@
 	function config_testdb()
 	{
 		global $config;
-		$db = Koda::getDatabaseConnection('mysql');
+		$db = core_create_db('mysql');
 		if(!@$db->connect($_POST['dbuser'], $_POST['dbpass'])) {
 			$_POST['dbpass'] = "";
 			return false;
@@ -82,7 +83,7 @@
 	function config_dispatch()
 	{
 		global $config;
-		$fm = Koda::getFileManager();
+		$fm = new FileManager();
 		$file = $fm->openFile("system/_ksysconfig.php", "r");
 		$content = $file->read();
 		$file->close();
