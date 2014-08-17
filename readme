@@ -1,9 +1,43 @@
 Vegpatch 0.2.1
 ==============
-Version: 	0.2.1/vegptach
+Version: 	0.3/vegptach
 Author: 	cfg csorg
 Date: 		08/04/2014
 Updated:	08/04/2014
+
+VegPatch 0.3
+============
+
+- Setup script for initial database and root configuration
+- Add a widget config root tool
+- Add dynamic loading of asset as standard functionality of gscripts
+- Deprecated KitJS, alias variable points to VPLib
+- Static markup in layouts
+- Error page handling on plugins
+- Error handling when there is no panel to perform requests on wireframe
+- Branching for RQL statements on both sides of the relationship
+- Extended RQL feedback to show both sides of the relationship; important for the management of relationships through root tools
+- VPXML now conforms to construct naming convention
+- Overhauled strap root tool
+	- <echo> element
+	- Correct table terms
+	- Logging facility for feedback on operations
+	- More error handling
+- Plugin class aligns with interaction process terminology
+- Module root tool can now specify instance parameters
+- Added redirect to vp_logout widget configs
+- Attachments is now a core feature of vegPatch
+- Implemented * wildcard in RQL again. Can now search for any type of resource
+- Implemented a 'type' extra in an RQL statement - this will recall the type of resource for when the wild card is used
+- Implemented a LibLoad function that tracks loaded libraries and automatically generates the object for the calling object
+- Online merging of modules held on separate server into running platform
+- Implemented a Xebec Repository browser in Repo Root Tool (points to carrotsrc's repo)
+- Removed a lot of unnecessary OOP
+- Most managers are now procedual functions
+- Implemented string functions for handling processing
+- Deprecating StrSan (with spelling error!)
+- Layout container markup now has flexible css classes, assigned by the element's name <foo></foo> would assign <div class="vpc-foo"></div>
+
 
 VegPatch 0.2.1 Changelog
 ========================
