@@ -11,7 +11,7 @@
 		die("Not logged in");
 ?>
 <?php
-	$repo = "http://repo.localhost";
+	$repo = "http://xebec.carrotsrc.org";
 	include(SystemConfig::relativeAppPath("system/helpers/vpxml.php"));
 	include("lib.php");
 
