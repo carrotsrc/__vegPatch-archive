@@ -1,4 +1,5 @@
 .vlog/*
 system/tmp/*
+library/media/attm/*
 .directory
 ksysconfig.php
