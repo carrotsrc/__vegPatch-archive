@@ -8,31 +8,6 @@
 	
 	class SurroundMan
 	{
-		public static function readTemplate($sId, $tId, $db)
-		{
-			//	Get surround path
-			$result = $db->sendQuery("SELECT name FROM surpool WHERE id='$sId';");
-			
-			if(!$result)
-				return null;
-			
-			$row = $result[0];
-			$path = SystemConfig::appRootPath("library/surrounds/".$row['name']."/");
-			
-			
-			//	Get surround template
-			$result = $db->sendQuery("SELECT value FROM surtemplate WHERE s_id='$sId' AND t_id='$tId';");
-			
-			if(!$result)
-				return null;
-			
-			$path .= $result[0]['value'];
-			
-			$template = new TemplateHolder();
-			$template->readTemplate($path);
-			return $template;
-		}
-		
 		public static function includeTemplate($sId, $tId, $vars, $db)
 		{
 			//	Get surround path
@@ -42,8 +17,7 @@
 
 			$row = $result[0];
 			$path = SystemConfig::appRootPath("library/surrounds/".$row['name']."/");
-			
-			
+			$vars->media = SystemConfig::relativeAppPath("library/media/surrounds/{$row['name']}");
 			$path .= $row['value'];
 			
 			$template = new TemplateHolder();
