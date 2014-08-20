@@ -78,18 +78,38 @@
 		global $resManager;
 		global $log;
 
-		$resManager = new ResMan($db);
 
-		$xml = new VPXML();
 
 		$fxml = loadFile($path, $fm);
 		if($fxml == null) {
 			$log[] = "! Strap file does not exist";
 			return;
 		}
-		
+
+		processStrapXML($fxml, $db, $rman);
+	}
+
+	function postedStrap($db, $rman)
+	{
+		if(!isset($_POST['strap']) || $_POST['strap'] == "") {
+			$log[] = "! No strap posted";
+			return;
+		}
+
+		$fxml = $_POST['strap'];
+		processStrapXML($fxml, $db, $rman);
+	}
+	
+	function processStrapXML($fxml, $db, $rman)
+	{
+		global $varlist;
+		global $resManager;
+		global $log;
+
+		$xml = new VPXML();
 		$xml->init($fxml);
-		
+		$resManager = new ResMan($db);
+	
 		while(($tag = $xml->getNextTag()) != null) {
 			if($tag->name == 'table') {
 				$table = loadTableData($tag, $xml);
@@ -436,6 +456,55 @@
 			
 		echo "</div>";
 		echo "<div class=\"log\">";
+		echo "<pre>Log\n---\n\n";
+		if($out != null) {
+			$errors = 0;
+			$dup = 0;
+
+			foreach($log as $l) {
+				if(isset($l[0])) {
+					if($l[0] == "!")
+						$errors++;
+					else
+					if($l[0] == "#")
+						$dup++;
+				}
+
+
+				echo "$l\n";
+			}
+
+			if($errors)
+				echo "\nerrors: $errors";
+
+			if($dup)
+				echo "\nduplicated: $dup";
+		}
+		echo "</pre>";
+		echo "</div>";
+	}
+
+	function strapPostPanel($fm, $db, $rman)
+	{
+		$out = null;
+		global $log;
+		if(isset($_POST['strap'])) {
+			$log[] = "Parsing posted strap data...";
+			$log[] = date("H:i:s d-m-Y", time('now'));
+			$log[] = "";
+			postedStrap($db, $rman);
+			$out = "Parsed strap file";
+		}
+
+		echo "<b>Stap Pad</b><br />";
+			
+		echo "<div class=\"form-item\" style=\"float: left; margin-right: 20px;\">";
+		echo "<form method=\"post\" action=\"index.php?tool=strap&mode=pad\">";
+		echo "<textarea name=\"strap\" class=\"form-text\" cols=\"80\" rows=\"10\"></textarea><br /><input type=\"submit\" value=\"Load\" class=\"form-button\"/>";
+		echo "</form>";
+			
+		echo "</div>";
+		echo "<div class=\"log\" style=\"\">";
 		echo "<pre>Log\n---\n\n";
 		if($out != null) {
 			$errors = 0;

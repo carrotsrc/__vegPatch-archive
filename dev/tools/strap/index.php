@@ -46,6 +46,13 @@
 		strapSystemPanel($fm, $db, $rman);
 		$panel = ob_get_contents();
 		ob_end_clean();
+	}
+	else
+	if(isset($_GET['mode']) && $_GET['mode'] == "pad") {
+		ob_start();
+		strapPostPanel($fm, $db, $rman);
+		$panel = ob_get_contents();
+		ob_end_clean();
 	} else {
 		ob_start();
 		strapRootPanel($fm, $db, $rman);
@@ -64,6 +71,9 @@
 			<input type="submit" value="Other Systems" class="form-button" />
 		</form>
 		</div>
+		<form method="post" action="index.php?tool=strap&mode=pad">
+			<input type="submit" value="Pad" class="form-button" />
+		</form>
 	</div>
 
 	<div class="panel">
