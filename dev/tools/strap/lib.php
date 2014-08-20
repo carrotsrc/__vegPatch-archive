@@ -488,11 +488,13 @@
 	{
 		$out = null;
 		global $log;
+		$xml = "";
 		if(isset($_POST['strap'])) {
 			$log[] = "Parsing posted strap data...";
 			$log[] = date("H:i:s d-m-Y", time('now'));
 			$log[] = "";
 			postedStrap($db, $rman);
+			$xml = $_POST['strap'];
 			$out = "Parsed strap file";
 		}
 
@@ -500,7 +502,7 @@
 			
 		echo "<div class=\"form-item\" style=\"float: left; margin-right: 20px;\">";
 		echo "<form method=\"post\" action=\"index.php?tool=strap&mode=pad\">";
-		echo "<textarea name=\"strap\" class=\"form-text\" cols=\"80\" rows=\"10\"></textarea><br /><input type=\"submit\" value=\"Load\" class=\"form-button\"/>";
+		echo "<textarea name=\"strap\" class=\"form-text\" cols=\"80\" rows=\"10\">$xml</textarea><br /><input type=\"submit\" value=\"Load\" class=\"form-button\"/>";
 		echo "</form>";
 			
 		echo "</div>";
