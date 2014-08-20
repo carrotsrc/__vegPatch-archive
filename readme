@@ -3,7 +3,13 @@ vegPatch 0.3
 Version: 	0.3/vegPatch
 Author: 	Charlie FG
 Date: 		08/04/2014
-Updated:	2014/08/17
+Updated:	2014/08/20
+
+Notes
+=====
+
+For documentation go to:
+http://doc.carrotsrc.org
 
 VegPatch 0.3
 ============
@@ -37,6 +43,8 @@ VegPatch 0.3
 - Implemented string functions for handling processing
 - Deprecating StrSan (with spelling error!)
 - Layout container markup now has flexible css classes, assigned by the element's name <foo></foo> would assign <div class="vpc-foo"></div>
+.1
+- Added a strap pad for sending strap markup on the fly
 
 
 VegPatch 0.2.1 Changelog
