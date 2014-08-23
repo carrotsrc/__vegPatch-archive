@@ -11,8 +11,9 @@
 			echo "<b>Query Resource</b><br />";
 			$res = null;
 
-			if($prq != null && $prq != "")
-				$res = $rman->queryAssoc($prq);
+			if($prq != null && $prq != "") {
+				$res = $rman->queryAssoc(string_clean_escapes($prq));
+			}
 				
 			echo "<div class=\"form-item\" style=\"overflow: auto; padding: 0px; width: auto; min-width: 600px;\">";
 				echo "<b>Query</b>";

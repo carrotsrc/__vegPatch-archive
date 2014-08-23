@@ -10,6 +10,7 @@
 		die("Not logged in");
 	
 	include(SystemConfig::relativeAppPath("system/resource/resman.php"));
+	include(SystemConfig::relativeAppPath("system/helpers/strings.php"));
 	include("lib.php");
 
 	$rman = new ResMan($db);
@@ -20,7 +21,7 @@
 		$prq = $crq = null;
 
 		if(isset($_POST['query']))
-			$prq = $_POST['query'];
+			$prq = string_clean_escapes($_POST['query']);
 
 		ob_start();
 		rqlPanel($prq, $rman, $db);

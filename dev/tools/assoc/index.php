@@ -10,6 +10,7 @@
 		die("Not logged in");
 
 	include(SystemConfig::relativeAppPath("system/resource/resman.php"));
+	include(SystemConfig::relativeAppPath("system/helpers/strings.php"));
 	include("lib.php");
 
 	$rman = new ResMan($db);
@@ -19,10 +20,10 @@
 		$prq = $crq = null;
 
 		if(isset($_POST['prq']))
-			$prq = $_POST['prq'];
+			$prq = string_clean_escapes($_POST['prq']);
 
 		if(isset($_POST['crq']))
-			$crq = $_POST['crq'];
+			$crq = string_clean_escapes($_POST['crq']);
 		
 		if(isset($_POST['op']) && $_POST['op'] == 1) {
 			createRelationship($_POST['edge'], $rman);
