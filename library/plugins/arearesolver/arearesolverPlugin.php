@@ -102,8 +102,8 @@
 			if(!$r) 
 				return $signal;
 
-			$ref = $r[0][1];
-			$channel = $this->channelManager->getChannel($ref);
+			$ref = $r[0]['ref'];
+			$channel = core_get_channel($ref, $ref);
 			if($channel == null)	// There are no channel nodes
 				return $signal;
 
