@@ -14,7 +14,7 @@
 		die("Setup Problem: Cannot locate SystemConfig.");
 	
 		//	Configure settings
-		SystemConfig::$KS_FLAG = KS_SURROUND | KS_IS_PAGE | KS_MOD | KS_USER | KS_TRACK | KS_PHP_ERROR | KS_DEBUG_MICRO;
+		SystemConfig::$KS_FLAG = KS_SURROUND | KS_IS_PAGE | KS_MOD | KS_USER | KS_TRACK | KS_PHP_ERROR;
 
 	
 	//	Import the app class
