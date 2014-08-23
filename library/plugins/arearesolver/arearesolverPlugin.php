@@ -103,7 +103,7 @@
 				return $signal;
 
 			$ref = $r[0]['ref'];
-			$channel = core_get_channel($ref, $ref);
+			$channel = core_get_channel($ref, $this->db);
 			if($channel == null)	// There are no channel nodes
 				return $signal;
 
