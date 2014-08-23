@@ -24,7 +24,7 @@ ini_set('display_errors', '1');
 
 
 	$result = $app->requestInterface();
-	echo $result;
+	//echo $result;
 	/*
 	*  Make alterations to the query string
 	*/
