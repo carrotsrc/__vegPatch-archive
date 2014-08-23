@@ -205,9 +205,9 @@
 			var endPos = e.selectionEnd;
 			e.value = e.value.substring(0, startPos) +
 			leaf +
-			this.value.substring(endPos, e.value.length);
-			this.selectionStart = startPos + leaf.length;
-			this.selectionEnd = startPos + leaf.length;
+			e.value.substring(endPos, e.value.length);
+			e.selectionStart = startPos + leaf.length;
+			e.selectionEnd = startPos + leaf.length;
 		} else {
 			e.value += leaf;
 		}
