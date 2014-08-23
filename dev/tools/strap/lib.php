@@ -96,7 +96,7 @@
 			return;
 		}
 
-		$fxml = $_POST['strap'];
+		$fxml = string_clean_escapes($_POST['strap']);
 		processStrapXML($fxml, $db, $rman);
 	}
 	
@@ -494,7 +494,7 @@
 			$log[] = date("H:i:s d-m-Y", time('now'));
 			$log[] = "";
 			postedStrap($db, $rman);
-			$xml = $_POST['strap'];
+			$xml = string_clean_escapes($_POST['strap']);
 			$out = "Parsed strap file";
 		}
 
